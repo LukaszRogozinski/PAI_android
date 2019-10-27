@@ -38,7 +38,7 @@ class LoginFragment : Fragment() {
         binding.lifecycleOwner = this
 
         binding.loginButton.setOnClickListener {
-            findNavController().navigate(LoginFragmentDirections.actionLoginFragmentToHomePageFragment())
+            findNavController().navigate(LoginFragmentDirections.actionLoginFragmentToProductsFragment())
         }
 
 //        viewModel.eventGameFinish.observe(this, Observer {

@@ -17,10 +17,30 @@
             app:exitAnim="@anim/slide_out_left"
             app:popEnterAnim="@anim/slide_in_right"
             app:popExitAnim="@anim/slide_out_left"/>
+        <action
+            android:id="@+id/action_loginFragment_to_productsFragment"
+            app:destination="@id/productsFragment"
+            app:popUpTo="@+id/loginFragment"
+            app:popUpToInclusive="true" />
     </fragment>
     <fragment
         android:id="@+id/homePageFragment"
         android:name="com.example.pai.homePage.HomePageFragment"
         android:label="home_page_fragment"
         tools:layout="@layout/home_page_fragment" />
+    <fragment
+        android:id="@+id/productsFragment"
+        android:name="com.example.pai.features.products.ProductsFragment"
+        android:label="products_fragment"
+        tools:layout="@layout/products_fragment" />
+    <fragment
+        android:id="@+id/usersFragment"
+        android:name="com.example.pai.features.users.UsersFragment"
+        android:label="users_fragment"
+        tools:layout="@layout/users_fragment" />
+    <fragment
+        android:id="@+id/warehousesFragment"
+        android:name="com.example.pai.features.warehouses.WarehousesFragment"
+        android:label="warehouses_fragment"
+        tools:layout="@layout/warehouses_fragment" />
 </navigation>
