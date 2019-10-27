@@ -87,4 +87,7 @@ dependencies {
     //di
     implementation 'org.koin:koin-android:2.0.1'
     implementation 'org.koin:koin-androidx-viewmodel:2.0.1'
+
+    //chrome://inspect
+    implementation 'com.facebook.stetho:stetho:1.5.1'
 }
