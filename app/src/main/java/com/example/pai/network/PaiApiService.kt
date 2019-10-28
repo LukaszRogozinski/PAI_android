@@ -15,7 +15,7 @@ private val retrofit = Retrofit.Builder()
 
 interface PaiApiService {
     @GET("api/products")
-   suspend fun getProducts() : List<Product>
+   suspend fun getProducts() : List<ProductDto>
 }
 
 object PaiApi {

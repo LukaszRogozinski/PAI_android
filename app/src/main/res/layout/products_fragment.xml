@@ -19,13 +19,16 @@
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/products_list"
+            itemBinding="@{vm.itemBinding}"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:layout_marginBottom="70dp"
             android:scrollbars="vertical"
             app:diffConfig="@{vm.diff}"
             app:items="@{vm.products}"
-            itemBinding="@{vm.itemBinding}"
-            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            app:layout_constraintBottom_toBottomOf="parent"
+            tools:listitem="@layout/product_item" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

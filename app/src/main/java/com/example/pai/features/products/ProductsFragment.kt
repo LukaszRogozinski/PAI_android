@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
+import androidx.lifecycle.ViewModelProviders
 
 import com.example.pai.R
 import com.example.pai.databinding.ProductsFragmentBinding
@@ -17,7 +18,12 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
  */
 class ProductsFragment : Fragment() {
 
-    private val viewModel: ProductsViewModel by viewModel()
+    private val viewModel: ProductsViewModel by lazy {
+        val activity = requireNotNull(this.activity) {
+        }
+        ViewModelProviders.of(this, ProductsViewModel.Factory(activity.application))
+            .get(ProductsViewModel::class.java)
+    }
 
     private lateinit var binding: ProductsFragmentBinding
 
@@ -32,7 +38,7 @@ class ProductsFragment : Fragment() {
             container,
             false
         )
-
+        viewModel
         binding.vm = viewModel
         binding.lifecycleOwner = viewLifecycleOwner
 

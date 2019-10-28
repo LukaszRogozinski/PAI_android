@@ -1,51 +1,56 @@
-//package com.example.pai.database
-//
-//import androidx.room.Embedded
-//import androidx.room.Entity
-//import androidx.room.PrimaryKey
-//import com.example.pai.network.Product
-//import com.example.pai.network.ProductType
-//import com.example.pai.network.Warehouse
-//
-//@Entity
-//data class DatabaseProduct constructor(
-//    @PrimaryKey
-//    val id: Int,
-//    val version: Int,
-//    val serialNumber: String,
-//    val status: String,
-//    @Embedded
-//    val productType: DatabaseProductType,
-//    val lastUpdate: String,
-//    val createDate: String,
-//    val deleted: Boolean,
-//    @Embedded
-//    val warehouse: DatabaseWarehouse
-//)
-//
-//@Entity
-//data class DatabaseProductType constructor(
-//    @PrimaryKey
-//    val id: Int,
-//    val version: Int,
-//    val name: String,
-//    val manufacture: String,
-//    val cost: Int,
-//    val deleted: Boolean
-//)
-//
-//@Entity
-//data class DatabaseWarehouse constructor(
-//    @PrimaryKey
-//    val id: Int,
-//    val version: Int,
-//    val name: String,
-//    val deleted: Boolean
-//)
-//
-//fun List<DatabaseProduct>.asDomainModel(): List<Product> {
+package com.example.pai.database
+
+import androidx.room.Entity
+import androidx.room.ForeignKey
+import androidx.room.PrimaryKey
+
+@Entity
+data class DatabaseProduct constructor(
+    @PrimaryKey
+    val id: Int,
+    val version: Int,
+    val serialNumber: String,
+    val status: String,
+    @ForeignKey(
+        entity = DatabaseProductType::class,
+        parentColumns = ["id"],
+        childColumns = ["databaseProductTypeId"]
+    )
+    val databaseProductTypeId: Int,
+    val lastUpdate: String,
+    val createDate: String,
+    val deleted: Boolean,
+    @ForeignKey(
+        entity = DatabaseWarehouse::class,
+        parentColumns = ["id"],
+        childColumns = ["databaseWarehouseId"]
+    )
+    val databaseWarehouseId: Int
+)
+
+@Entity
+data class DatabaseProductType constructor(
+    @PrimaryKey
+    val id: Int,
+    val version: Int,
+    val name: String,
+    val manufacture: String,
+    val cost: Int,
+    val deleted: Boolean
+)
+
+@Entity
+data class DatabaseWarehouse constructor(
+    @PrimaryKey
+    val id: Int,
+    val version: Int,
+    val name: String,
+    val deleted: Boolean
+)
+
+//fun List<DatabaseProduct>.asDomainModel(): List<ProductDto> {
 //    return map {
-//        Product(
+//        ProductDto(
 //            id = it.id,
 //            version = it.version,
 //            serialNumber = it.serialNumber,
@@ -59,8 +64,8 @@
 //    }
 //}
 //
-//fun DatabaseProductType.asDomainModel(): ProductType {
-//    return ProductType(
+//fun DatabaseProductType.asDomainModel(): ProductTypeDto {
+//    return ProductTypeDto(
 //        id = this.id,
 //        version = this.version,
 //        name = this.name,
@@ -70,8 +75,8 @@
 //    )
 //}
 //
-//fun DatabaseWarehouse.asDomainModel(): Warehouse {
-//    return Warehouse(
+//fun DatabaseWarehouse.asDomainModel(): WarehouseDto {
+//    return WarehouseDto(
 //        id = this.id,
 //        version = this.version,
 //        name = this.name,

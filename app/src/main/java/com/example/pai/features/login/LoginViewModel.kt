@@ -1,4 +1,4 @@
-package com.example.pai.login
+package com.example.pai.features.login
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData

@@ -2,8 +2,7 @@ package com.example.pai
 
 import android.app.Application
 import com.example.pai.features.products.ProductsViewModel
-import com.example.pai.homePage.HomePageViewModel
-import com.example.pai.login.LoginViewModel
+import com.example.pai.features.login.LoginViewModel
 import com.facebook.stetho.Stetho
 import org.koin.android.ext.koin.androidContext
 import org.koin.androidx.viewmodel.dsl.viewModel
@@ -24,6 +23,4 @@ class App : Application() {
 val appModule = module {
 
     viewModel { LoginViewModel() }
-    viewModel { HomePageViewModel() }
-    viewModel { ProductsViewModel() }
 }

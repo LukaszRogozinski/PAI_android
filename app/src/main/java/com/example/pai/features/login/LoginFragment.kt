@@ -1,4 +1,4 @@
-package com.example.pai.login
+package com.example.pai.features.login
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -9,6 +9,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.navigation.fragment.findNavController
 import com.example.pai.R
 import com.example.pai.databinding.LoginFragmentBinding
+import com.example.pai.features.login.LoginFragmentDirections
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 /**
