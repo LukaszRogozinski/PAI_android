@@ -1,20 +1,31 @@
 package com.example.pai.database
 
 import android.content.Context
-import androidx.lifecycle.LiveData
 import androidx.room.*
 
 @Dao
 interface ProductDao {
-    @Query("SELECT * FROM databaseproduct")
-    fun getDatabaseProducts(): LiveData<List<DatabaseProduct>>
+    @Query("SELECT * FROM DatabaseProduct")
+    fun getDatabaseProducts(): List<DatabaseProduct>
+
+    @Query("SELECT * FROM DatabaseProduct WHERE id = :id")
+    fun get(id: Int): DatabaseProduct
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertAll(products: List<DatabaseProduct>)
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    fun insert(product: DatabaseProduct)
 }
 
 @Dao
 interface ProductTypeDao {
+    @Query("SELECT * FROM DatabaseProductType")
+    fun getDatabaseProductTypes(): List<DatabaseProductType>
+
+    @Query("SELECT * FROM DatabaseProductType WHERE id = :id")
+    fun get(id: Int) : DatabaseProductType
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insert(productType: DatabaseProductType)
 
@@ -24,6 +35,12 @@ interface ProductTypeDao {
 
 @Dao
 interface WarehouseDao {
+    @Query("SELECT * FROM DatabaseWarehouse")
+    fun getDatabaseWarehouses(): List<DatabaseWarehouse>
+
+    @Query("SELECT * FROM DatabaseWarehouse WHERE id = :id")
+    fun get(id: Int) : DatabaseWarehouse
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insert(warehouse: DatabaseWarehouse)
 
@@ -32,19 +49,19 @@ interface WarehouseDao {
 }
 
 @Database(entities = [DatabaseProduct::class, DatabaseProductType::class, DatabaseWarehouse::class], version = 1)
-abstract class ProductDatabase : RoomDatabase() {
+abstract class PaiDatabase : RoomDatabase() {
     abstract val productDao: ProductDao
     abstract val productTypeDao: ProductTypeDao
     abstract val warehouseDao: WarehouseDao
 }
 
-private lateinit var INSTANCE: ProductDatabase
+private lateinit var INSTANCE: PaiDatabase
 
-fun getDatabase(context: Context): ProductDatabase {
-    synchronized(ProductDatabase::class.java) {
+fun getDatabase(context: Context): PaiDatabase {
+    synchronized(PaiDatabase::class.java) {
         if(!::INSTANCE.isInitialized) {
             INSTANCE = Room.databaseBuilder(context.applicationContext,
-                ProductDatabase::class.java,
+                PaiDatabase::class.java,
                 "products").build()
         }
     }

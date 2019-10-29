@@ -7,7 +7,7 @@
 
         <variable
             name="item"
-            type="com.example.pai.network.ProductDto" />
+            type="com.example.pai.domain.Product" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

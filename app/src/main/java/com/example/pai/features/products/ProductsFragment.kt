@@ -42,8 +42,6 @@ class ProductsFragment : Fragment() {
         binding.vm = viewModel
         binding.lifecycleOwner = viewLifecycleOwner
 
-        viewModel.loadAllProducts()
-        // Inflate the layout for this fragment
         return binding.root
     }
 
