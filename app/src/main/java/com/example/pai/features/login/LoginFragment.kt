@@ -36,7 +36,7 @@ class LoginFragment : Fragment() {
 
         binding.vm = viewModel
 
-        binding.lifecycleOwner = this
+     //   binding.lifecycleOwner = this
 
         binding.loginButton.setOnClickListener {
             findNavController().navigate(LoginFragmentDirections.actionLoginFragmentToProductsFragment())

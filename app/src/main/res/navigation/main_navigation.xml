@@ -9,7 +9,7 @@
         android:id="@+id/loginFragment"
         android:name="com.example.pai.features.login.LoginFragment"
         android:label="login_fragment"
-        tools:layout="@layout/login_fragment" >
+        tools:layout="@layout/login_fragment">
         <action
             android:id="@+id/action_loginFragment_to_productsFragment"
             app:destination="@id/productsFragment"
@@ -31,4 +31,15 @@
         android:name="com.example.pai.features.warehouses.WarehousesFragment"
         android:label="warehouses_fragment"
         tools:layout="@layout/warehouses_fragment" />
+    <fragment
+        android:id="@+id/productDetailFragment"
+        android:name="com.example.pai.features.products.detail.ProductDetailFragment"
+        android:label="ProductDetailFragment">
+
+        <argument
+            android:name="product"
+            android:defaultValue="@null"
+            app:argType="com.example.pai.domain.Product"
+            app:nullable="true" />
+    </fragment>
 </navigation>

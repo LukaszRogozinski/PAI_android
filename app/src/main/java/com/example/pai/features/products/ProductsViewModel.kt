@@ -21,10 +21,17 @@ class ProductsViewModel(application: Application) : AndroidViewModel(application
 
     private val productsRepository = ProductsRepository(getDatabase(application))
 
+    var view: ProductsView? = null
+
     val products: LiveData<List<Product>> = productsRepository.products
 
     val itemBinding: OnItemBind<Product> = OnItemBind { itemBinding, _, item ->
         itemBinding.set(BR.item, R.layout.product_item)
+        itemBinding.bindExtra(BR.listener, object: OnProductClickedListener {
+            override fun onProductClicked(product: Product) {
+                view?.navigateToProductDetails(product)
+            }
+        })
     }
 
     val diff = object : DiffUtil.ItemCallback<Product>() {
