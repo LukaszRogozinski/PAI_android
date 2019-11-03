@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProviders
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 
 import com.example.pai.R
@@ -36,6 +37,10 @@ class ProductDetailFragment : Fragment() {
         val product = ProductDetailFragmentArgs.fromBundle(arguments!!).product
         val viewModelFactory = ProductDetailViewModel.Factory(product)
         binding.vm = ViewModelProviders.of(this, viewModelFactory).get(ProductDetailViewModel::class.java)
+
+        binding.editButton.setOnClickListener{
+            findNavController().navigate(R.id.action_productDetailFragment_to_editProductFragment)
+        }
         // Inflate the layout for this fragment
         return binding.root
     }

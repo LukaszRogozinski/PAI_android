@@ -34,12 +34,21 @@
     <fragment
         android:id="@+id/productDetailFragment"
         android:name="com.example.pai.features.products.detail.ProductDetailFragment"
-        android:label="ProductDetailFragment">
+        android:label="ProductDetailFragment"
+        tools:layout="@layout/product_detail_fragment">
 
         <argument
             android:name="product"
             android:defaultValue="@null"
             app:argType="com.example.pai.domain.Product"
             app:nullable="true" />
+        <action
+            android:id="@+id/action_productDetailFragment_to_editProductFragment"
+            app:destination="@id/editProductFragment" />
     </fragment>
+    <fragment
+        android:id="@+id/editProductFragment"
+        android:name="com.example.pai.features.products.edit.EditProductFragment"
+        android:label="EditProductFragment"
+        tools:layout="@layout/edit_product_fragment"/>
 </navigation>
