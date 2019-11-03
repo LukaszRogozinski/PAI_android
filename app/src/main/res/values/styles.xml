@@ -8,4 +8,14 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+    <style name="detailViewLabels">
+        <item name="android:textSize">14sp</item>
+        <item name="android:textColor">@android:color/secondary_text_dark</item>
+
+    </style>
+
+    <style name="detailViewValues">
+        <item name="android:textSize">16sp</item>
+    </style>
+
 </resources>
