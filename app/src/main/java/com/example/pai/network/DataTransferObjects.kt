@@ -32,6 +32,16 @@ data class WarehouseDto(
     val deleted: Boolean
 )
 
+data class ProductDomainToDto(
+    var id: Int? = null,
+    val createDate: String,
+    val lastUpdate: String,
+    var productTypeId: Int? = null,
+    var serialNumber: String? = null,
+    var status: String? = null,
+    var warehouseId: Int? = null
+)
+
 fun List<ProductDto>.asProductDatabaseModel(): List<DatabaseProduct> {
     return map {
         DatabaseProduct(

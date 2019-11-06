@@ -2,18 +2,16 @@ package com.example.pai.features.products.detail
 
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
-import androidx.navigation.fragment.navArgs
-
 import com.example.pai.R
 import com.example.pai.databinding.ProductDetailFragmentBinding
-import org.koin.androidx.viewmodel.ext.android.viewModel
+import com.example.pai.domain.Product
 
 /**
  * A simple [Fragment] subclass.
@@ -21,6 +19,20 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 class ProductDetailFragment : Fragment() {
 
     private lateinit var binding: ProductDetailFragmentBinding
+
+    var product: Product? = null
+
+    private val viewModel: ProductDetailViewModel by lazy {
+        val activity = requireNotNull(this.activity)
+        ViewModelProviders.of(
+            this,
+            ProductDetailViewModel.Factory(
+                activity.application,
+                product
+            )
+        )
+            .get(ProductDetailViewModel::class.java)
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -33,15 +45,23 @@ class ProductDetailFragment : Fragment() {
             container,
             false
         )
-
-        val product = ProductDetailFragmentArgs.fromBundle(arguments!!).product
-        val viewModelFactory = ProductDetailViewModel.Factory(product)
-        binding.vm = ViewModelProviders.of(this, viewModelFactory).get(ProductDetailViewModel::class.java)
-
-        binding.editButton.setOnClickListener{
-            findNavController().navigate(R.id.action_productDetailFragment_to_editProductFragment)
-        }
-        // Inflate the layout for this fragment
+        product = ProductDetailFragmentArgs.fromBundle(arguments!!).product
+        binding.vm = viewModel
+        setOnClickListeners()
         return binding.root
+    }
+
+    private fun setOnClickListeners() {
+        binding.saveButton.setOnClickListener {
+            val action =
+                ProductDetailFragmentDirections.actionProductDetailFragmentToEditProductFragment(
+                    false
+                ).setProduct(product)
+            findNavController().navigate(action)
+        }
+
+        binding.deleteButton.setOnClickListener {
+            viewModel.deleteProduct()
+        }
     }
 }

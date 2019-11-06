@@ -23,6 +23,7 @@
             android:layout_marginTop="32dp"
             android:layout_marginEnd="16dp"
             android:hint="serial number"
+            android:text="@={vm.productDtoToSave.serialNumber}"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -80,7 +81,7 @@
             app:layout_constraintTop_toTopOf="@+id/status_text_view" />
 
         <com.google.android.material.button.MaterialButton
-            android:id="@+id/edit_button"
+            android:id="@+id/save_button"
             style="@style/Widget.AppCompat.Button.Colored"
             android:layout_width="0dp"
             android:layout_height="52dp"

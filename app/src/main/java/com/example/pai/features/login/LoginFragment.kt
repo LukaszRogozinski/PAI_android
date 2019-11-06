@@ -6,6 +6,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
 import com.example.pai.R
 import com.example.pai.databinding.LoginFragmentBinding
@@ -19,7 +21,9 @@ class LoginFragment : Fragment() {
 
     private lateinit var binding: LoginFragmentBinding
 
-    private val viewModel: LoginViewModel by viewModel()
+    private val viewModel: LoginViewModel by lazy {
+        ViewModelProviders.of(this).get(LoginViewModel::class.java)
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -32,22 +36,15 @@ class LoginFragment : Fragment() {
             container,
             false
         )
-        // Inflate the layout for this fragment
-
         binding.vm = viewModel
+        setOnClickListeners()
+        return binding.root
+    }
 
-     //   binding.lifecycleOwner = this
-
+    private fun setOnClickListeners() {
         binding.loginButton.setOnClickListener {
             findNavController().navigate(LoginFragmentDirections.actionLoginFragmentToProductsFragment())
         }
-
-//        viewModel.eventGameFinish.observe(this, Observer {
-//            findNavController().navigate(LoginFragmentDirections.actionLoginFragmentToHomePageFragment())
-//            viewModel.onGameFinishComplete()
-//        })
-
-        return binding.root
     }
 
 }

@@ -12,24 +12,6 @@ import kotlinx.coroutines.*
 
 class ProductsRepository(private val database: PaiDatabase) {
 
-//    private val _products = MutableLiveData<List<Product>>()
-//    val products: LiveData<List<Product>>
-//        get() {
-//           // GlobalScope.launch {
-//          //      _products.postValue(database.productDao.getDatabaseProducts().asDomainModel(database))
-//          //  }
-//            return _products
-//        }
-
-    private val _warehouses = MutableLiveData<List<Warehouse>>()
-    val warehouses: LiveData<List<Warehouse>>
-        get() {
-            GlobalScope.launch {
-                _warehouses.postValue(database.warehouseDao.getDatabaseWarehouses().asWarehouseDomainModel())
-            }
-            return _warehouses
-        }
-
     suspend fun getProductsFromDatabase(): List<Product> {
         return database.productDao.getDatabaseProducts().asDomainModel(database)
     }
@@ -54,18 +36,15 @@ class ProductsRepository(private val database: PaiDatabase) {
         }
     }
 
-    suspend fun getProductType() {
-        withContext(Dispatchers.IO) {
-            val b = database.productTypeDao.get(
-                1
-            )
-            val c = database.productTypeDao.getDatabaseProductTypes()
-            val eee = database.productDao.getDatabaseProducts().asDomainModel(database)
-            // var ggg = MutableLiveData<List<Warehouse>>()
-            //       _products.postValue(database.productDao.getDatabaseProducts().asDomainModel(database))
-            Log.i("", "")
-        }
-
+    suspend fun addProduct(productDomainToDto: ProductDomainToDto) {
+        PaiApi.retrofitService.addProduct(productDomainToDto)
     }
 
+    suspend fun updateProduct(productDomainToDto: ProductDomainToDto) {
+        PaiApi.retrofitService.updateProduct(productDomainToDto)
+    }
+
+    suspend fun deleteProduct(id: Int) {
+        PaiApi.retrofitService.deleteProduct(id)
+    }
 }

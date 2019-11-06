@@ -1,7 +1,9 @@
 package com.example.pai.domain
 
 import android.os.Parcelable
+import com.example.pai.network.ProductDomainToDto
 import kotlinx.android.parcel.Parcelize
+import java.time.LocalDateTime
 
 @Parcelize
 data class Product(
@@ -33,3 +35,14 @@ data class Warehouse(
     val name: String,
     val deleted: Boolean
 ) : Parcelable
+
+fun Product.asProductDtoToSave() : ProductDomainToDto {
+    return ProductDomainToDto(
+        id = this.id,
+        createDate = LocalDateTime.now().toString(),
+        lastUpdate = LocalDateTime.now().toString(),
+        productTypeId = this.productType.id,
+        serialNumber = this.serialNumber,
+        status = this.status,
+        warehouseId = this.warehouse.id)
+}

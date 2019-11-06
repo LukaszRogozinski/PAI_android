@@ -8,3 +8,8 @@ import androidx.databinding.BindingAdapter
 fun bindPrice(txtView: TextView, price: Int) {
     txtView.text = price.toString()
 }
+
+@BindingAdapter("booleanToString")
+fun bindBoolean(txtView: TextView, boolean: Boolean) {
+    txtView.text = boolean.toString()
+}

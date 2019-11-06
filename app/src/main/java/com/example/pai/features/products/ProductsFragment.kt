@@ -30,7 +30,6 @@ class ProductsFragment : Fragment(), ProductsView {
 
     private lateinit var binding: ProductsFragmentBinding
 
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -45,6 +44,8 @@ class ProductsFragment : Fragment(), ProductsView {
         binding.vm = viewModel
         binding.lifecycleOwner = viewLifecycleOwner
 
+        setOnClickListeners()
+
         return binding.root
     }
 
@@ -56,6 +57,13 @@ class ProductsFragment : Fragment(), ProductsView {
     override fun onStop() {
         super.onStop()
         viewModel.view = null
+    }
+
+    private fun setOnClickListeners() {
+        binding.floatingActionButton.setOnClickListener {
+            val action = ProductsFragmentDirections.actionProductsFragmentToEditProductFragment(true)
+            findNavController().navigate(action)
+        }
     }
 
     override fun navigateToProductDetails(product: Product) {

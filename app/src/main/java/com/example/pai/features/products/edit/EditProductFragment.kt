@@ -14,30 +14,30 @@ import android.widget.Spinner
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
+import androidx.navigation.fragment.navArgs
 
 import com.example.pai.R
 import com.example.pai.databinding.EditProductFragmentBinding
+import kotlinx.android.synthetic.main.edit_product_fragment.view.*
 
 /**
  * A simple [Fragment] subclass.
  */
 class EditProductFragment : Fragment(), AdapterView.OnItemSelectedListener {
-    override fun onNothingSelected(p0: AdapterView<*>?) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
-
-    override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
-        val a = p0?.getItemAtPosition(p2)
-        Log.i("TAG", "fas")
-    }
-
 
     private lateinit var binding: EditProductFragmentBinding
 
     private val viewModel: EditProductViewModel by lazy {
         val activity = requireNotNull(this.activity) {
         }
-        ViewModelProviders.of(this, EditProductViewModel.Factory(activity.application))
+        ViewModelProviders.of(
+            this,
+            EditProductViewModel.Factory(
+                activity.application,
+                EditProductFragmentArgs.fromBundle(arguments!!).product,
+                EditProductFragmentArgs.fromBundle(arguments!!).isNewProduct
+            )
+        )
             .get(EditProductViewModel::class.java)
     }
 
@@ -53,53 +53,55 @@ class EditProductFragment : Fragment(), AdapterView.OnItemSelectedListener {
             false
         )
         binding.vm = viewModel
-        binding.warehouseTypeSpinner.visibility = View.VISIBLE
+        setOnClickListeners()
 
-        viewModel.loadWarehouses()
+        // viewModel.loadWarehouses()
 
-//        val categories = arrayListOf("Automobile","Travel","Personal","Education","Computers","Business Services" )
-//
-//        val dataAdapter = ArrayAdapter<String>(requireContext(), android.R.layout.simple_spinner_item, categories)
-//        binding.warehouseTypeSpinner.adapter = dataAdapter
-        // Inflate the layout for this fragment
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-//        viewModel.isWarehousesLoaded.observe(this, Observer {
-//////            binding.warehouseTypeSpinner.visibility = View.VISIBLE
-////            viewModel.isWarehousesLoadedFinish()
-////        })
 
         createArrayAdapterForSpinner(viewModel.warehouses, binding.warehouseTypeSpinner)
         createArrayAdapterForSpinner(viewModel.status, binding.statusSpinner)
         createArrayAdapterForSpinner(viewModel.productTypes, binding.productTypeSpinner)
-
-
-//        ArrayAdapter(
-//            requireContext(),
-//            android.R.layout.simple_spinner_item,
-//            viewModel.warehouses
-//        ).also {
-//                adapter ->
-//            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-//            binding.warehouseTypeSpinner.adapter = adapter
-//        }
-//        binding.warehouseTypeSpinner.onItemSelectedListener = this
+        binding.productTypeSpinner.setSelection(2)
     }
 
-    private fun <T> createArrayAdapterForSpinner(objects: List<T>, spinner: Spinner){
+    private fun setOnClickListeners() {
+        binding.saveButton.setOnClickListener {
+            viewModel.saveProduct()
+        }
+    }
+
+    private fun <T> createArrayAdapterForSpinner(objects: List<T>, spinner: Spinner) {
         ArrayAdapter(
             requireContext(),
             android.R.layout.simple_spinner_item,
             objects
-        ).also {
-            adapter ->
+        ).also { adapter ->
             adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
             spinner.adapter = adapter
         }
         spinner.onItemSelectedListener = this
     }
 
+    override fun onNothingSelected(p0: AdapterView<*>?) {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+    override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
+        when {
+            (p0 as View).warehouse_type_spinner != null -> {
+                viewModel.productDtoToSave?.warehouseId = p0.getItemAtPosition(p2) as Int
+            }
+            (p0 as View).product_type_spinner != null -> {
+                viewModel.productDtoToSave?.productTypeId = p0.getItemAtPosition(p2) as Int
+            }
+            (p0 as View).status_spinner != null -> {
+                viewModel.productDtoToSave?.status = p0.getItemAtPosition(p2) as String
+            }
+        }
+    }
 }

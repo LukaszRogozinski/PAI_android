@@ -27,14 +27,13 @@ class ProductsViewModel(application: Application) : AndroidViewModel(application
 
     var view: ProductsView? = null
 
-//    val products: LiveData<List<Product>> =  productsRepository.products
     val _products = MutableLiveData<List<Product>>()
     val products: LiveData<List<Product>>
         get() = _products
 
     val itemBinding: OnItemBind<Product> = OnItemBind { itemBinding, _, item ->
         itemBinding.set(BR.item, R.layout.product_item)
-        itemBinding.bindExtra(BR.listener, object: OnProductClickedListener {
+        itemBinding.bindExtra(BR.listener, object : OnProductClickedListener {
             override fun onProductClicked(product: Product) {
                 view?.navigateToProductDetails(product)
             }
@@ -53,31 +52,28 @@ class ProductsViewModel(application: Application) : AndroidViewModel(application
     }
 
     init {
-        loadAllProducts()
         loadProducts()
     }
 
     private fun loadProducts() {
-
-        viewModelScope2.launch {
+        viewModelScope.launch {
+            val loadProductsAndPutToDatabase = viewModelScope.launch {
                 try {
-                    _products.postValue(productsRepository.getProductsFromDatabase())
-                } catch (e: Exception){
+                    productsRepository.refreshProductDatabase()
+                } catch (e: Exception) {
                     Log.e("TAG", e.message)
                 }
             }
+            loadProductsAndPutToDatabase.join()
 
-    }
-
-    private fun loadAllProducts() {
-        viewModelScope.launch {
-            try {
-                productsRepository.refreshProductDatabase()
-            } catch (e: Exception) {
-                Log.e("TAG", e.message)
+            viewModelScope2.launch {
+                try {
+                    _products.postValue(productsRepository.getProductsFromDatabase())
+                } catch (e: Exception) {
+                    Log.e("TAG", e.message)
+                }
             }
         }
-
     }
 
     class Factory(val app: Application) : ViewModelProvider.Factory {
