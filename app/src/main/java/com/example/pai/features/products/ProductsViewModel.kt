@@ -13,7 +13,7 @@ import com.example.pai.network.ProductDto
 import com.example.pai.network.ProductTypeDto
 import com.example.pai.network.WarehouseDto
 import com.example.pai.repository.ProductsRepository
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
 import me.tatarka.bindingcollectionadapter2.OnItemBind
 import java.lang.Exception
 
@@ -21,9 +21,16 @@ class ProductsViewModel(application: Application) : AndroidViewModel(application
 
     private val productsRepository = ProductsRepository(getDatabase(application))
 
+    private val viewModelJob = Job()
+
+    private val viewModelScope2 = CoroutineScope(viewModelJob + Dispatchers.IO)
+
     var view: ProductsView? = null
 
-    val products: LiveData<List<Product>> = productsRepository.products
+//    val products: LiveData<List<Product>> =  productsRepository.products
+    val _products = MutableLiveData<List<Product>>()
+    val products: LiveData<List<Product>>
+        get() = _products
 
     val itemBinding: OnItemBind<Product> = OnItemBind { itemBinding, _, item ->
         itemBinding.set(BR.item, R.layout.product_item)
@@ -47,6 +54,19 @@ class ProductsViewModel(application: Application) : AndroidViewModel(application
 
     init {
         loadAllProducts()
+        loadProducts()
+    }
+
+    private fun loadProducts() {
+
+        viewModelScope2.launch {
+                try {
+                    _products.postValue(productsRepository.getProductsFromDatabase())
+                } catch (e: Exception){
+                    Log.e("TAG", e.message)
+                }
+            }
+
     }
 
     private fun loadAllProducts() {

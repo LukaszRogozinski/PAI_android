@@ -16,7 +16,7 @@ class UsersViewModel(app: Application) : ViewModel() {
 
     init {
         viewModelScope.launch {
-            val b = productsRepository.getProductType(1)
+            val b = productsRepository.getProductType()
 
             Log.i("TAG", "")
         }

@@ -6,7 +6,7 @@ import androidx.room.*
 @Dao
 interface ProductDao {
     @Query("SELECT * FROM DatabaseProduct")
-    fun getDatabaseProducts(): List<DatabaseProduct>
+    suspend fun getDatabaseProducts(): List<DatabaseProduct>
 
     @Query("SELECT * FROM DatabaseProduct WHERE id = :id")
     fun get(id: Int): DatabaseProduct
@@ -36,7 +36,7 @@ interface ProductTypeDao {
 @Dao
 interface WarehouseDao {
     @Query("SELECT * FROM DatabaseWarehouse")
-    fun getDatabaseWarehouses(): List<DatabaseWarehouse>
+    suspend fun getDatabaseWarehouses(): List<DatabaseWarehouse>
 
     @Query("SELECT * FROM DatabaseWarehouse WHERE id = :id")
     fun get(id: Int) : DatabaseWarehouse

@@ -5,7 +5,9 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
-
+        <variable
+            name="vm"
+            type="com.example.pai.features.products.edit.EditProductViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -14,37 +16,82 @@
         tools:context=".features.products.edit.EditProductFragment">
 
         <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/product_type"
+            android:id="@+id/serial_number_input_text"
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:layout_marginStart="16dp"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="32dp"
             android:layout_marginEnd="16dp"
-            android:hint="product type id"
+            android:hint="serial number"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/serial_number_input_text"
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:hint="serial number"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="16dp"
-            android:layout_marginEnd="16dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/product_type" />
-
-        <androidx.appcompat.widget.AppCompatSpinner
+        <Spinner
             android:id="@+id/warehouse_type_spinner"
-            android:layout_width="300dp"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
+            android:layout_marginStart="16dp"
+            app:layout_constraintEnd_toEndOf="@+id/serial_number_input_text"
+            app:layout_constraintStart_toEndOf="@+id/warehouse_id_text_view"
+            app:layout_constraintTop_toTopOf="@+id/warehouse_id_text_view" />
+
+        <TextView
+            android:id="@+id/warehouse_id_text_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="32dp"
+            android:text="warehouse id:"
             app:layout_constraintStart_toStartOf="@+id/serial_number_input_text"
             app:layout_constraintTop_toBottomOf="@+id/serial_number_input_text" />
 
+        <TextView
+            android:id="@+id/product_type_id_text_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="32dp"
+            android:text="product type id:"
+            app:layout_constraintStart_toStartOf="@+id/warehouse_id_text_view"
+            app:layout_constraintTop_toBottomOf="@+id/warehouse_id_text_view" />
+
+        <Spinner
+            android:id="@+id/product_type_spinner"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="@+id/warehouse_type_spinner"
+            app:layout_constraintStart_toStartOf="@+id/warehouse_type_spinner"
+            app:layout_constraintTop_toTopOf="@+id/product_type_id_text_view" />
+
+        <TextView
+            android:id="@+id/status_text_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="32dp"
+            android:text="status:"
+            app:layout_constraintStart_toStartOf="@+id/product_type_id_text_view"
+            app:layout_constraintTop_toBottomOf="@+id/product_type_id_text_view" />
+
+        <Spinner
+            android:id="@+id/status_spinner"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="@+id/product_type_spinner"
+            app:layout_constraintStart_toStartOf="@+id/product_type_spinner"
+            app:layout_constraintTop_toTopOf="@+id/status_text_view" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/edit_button"
+            style="@style/Widget.AppCompat.Button.Colored"
+            android:layout_width="0dp"
+            android:layout_height="52dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="32dp"
+            android:layout_marginEnd="16dp"
+            android:text="save"
+            app:backgroundTint="@android:color/holo_green_dark"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/status_spinner" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

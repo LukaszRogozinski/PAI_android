@@ -8,21 +8,35 @@ import com.example.pai.database.*
 import com.example.pai.domain.Product
 import com.example.pai.domain.Warehouse
 import com.example.pai.network.*
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
+import kotlinx.coroutines.*
 
 class ProductsRepository(private val database: PaiDatabase) {
 
-    private val _products = MutableLiveData<List<Product>>()
-    val products: LiveData<List<Product>>
+//    private val _products = MutableLiveData<List<Product>>()
+//    val products: LiveData<List<Product>>
+//        get() {
+//           // GlobalScope.launch {
+//          //      _products.postValue(database.productDao.getDatabaseProducts().asDomainModel(database))
+//          //  }
+//            return _products
+//        }
+
+    private val _warehouses = MutableLiveData<List<Warehouse>>()
+    val warehouses: LiveData<List<Warehouse>>
         get() {
             GlobalScope.launch {
-                _products.postValue(database.productDao.getDatabaseProducts().asDomainModel(database))
+                _warehouses.postValue(database.warehouseDao.getDatabaseWarehouses().asWarehouseDomainModel())
             }
-            return _products
+            return _warehouses
         }
+
+    suspend fun getProductsFromDatabase(): List<Product> {
+        return database.productDao.getDatabaseProducts().asDomainModel(database)
+    }
+
+    suspend fun getWarehousesFromDatabase(): List<Warehouse> {
+        return database.warehouseDao.getDatabaseWarehouses().asWarehouseDomainModel()
+    }
 
     suspend fun refreshProductDatabase() {
         withContext(Dispatchers.IO) {
@@ -40,7 +54,7 @@ class ProductsRepository(private val database: PaiDatabase) {
         }
     }
 
-    suspend fun getProductType(productTypeId: Int) {
+    suspend fun getProductType() {
         withContext(Dispatchers.IO) {
             val b = database.productTypeDao.get(
                 1
