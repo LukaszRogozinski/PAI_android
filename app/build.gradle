@@ -97,6 +97,9 @@ dependencies {
     implementation 'org.koin:koin-android:2.0.1'
     implementation 'org.koin:koin-androidx-viewmodel:2.0.1'
 
+    //Timber - logs
+    implementation 'com.jakewharton.timber:timber:4.7.1'
+
     //chrome://inspect
     implementation 'com.facebook.stetho:stetho:1.5.1'
 }

@@ -8,11 +8,14 @@ import com.example.pai.domain.Product
 import com.example.pai.domain.Warehouse
 import com.example.pai.domain.asProductDtoToSave
 import com.example.pai.network.ProductDomainToDto
+import com.example.pai.network.asDomainModel
+import com.example.pai.network.asProductTypeDomainModel
 import com.example.pai.repository.ProductsRepository
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
+import timber.log.Timber
 import java.lang.Exception
 import java.time.LocalDateTime
 
@@ -21,68 +24,103 @@ class EditProductViewModel(app: Application, val product: Product?, val isNewPro
 
     private val productsRepository = ProductsRepository(getDatabase(app))
 
-    private val viewModelJob = Job()
+    private val _warehousesObservable = MutableLiveData<List<Int>>()
+    val warehousesObservable: LiveData<List<Int>>
+        get() = _warehousesObservable
 
-    private val viewModelIOScope = CoroutineScope(viewModelJob + Dispatchers.IO)
+    private val _productTypesObservable = MutableLiveData<List<Int>>()
+    val productTypesObservable: LiveData<List<Int>>
+        get() = _productTypesObservable
+
+    private val _saveProductResponse = MutableLiveData<Boolean>()
+    val saveProductResponse: LiveData<Boolean>
+        get() = _saveProductResponse
+
+    private val _updateProductResponse = MutableLiveData<Boolean>()
+    val updateProductResponse: LiveData<Boolean>
+        get() = _updateProductResponse
+
 
     var productDtoToSave: ProductDomainToDto? = product?.asProductDtoToSave() ?: ProductDomainToDto(
         createDate = LocalDateTime.now().toString(),
         lastUpdate = LocalDateTime.now().toString()
     )
 
-    var warehouses: List<Int> =
-        arrayListOf(1, 2, 3)// = productsRepository.warehouses.map { it.map { it.id } }.value
     val status: List<String> = arrayListOf("available", "unavailable")
-    var productTypes: List<Int> = arrayListOf(1, 2, 3, 4)
-
 
     init {
-        //showSpinners()
-        loadWarehouses()
-        Log.e("TA0", "")
+        loadWarehousesFromNetwork()
+        loadProductTypesFromNetwork()
     }
 
-    fun showSpinners() {
+    fun loadWarehousesFromNetwork() {
         viewModelScope.launch {
-
-            val a = viewModelIOScope.launch {
-                try {
-                    warehouses = productsRepository.getWarehousesFromDatabase().map { it.id }
-                    Log.e("TAG", "item loaded")
-                } catch (e: Exception) {
-                    Log.e("TAG", e.message)
-                }
+            val response = productsRepository.getWarehousesFromNetwork()
+            if (response.isSuccessful) {
+                _warehousesObservable.value =
+                    response.body()!!.asDomainModel().map { it.id }.reversed()
+            } else {
+                Timber.e("could not load warehouses from server")
             }
-            a.join()
         }
-
-
     }
 
-    fun loadWarehouses() {
-        viewModelIOScope.launch {
-            try {
-                warehouses = productsRepository.getWarehousesFromDatabase()
-                    .map { it.id }// { it.id } }.value!!
-                Log.e("TAG", "item loaded")
-            } catch (e: Exception) {
-                Log.e("TAG", e.message)
+    fun loadProductTypesFromNetwork() {
+        viewModelScope.launch {
+            val response = productsRepository.getProductTypesFromNetwork()
+            if (response.isSuccessful) {
+                _productTypesObservable.value =
+                    response.body()!!.asProductTypeDomainModel().map { it.id }
+            } else {
+                Timber.e("Failed to load product types from server")
             }
         }
+    }
+
+    fun setCurrentProductType(): Int {
+        return _productTypesObservable.value!!.indexOf(product?.productType?.id ?: 0)
+    }
+
+    fun setCurrentWarehouseType(): Int {
+        return _warehousesObservable.value!!.indexOf(product?.warehouse?.id ?: 0)
+    }
+
+    fun setCurrentStatus(): Int {
+        return status.indexOf(product?.status ?: "available")
     }
 
     fun saveProduct() {
         viewModelScope.launch {
             try {
                 if (isNewProduct) {
-                    productsRepository.addProduct(productDtoToSave!!)
+                    val response = productsRepository.addProduct(productDtoToSave!!)
+                    if (response.isSuccessful) {
+                        _saveProductResponse.value = true
+                    } else {
+                        Timber.e(response.errorBody().toString())
+                    }
                 } else {
-                    productsRepository.updateProduct(productDtoToSave!!)
+                    val response = productsRepository.updateProduct(productDtoToSave!!)
+                    if (response.isSuccessful) {
+                        _updateProductResponse.value = true
+                    } else {
+                        Timber.e(response.errorBody().toString())
+                    }
                 }
             } catch (e: Exception) {
-                Log.e("TAG", e.message)
+                Timber.e(e)
             }
         }
+    }
+
+    fun saveProductResponseFinish() {
+        _saveProductResponse.value = false
+        Timber.i("saveProductResponse value= ${_saveProductResponse.value}")
+    }
+
+    fun updateProductResponseFinish() {
+        _updateProductResponse.value = false
+        Timber.i("updateProductResponse value= ${_updateProductResponse.value}")
     }
 
     class Factory(val app: Application, val product: Product?, val isNewProduct: Boolean) :

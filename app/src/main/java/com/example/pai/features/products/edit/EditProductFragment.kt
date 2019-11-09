@@ -2,22 +2,21 @@ package com.example.pai.features.products.edit
 
 
 import android.os.Bundle
-import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
-import android.widget.CursorAdapter
 import android.widget.Spinner
+import android.widget.Toast
 import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
-import androidx.navigation.fragment.navArgs
-
+import androidx.navigation.fragment.NavHostFragment.findNavController
 import com.example.pai.R
 import com.example.pai.databinding.EditProductFragmentBinding
+import com.example.pai.utils.hideKeyboard
 import kotlinx.android.synthetic.main.edit_product_fragment.view.*
 
 /**
@@ -53,26 +52,55 @@ class EditProductFragment : Fragment(), AdapterView.OnItemSelectedListener {
             false
         )
         binding.vm = viewModel
-        setOnClickListeners()
-
-        // viewModel.loadWarehouses()
-
+        setObservers()
+        setStatusSpinner()
         return binding.root
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
+    private fun setObservers() {
 
-        createArrayAdapterForSpinner(viewModel.warehouses, binding.warehouseTypeSpinner)
-        createArrayAdapterForSpinner(viewModel.status, binding.statusSpinner)
-        createArrayAdapterForSpinner(viewModel.productTypes, binding.productTypeSpinner)
-        binding.productTypeSpinner.setSelection(2)
+        viewModel.saveProductResponse.observe(this, Observer<Boolean> {
+            if(it) {
+                Toast.makeText(requireContext(), "new item added", Toast.LENGTH_LONG).show()
+                binding.serialNumberInputText.hideKeyboard()
+                val action =
+                    EditProductFragmentDirections.actionEditProductFragmentToProductsFragment()
+                findNavController(this).navigate(action)
+                viewModel.saveProductResponseFinish()
+            }
+        })
+
+        viewModel.updateProductResponse.observe(this, Observer<Boolean> {
+            if(it) {
+                binding.serialNumberInputText.hideKeyboard()
+                Toast.makeText(requireContext(), "item updated", Toast.LENGTH_LONG).show()
+                val action =
+                    EditProductFragmentDirections.actionEditProductFragmentToProductsFragment()
+                findNavController(this).navigate(action)
+                viewModel.updateProductResponseFinish()
+            }
+        })
+        setWarehouseSpinner()
+        setProductTypeSpinner()
     }
 
-    private fun setOnClickListeners() {
-        binding.saveButton.setOnClickListener {
-            viewModel.saveProduct()
-        }
+    private fun setWarehouseSpinner() {
+        viewModel.warehousesObservable.observe(this, Observer {
+            createArrayAdapterForSpinner(it, binding.warehouseTypeSpinner)
+            binding.warehouseTypeSpinner.setSelection(viewModel.setCurrentWarehouseType())
+        })
+    }
+
+    private fun setProductTypeSpinner() {
+        viewModel.productTypesObservable.observe(this, Observer {
+            createArrayAdapterForSpinner(it, binding.productTypeSpinner)
+            binding.productTypeSpinner.setSelection(viewModel.setCurrentProductType())
+        })
+    }
+
+    private fun setStatusSpinner() {
+        createArrayAdapterForSpinner(viewModel.status, binding.statusSpinner)
+        binding.statusSpinner.setSelection(viewModel.setCurrentStatus())
     }
 
     private fun <T> createArrayAdapterForSpinner(objects: List<T>, spinner: Spinner) {
@@ -88,7 +116,6 @@ class EditProductFragment : Fragment(), AdapterView.OnItemSelectedListener {
     }
 
     override fun onNothingSelected(p0: AdapterView<*>?) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
     override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {

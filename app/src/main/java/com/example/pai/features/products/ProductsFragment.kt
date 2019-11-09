@@ -6,15 +6,16 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.databinding.DataBindingUtil
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
-import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.NavHostFragment.findNavController
 
 import com.example.pai.R
 import com.example.pai.databinding.ProductsFragmentBinding
 import com.example.pai.domain.Product
 import com.example.pai.features.products.detail.ProductDetailFragmentArgs
-import org.koin.androidx.viewmodel.ext.android.viewModel
 
 /**
  * A simple [Fragment] subclass.
@@ -44,7 +45,7 @@ class ProductsFragment : Fragment(), ProductsView {
         binding.vm = viewModel
         binding.lifecycleOwner = viewLifecycleOwner
 
-        setOnClickListeners()
+        setObservers()
 
         return binding.root
     }
@@ -59,10 +60,27 @@ class ProductsFragment : Fragment(), ProductsView {
         viewModel.view = null
     }
 
-    private fun setOnClickListeners() {
-        binding.floatingActionButton.setOnClickListener {
-            val action = ProductsFragmentDirections.actionProductsFragmentToEditProductFragment(true)
-            findNavController().navigate(action)
+    private fun setObservers() {
+
+        viewModel.navigateToEditProduct.observe(this, Observer<Boolean> {
+            if(it) {
+                val action = ProductsFragmentDirections.actionProductsFragmentToEditProductFragment(true)
+                findNavController(this).navigate(action)
+                viewModel.navigateToEditProductFinish()
+            }
+        })
+
+        viewModel.eventNetworkError.observe(this, Observer<Boolean> {
+            if(it) {
+                onNetworkError()
+            }
+        })
+    }
+
+    fun onNetworkError() {
+        if(!viewModel.isNetworkErrorShown.value!!) {
+            Toast.makeText(activity, "Network Error", Toast.LENGTH_LONG).show()
+            viewModel.onNetworkErrorShown()
         }
     }
 
@@ -70,7 +88,7 @@ class ProductsFragment : Fragment(), ProductsView {
         val bundle = ProductDetailFragmentArgs.Builder()
             .setProduct(product)
             .build().toBundle()
-        findNavController().navigate(R.id.productDetailFragment, bundle)
+        findNavController(this).navigate(R.id.productDetailFragment, bundle)
     }
 }
 

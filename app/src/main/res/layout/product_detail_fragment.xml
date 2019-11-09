@@ -109,16 +109,6 @@
             app:layout_constraintStart_toStartOf="@+id/imageView"
             app:layout_constraintTop_toBottomOf="@+id/imageView">
 
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/delete_button"
-                style="@style/Widget.AppCompat.Button.Colored"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:text="delete"
-                app:backgroundTint="@android:color/holo_red_dark"
-                app:layout_constraintTop_toBottomOf="@+id/save_button" />
-
             <TextView
                 android:id="@+id/name_label"
                 style="@style/detailViewLabels"
@@ -181,15 +171,27 @@
                 app:layout_constraintTop_toBottomOf="@+id/warehouse_label" />
 
             <com.google.android.material.button.MaterialButton
-                android:id="@+id/save_button"
+                android:id="@+id/edit_button"
                 style="@style/Widget.AppCompat.Button.Colored"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="64dp"
                 android:text="edit"
+                android:onClick="@{() -> vm.navigateToEditProduct()}"
                 app:backgroundTint="@color/design_default_color_primary_dark"
                 app:layout_constraintStart_toStartOf="@+id/warehouse_label"
                 app:layout_constraintTop_toBottomOf="@+id/warehouse_label" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/delete_button"
+                style="@style/Widget.AppCompat.Button.Colored"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="delete"
+                android:onClick="@{() -> vm.deleteProduct()}"
+                app:backgroundTint="@android:color/holo_red_dark"
+                app:layout_constraintTop_toBottomOf="@+id/edit_button" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

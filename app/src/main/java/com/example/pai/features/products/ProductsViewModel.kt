@@ -21,15 +21,23 @@ class ProductsViewModel(application: Application) : AndroidViewModel(application
 
     private val productsRepository = ProductsRepository(getDatabase(application))
 
-    private val viewModelJob = Job()
-
-    private val viewModelScope2 = CoroutineScope(viewModelJob + Dispatchers.IO)
-
     var view: ProductsView? = null
+
+    private val _eventNetworkError = MutableLiveData<Boolean>(false)
+    val eventNetworkError: LiveData<Boolean>
+    get() = _eventNetworkError
+
+    private val _isNetworkErrorShown = MutableLiveData<Boolean>(false)
+    val isNetworkErrorShown: LiveData<Boolean>
+    get() = _isNetworkErrorShown
 
     val _products = MutableLiveData<List<Product>>()
     val products: LiveData<List<Product>>
         get() = _products
+
+    private val _navigateToEditProduct = MutableLiveData<Boolean>()
+    val navigateToEditProduct: LiveData<Boolean>
+        get() = _navigateToEditProduct
 
     val itemBinding: OnItemBind<Product> = OnItemBind { itemBinding, _, item ->
         itemBinding.set(BR.item, R.layout.product_item)
@@ -48,32 +56,35 @@ class ProductsViewModel(application: Application) : AndroidViewModel(application
         override fun areContentsTheSame(oldItem: Product, newItem: Product): Boolean {
             return oldItem == newItem
         }
-
     }
 
     init {
-        loadProducts()
+        loadProductsFromNetwork()
     }
 
-    private fun loadProducts() {
+    private fun loadProductsFromNetwork() {
         viewModelScope.launch {
-            val loadProductsAndPutToDatabase = viewModelScope.launch {
-                try {
-                    productsRepository.refreshProductDatabase()
-                } catch (e: Exception) {
-                    Log.e("TAG", e.message)
-                }
-            }
-            loadProductsAndPutToDatabase.join()
-
-            viewModelScope2.launch {
-                try {
-                    _products.postValue(productsRepository.getProductsFromDatabase())
-                } catch (e: Exception) {
-                    Log.e("TAG", e.message)
-                }
+            try {
+                _products.value = productsRepository.loadProducts()
+                _eventNetworkError.value = false
+                _isNetworkErrorShown.value = false
+            } catch (e: Exception) {
+                Log.e("TAG", e.message)
+                _eventNetworkError.value = true
             }
         }
+    }
+
+    fun onNetworkErrorShown() {
+        _isNetworkErrorShown.value = true
+    }
+
+    fun navigateToEditProduct() {
+        _navigateToEditProduct.value = true
+    }
+
+    fun navigateToEditProductFinish() {
+        _navigateToEditProduct.value = false
     }
 
     class Factory(val app: Application) : ViewModelProvider.Factory {

@@ -49,6 +49,9 @@
         <action
             android:id="@+id/action_productDetailFragment_to_editProductFragment"
             app:destination="@id/editProductFragment" />
+        <action
+            android:id="@+id/action_productDetailFragment_to_productsFragment"
+            app:destination="@id/productsFragment" />
     </fragment>
     <fragment
         android:id="@+id/editProductFragment"
@@ -63,5 +66,8 @@
         <argument
             android:name="isNewProduct"
             app:argType="boolean" />
+        <action
+            android:id="@+id/action_editProductFragment_to_productsFragment"
+            app:destination="@id/productsFragment" />
     </fragment>
 </navigation>

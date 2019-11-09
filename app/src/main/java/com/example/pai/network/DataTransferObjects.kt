@@ -3,6 +3,9 @@ package com.example.pai.network
 import com.example.pai.database.DatabaseProduct
 import com.example.pai.database.DatabaseProductType
 import com.example.pai.database.DatabaseWarehouse
+import com.example.pai.domain.Product
+import com.example.pai.domain.ProductType
+import com.example.pai.domain.Warehouse
 
 data class ProductDto(
     val id: Int,
@@ -42,6 +45,22 @@ data class ProductDomainToDto(
     var warehouseId: Int? = null
 )
 
+fun List<ProductDto>.asProductDomainModel(): List<Product> {
+    return map {
+        Product(
+            id = it.id,
+            version = it.version,
+            serialNumber = it.serialNumber,
+            status = it.status,
+            productType = it.productType.asDomainModel(),
+            lastUpdate = it.lastUpdate,
+            createDate = it.createDate,
+            deleted = it.deleted,
+            warehouse = it.warehouse.asDomainModel()
+        )
+    }
+}
+
 fun List<ProductDto>.asProductDatabaseModel(): List<DatabaseProduct> {
     return map {
         DatabaseProduct(
@@ -58,6 +77,19 @@ fun List<ProductDto>.asProductDatabaseModel(): List<DatabaseProduct> {
     }
 }
 
+fun List<ProductTypeDto>.asProductTypeDomainModel(): List<ProductType> {
+    return map {
+        ProductType(
+            id = it.id,
+            version = it.version,
+            name = it.name,
+            manufacture = it.manufacture,
+            cost = it.cost,
+            deleted = it.deleted
+        )
+    }
+}
+
 fun List<ProductTypeDto>.asProductTypeDatabaseModel(): List<DatabaseProductType> {
     return map {
         DatabaseProductType(
@@ -69,6 +101,17 @@ fun List<ProductTypeDto>.asProductTypeDatabaseModel(): List<DatabaseProductType>
             deleted = it.deleted
         )
     }
+}
+
+fun ProductTypeDto.asDomainModel() : ProductType {
+    return ProductType(
+        id = this.id,
+        version = this.version,
+        name = this.name,
+        manufacture = this.manufacture,
+        cost = this.cost,
+        deleted = this.deleted
+    )
 }
 
 fun ProductTypeDto.asDatabaseModel(): DatabaseProductType {
@@ -89,6 +132,26 @@ fun WarehouseDto.asDatabaseModel(): DatabaseWarehouse {
         name = this.name,
         deleted = this.deleted
     )
+}
+
+fun WarehouseDto.asDomainModel(): Warehouse {
+    return Warehouse(
+        id = this.id,
+        version = this.version,
+        name = this.name,
+        deleted = this.deleted
+    )
+}
+
+fun List<WarehouseDto>.asDomainModel(): List<Warehouse> {
+    return map {
+        Warehouse(
+            id = it.id,
+            version = it.version,
+            name = it.name,
+            deleted = it.deleted
+        )
+    }
 }
 
 fun List<WarehouseDto>.asWarehouseDatabaseModel(): List<DatabaseWarehouse> {
