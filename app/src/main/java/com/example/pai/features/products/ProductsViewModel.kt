@@ -8,13 +8,11 @@ import com.example.pai.BR
 import com.example.pai.R
 import com.example.pai.database.getDatabase
 import com.example.pai.domain.Product
-import com.example.pai.network.PaiApi
-import com.example.pai.network.ProductDto
-import com.example.pai.network.ProductTypeDto
-import com.example.pai.network.WarehouseDto
+import com.example.pai.network.*
 import com.example.pai.repository.ProductsRepository
 import kotlinx.coroutines.*
 import me.tatarka.bindingcollectionadapter2.OnItemBind
+import timber.log.Timber
 import java.lang.Exception
 
 class ProductsViewModel(application: Application) : AndroidViewModel(application) {
@@ -25,11 +23,11 @@ class ProductsViewModel(application: Application) : AndroidViewModel(application
 
     private val _eventNetworkError = MutableLiveData<Boolean>(false)
     val eventNetworkError: LiveData<Boolean>
-    get() = _eventNetworkError
+        get() = _eventNetworkError
 
     private val _isNetworkErrorShown = MutableLiveData<Boolean>(false)
     val isNetworkErrorShown: LiveData<Boolean>
-    get() = _isNetworkErrorShown
+        get() = _isNetworkErrorShown
 
     val _products = MutableLiveData<List<Product>>()
     val products: LiveData<List<Product>>
@@ -65,11 +63,17 @@ class ProductsViewModel(application: Application) : AndroidViewModel(application
     private fun loadProductsFromNetwork() {
         viewModelScope.launch {
             try {
-                _products.value = productsRepository.loadProducts()
-                _eventNetworkError.value = false
-                _isNetworkErrorShown.value = false
+                val response = productsRepository.loadProducts()
+                if (response.isSuccessful) {
+                    _products.value = response.body()!!.asProductDomainModel()
+                    _eventNetworkError.value = false
+                    _isNetworkErrorShown.value = false
+                } else {
+                    Timber.e(response.errorBody().toString())
+                }
+
             } catch (e: Exception) {
-                Log.e("TAG", e.message)
+                Timber.e(e)
                 _eventNetworkError.value = true
             }
         }
@@ -85,6 +89,11 @@ class ProductsViewModel(application: Application) : AndroidViewModel(application
 
     fun navigateToEditProductFinish() {
         _navigateToEditProduct.value = false
+    }
+
+    override fun onCleared() {
+        super.onCleared()
+        viewModelScope.cancel()
     }
 
     class Factory(val app: Application) : ViewModelProvider.Factory {

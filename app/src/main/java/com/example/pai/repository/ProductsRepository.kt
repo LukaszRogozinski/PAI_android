@@ -18,8 +18,8 @@ class ProductsRepository(private val database: PaiDatabase) {
         return database.warehouseDao.getDatabaseWarehouses().asWarehouseDomainModel()
     }
 
-    suspend fun loadProducts() : List<Product> {
-        return PaiApi.retrofitService.getProducts().asProductDomainModel()
+    suspend fun loadProducts() : Response<List<ProductDto>> {
+        return PaiApi.retrofitService.getProducts()
     }
 
     suspend fun getWarehousesFromNetwork() : Response<List<WarehouseDto>> {

@@ -15,7 +15,6 @@ import androidx.navigation.fragment.NavHostFragment.findNavController
 import com.example.pai.R
 import com.example.pai.databinding.ProductsFragmentBinding
 import com.example.pai.domain.Product
-import com.example.pai.features.products.detail.ProductDetailFragmentArgs
 
 /**
  * A simple [Fragment] subclass.
@@ -28,7 +27,6 @@ class ProductsFragment : Fragment(), ProductsView {
         ViewModelProviders.of(this, ProductsViewModel.Factory(activity.application))
             .get(ProductsViewModel::class.java)
     }
-
     private lateinit var binding: ProductsFragmentBinding
 
     override fun onCreateView(
@@ -41,7 +39,6 @@ class ProductsFragment : Fragment(), ProductsView {
             container,
             false
         )
-        viewModel
         binding.vm = viewModel
         binding.lifecycleOwner = viewLifecycleOwner
 
@@ -63,32 +60,34 @@ class ProductsFragment : Fragment(), ProductsView {
     private fun setObservers() {
 
         viewModel.navigateToEditProduct.observe(this, Observer<Boolean> {
-            if(it) {
-                val action = ProductsFragmentDirections.actionProductsFragmentToEditProductFragment(true)
+            if (it) {
+                val action =
+                    ProductsFragmentDirections.actionProductsFragmentToEditProductFragment(true)
                 findNavController(this).navigate(action)
                 viewModel.navigateToEditProductFinish()
             }
         })
 
         viewModel.eventNetworkError.observe(this, Observer<Boolean> {
-            if(it) {
+            if (it) {
                 onNetworkError()
             }
         })
     }
 
     fun onNetworkError() {
-        if(!viewModel.isNetworkErrorShown.value!!) {
+        if (!viewModel.isNetworkErrorShown.value!!) {
             Toast.makeText(activity, "Network Error", Toast.LENGTH_LONG).show()
             viewModel.onNetworkErrorShown()
         }
     }
 
     override fun navigateToProductDetails(product: Product) {
-        val bundle = ProductDetailFragmentArgs.Builder()
-            .setProduct(product)
-            .build().toBundle()
-        findNavController(this).navigate(R.id.productDetailFragment, bundle)
+        findNavController(this).navigate(
+            ProductsFragmentDirections.actionProductsFragmentToProductDetailFragment().setProduct(
+                product
+            )
+        )
     }
 }
 

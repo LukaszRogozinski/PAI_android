@@ -17,26 +17,26 @@ private val retrofit = Retrofit.Builder()
 
 interface PaiApiService {
     @GET("api/products")
-   suspend fun getProducts() : List<ProductDto>
+    suspend fun getProducts(): Response<List<ProductDto>>
 
     @POST("api/products")
-    suspend fun addProduct(@Body productDomainToDto: ProductDomainToDto) : Response<Unit>
+    suspend fun addProduct(@Body productDomainToDto: ProductDomainToDto): Response<Unit>
 
     @PUT("api/products")
-    suspend fun updateProduct(@Body productDomainToDto: ProductDomainToDto) : Response<Unit>
+    suspend fun updateProduct(@Body productDomainToDto: ProductDomainToDto): Response<Unit>
 
     @DELETE("/api/products/{id}")
-    suspend fun deleteProductAsync(@Path("id") id: Int) : Response<Unit>
+    suspend fun deleteProductAsync(@Path("id") id: Int): Response<Unit>
 
     @GET("api/warehouses")
-    suspend fun getWarehouses() : Response<List<WarehouseDto>>
+    suspend fun getWarehouses(): Response<List<WarehouseDto>>
 
     @GET("api/products/type")
-    suspend fun getProductTypes() : Response<List<ProductTypeDto>>
+    suspend fun getProductTypes(): Response<List<ProductTypeDto>>
 }
 
 object PaiApi {
-    val retrofitService : PaiApiService by lazy {
+    val retrofitService: PaiApiService by lazy {
         retrofit.create(PaiApiService::class.java)
     }
 }
