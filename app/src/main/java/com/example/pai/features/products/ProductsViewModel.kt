@@ -1,7 +1,6 @@
 package com.example.pai.features.products
 
 import android.app.Application
-import android.util.Log
 import androidx.lifecycle.*
 import androidx.recyclerview.widget.DiffUtil
 import com.example.pai.BR
@@ -19,7 +18,6 @@ class ProductsViewModel(application: Application) : AndroidViewModel(application
 
     private val productsRepository = ProductsRepository(getDatabase(application))
 
-    var view: ProductsView? = null
 
     private val _eventNetworkError = MutableLiveData<Boolean>(false)
     val eventNetworkError: LiveData<Boolean>
@@ -33,17 +31,25 @@ class ProductsViewModel(application: Application) : AndroidViewModel(application
     val products: LiveData<List<Product>>
         get() = _products
 
+    private val _navigateToSelectedProduct = MutableLiveData<Product>()
+    val navigateToSelectedProduct: LiveData<Product>
+        get() = _navigateToSelectedProduct
+
     private val _navigateToEditProduct = MutableLiveData<Boolean>()
     val navigateToEditProduct: LiveData<Boolean>
         get() = _navigateToEditProduct
 
+    fun onSelectedProduct(item: Product) {
+        _navigateToSelectedProduct.value = item
+    }
+
+    fun navigateToSelectedProductDone() {
+        _navigateToSelectedProduct.value = null
+    }
+
     val itemBinding: OnItemBind<Product> = OnItemBind { itemBinding, _, item ->
         itemBinding.set(BR.item, R.layout.product_item)
-        itemBinding.bindExtra(BR.listener, object : OnProductClickedListener {
-            override fun onProductClicked(product: Product) {
-                view?.navigateToProductDetails(product)
-            }
-        })
+        itemBinding.bindExtra(BR.vm, this)
     }
 
     val diff = object : DiffUtil.ItemCallback<Product>() {

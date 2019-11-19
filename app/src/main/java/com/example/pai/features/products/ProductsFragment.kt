@@ -19,7 +19,7 @@ import com.example.pai.domain.Product
 /**
  * A simple [Fragment] subclass.
  */
-class ProductsFragment : Fragment(), ProductsView {
+class ProductsFragment : Fragment() {
 
     private val viewModel: ProductsViewModel by lazy {
         val activity = requireNotNull(this.activity) {
@@ -47,17 +47,17 @@ class ProductsFragment : Fragment(), ProductsView {
         return binding.root
     }
 
-    override fun onStart() {
-        super.onStart()
-        viewModel.view = this
-    }
-
-    override fun onStop() {
-        super.onStop()
-        viewModel.view = null
-    }
-
     private fun setObservers() {
+
+        viewModel.navigateToSelectedProduct.observe(this, Observer<Product> {
+            if (it != null) {
+                val action =
+                    ProductsFragmentDirections.actionProductsFragmentToProductDetailFragment()
+                        .setProduct(it)
+                findNavController(this).navigate(action)
+                viewModel.navigateToSelectedProductDone()
+            }
+        })
 
         viewModel.navigateToEditProduct.observe(this, Observer<Boolean> {
             if (it) {
@@ -81,20 +81,5 @@ class ProductsFragment : Fragment(), ProductsView {
             viewModel.onNetworkErrorShown()
         }
     }
-
-    override fun navigateToProductDetails(product: Product) {
-        findNavController(this).navigate(
-            ProductsFragmentDirections.actionProductsFragmentToProductDetailFragment().setProduct(
-                product
-            )
-        )
-    }
 }
 
-interface ProductsView {
-    fun navigateToProductDetails(product: Product)
-}
-
-interface OnProductClickedListener {
-    fun onProductClicked(product: Product)
-}

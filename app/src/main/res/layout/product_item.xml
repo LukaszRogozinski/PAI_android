@@ -10,8 +10,8 @@
             type="com.example.pai.domain.Product" />
 
         <variable
-            name="listener"
-            type="com.example.pai.features.products.OnProductClickedListener" />
+            name="vm"
+            type="com.example.pai.features.products.ProductsViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -24,7 +24,7 @@
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
             android:layout_marginEnd="8dp"
-            android:onClick="@{() -> listener.onProductClicked(item)}"
+            android:onClick="@{() -> vm.onSelectedProduct(item)}"
             app:cardCornerRadius="2dp"
             app:cardElevation="4dp"
             app:cardUseCompatPadding="true"
