@@ -15,6 +15,7 @@ import androidx.navigation.fragment.NavHostFragment.findNavController
 import com.example.pai.R
 import com.example.pai.databinding.ProductsFragmentBinding
 import com.example.pai.domain.Product
+import com.example.pai.utils.Utils
 
 /**
  * A simple [Fragment] subclass.
@@ -45,6 +46,14 @@ class ProductsFragment : Fragment() {
         setObservers()
 
         return binding.root
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        requireActivity().onBackPressedDispatcher.addCallback(
+            this,
+            Utils.onBackPressedCallback(requireActivity(), requireContext())
+        )
     }
 
     private fun setObservers() {

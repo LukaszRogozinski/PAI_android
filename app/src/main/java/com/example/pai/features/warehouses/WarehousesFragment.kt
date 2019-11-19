@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 
 import com.example.pai.R
+import com.example.pai.utils.Utils
 
 /**
  * A simple [Fragment] subclass.
@@ -22,5 +23,12 @@ class WarehousesFragment : Fragment() {
         return inflater.inflate(R.layout.warehouses_fragment, container, false)
     }
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        requireActivity().onBackPressedDispatcher.addCallback(
+            this,
+            Utils.onBackPressedCallback(requireActivity(), requireContext())
+        )
+    }
 
 }

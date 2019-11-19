@@ -1,11 +1,11 @@
 package com.example.pai.repository
 
-import android.util.Log
-import com.example.pai.database.*
+import com.example.pai.database.PaiDatabase
+import com.example.pai.database.asDomainModel
+import com.example.pai.database.asWarehouseDomainModel
 import com.example.pai.domain.Product
 import com.example.pai.domain.Warehouse
 import com.example.pai.network.*
-import kotlinx.coroutines.*
 import retrofit2.Response
 
 class ProductsRepository(private val database: PaiDatabase) {
