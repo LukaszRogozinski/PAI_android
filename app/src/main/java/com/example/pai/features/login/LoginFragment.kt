@@ -43,7 +43,7 @@ class LoginFragment : Fragment() {
 
     private fun setObservers() {
 
-        viewModel.navigateToProducts.observe(this, Observer<Boolean> {
+        viewModel.navigateToProducts.observe(viewLifecycleOwner, Observer<Boolean> {
             if (it) {
                 Timber.i("Navigate to products fragment called")
                 val action = LoginFragmentDirections.actionLoginFragmentToProductsFragment()
