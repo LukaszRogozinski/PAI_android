@@ -1,0 +1,255 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <variable
+            name="item"
+            type="com.example.pai.domain.User" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".features.users.detail.UserDetailFragment">
+
+        <ImageView
+            android:id="@+id/imageView3"
+            android:layout_width="200dp"
+            android:layout_height="200dp"
+            android:layout_marginTop="32dp"
+            android:src="@drawable/ic_person_24px"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/username_textView_detail"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="@{item.username}"
+            android:textSize="20sp"
+            app:layout_constraintEnd_toEndOf="@+id/imageView3"
+            app:layout_constraintStart_toStartOf="@+id/imageView3"
+            app:layout_constraintTop_toBottomOf="@+id/imageView3" />
+
+        <TextView
+            android:id="@+id/name_label"
+            style="@style/detailViewLabels"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:text="name:"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/username_textView_detail" />
+
+        <TextView
+            android:id="@+id/name_textView_detail"
+            style="@style/detailViewValues"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="@{item.userdata.name}"
+            app:layout_constraintStart_toStartOf="@+id/name_label"
+            app:layout_constraintTop_toBottomOf="@+id/name_label" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.5" />
+
+        <TextView
+            android:id="@+id/surname_label"
+            style="@style/detailViewLabels"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:text="surname:"
+            app:layout_constraintStart_toStartOf="@+id/guideline"
+            app:layout_constraintTop_toTopOf="@+id/name_label" />
+
+        <TextView
+            android:id="@+id/surname_value_detail"
+            style="@style/detailViewValues"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="@{item.userdata.surname}"
+            app:layout_constraintStart_toStartOf="@+id/surname_label"
+            app:layout_constraintTop_toBottomOf="@+id/surname_label" />
+
+        <TextView
+            android:id="@+id/is_account_expired_label"
+            style="@style/detailViewLabels"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="account expired:"
+            app:layout_constraintStart_toStartOf="@+id/name_textView_detail"
+            app:layout_constraintTop_toBottomOf="@+id/city_value" />
+
+        <TextView
+            android:id="@+id/account_locked_value"
+            style="@style/detailViewValues"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            app:booleanToString="@{item.accountLocked}"
+            app:layout_constraintStart_toStartOf="@+id/is_account_locked_label"
+            app:layout_constraintTop_toBottomOf="@+id/is_account_locked_label" />
+
+        <TextView
+            android:id="@+id/is_account_locked_label"
+            style="@style/detailViewLabels"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="account locked:"
+            app:layout_constraintStart_toStartOf="@+id/surname_value_detail"
+            app:layout_constraintTop_toBottomOf="@+id/house_no_value" />
+
+        <TextView
+            android:id="@+id/account_enabled_value"
+            style="@style/detailViewValues"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:booleanToString="@{item.enabled}"
+            app:layout_constraintStart_toStartOf="@+id/account_enabled_label"
+            app:layout_constraintTop_toBottomOf="@+id/account_enabled_label" />
+
+        <TextView
+            android:id="@+id/credentials_expired_label"
+            style="@style/detailViewLabels"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="credentials expired:"
+            app:layout_constraintStart_toStartOf="@+id/account_expired_value"
+            app:layout_constraintTop_toBottomOf="@+id/account_expired_value" />
+
+        <TextView
+            android:id="@+id/credentials_expired_value"
+            style="@style/detailViewValues"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:booleanToString="@{item.credentialsExpired}"
+            app:layout_constraintStart_toStartOf="@+id/credentials_expired_label"
+            app:layout_constraintTop_toBottomOf="@+id/credentials_expired_label" />
+
+        <TextView
+            android:id="@+id/account_enabled_label"
+            style="@style/detailViewLabels"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="account enabled:"
+            app:layout_constraintStart_toStartOf="@+id/account_locked_value"
+            app:layout_constraintTop_toBottomOf="@+id/account_locked_value" />
+
+        <TextView
+            android:id="@+id/account_expired_value"
+            style="@style/detailViewValues"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            app:booleanToString="@{item.accountExpired}"
+            app:layout_constraintStart_toStartOf="@+id/is_account_expired_label"
+            app:layout_constraintTop_toBottomOf="@+id/is_account_expired_label" />
+
+        <TextView
+            android:id="@+id/email_label"
+            style="@style/detailViewLabels"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="email:"
+            app:layout_constraintStart_toStartOf="@+id/name_textView_detail"
+            app:layout_constraintTop_toBottomOf="@+id/name_textView_detail" />
+
+        <TextView
+            android:id="@+id/email_value"
+            style="@style/detailViewValues"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="@{item.userdata.email}"
+            app:layout_constraintStart_toStartOf="@+id/email_label"
+            app:layout_constraintTop_toBottomOf="@+id/email_label" />
+
+        <TextView
+            android:id="@+id/city_label"
+            style="@style/detailViewLabels"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="city:"
+            app:layout_constraintStart_toStartOf="@+id/email_value"
+            app:layout_constraintTop_toBottomOf="@+id/email_value" />
+
+        <TextView
+            android:id="@+id/city_value"
+            style="@style/detailViewValues"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="@{item.userdata.address.city}"
+            app:layout_constraintStart_toStartOf="@+id/city_label"
+            app:layout_constraintTop_toBottomOf="@+id/city_label" />
+
+        <TextView
+            android:id="@+id/street_label"
+            style="@style/detailViewLabels"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="32dp"
+            android:gravity="center_horizontal"
+            android:text="street:"
+            app:layout_constraintStart_toEndOf="@+id/city_value"
+            app:layout_constraintTop_toTopOf="@+id/city_label" />
+
+        <TextView
+            android:id="@+id/street_value"
+            style="@style/detailViewValues"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="@{item.userdata.address.street}"
+            app:layout_constraintStart_toStartOf="@+id/street_label"
+            app:layout_constraintTop_toBottomOf="@+id/street_label" />
+
+        <TextView
+            android:id="@+id/house_flat_no_label"
+            style="@style/detailViewLabels"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="32dp"
+            android:text="house/flat No:"
+            app:layout_constraintStart_toEndOf="@+id/street_value"
+            app:layout_constraintTop_toTopOf="@+id/street_label" />
+
+        <TextView
+            android:id="@+id/house_no_value"
+            style="@style/detailViewValues"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="@{item.userdata.address.buildingNumber}"
+            app:layout_constraintStart_toStartOf="@+id/house_flat_no_label"
+            app:layout_constraintTop_toBottomOf="@+id/house_flat_no_label" />
+
+        <TextView
+            android:id="@+id/flat_no_value"
+            style="@style/detailViewValues"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:flatNumber="@{item.userdata.address.flatNumber}"
+            app:layout_constraintStart_toEndOf="@+id/house_no_value"
+            app:layout_constraintTop_toTopOf="@+id/house_no_value" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

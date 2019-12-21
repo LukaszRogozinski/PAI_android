@@ -68,8 +68,7 @@ dependencies {
     implementation 'com.jakewharton.retrofit:retrofit2-kotlin-coroutines-adapter:0.9.2'
 
     // moshi for parsing the JSON format
-    def moshi_version = "1.6.0"
-    implementation "com.squareup.moshi:moshi:$moshi_version"
+    def moshi_version = "1.9.1"
     implementation "com.squareup.moshi:moshi-kotlin:$moshi_version"
     kapt "com.squareup.moshi:moshi-kotlin-codegen:$moshi_version"
 
@@ -96,6 +95,12 @@ dependencies {
     //di
     implementation 'org.koin:koin-android:2.0.1'
     implementation 'org.koin:koin-androidx-viewmodel:2.0.1'
+
+    // Material Dialog Library
+    implementation 'com.shreyaspatil:MaterialDialog:2.0'
+
+    // Material Design Library
+    implementation 'com.google.android.material:material:1.0.0'
 
     //Timber - logs
     implementation 'com.jakewharton.timber:timber:4.7.1'

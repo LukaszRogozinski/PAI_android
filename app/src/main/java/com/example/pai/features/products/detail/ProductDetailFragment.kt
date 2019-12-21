@@ -1,6 +1,7 @@
 package com.example.pai.features.products.detail
 
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -14,6 +15,7 @@ import androidx.navigation.fragment.NavHostFragment.findNavController
 import com.example.pai.R
 import com.example.pai.databinding.ProductDetailFragmentBinding
 import com.example.pai.domain.Product
+import com.shreyaspatil.MaterialDialog.MaterialDialog
 import timber.log.Timber
 
 /**
@@ -27,11 +29,9 @@ class ProductDetailFragment : Fragment() {
 
     private val viewModel: ProductDetailViewModel by lazy {
         Timber.i("ProductDetailViewModel called")
-        val activity = requireNotNull(this.activity)
         ViewModelProviders.of(
             this,
             ProductDetailViewModel.Factory(
-                activity.application,
                 product
             )
         )
@@ -55,21 +55,22 @@ class ProductDetailFragment : Fragment() {
         return binding.root
     }
 
+    @SuppressLint("RestrictedApi")
     private fun setObservers() {
 
-        viewModel.navigateToEditProduct.observe(this, Observer<Boolean> {
-            if (it) {
-                val action =
-                    ProductDetailFragmentDirections.actionProductDetailFragmentToEditProductFragment(
-                        false
-                    ).setProduct(product)
-                findNavController(this).navigate(action)
-                Timber.i("navigate to edit product screen")
-                viewModel.navigateToEditProductFinish()
-            }
-        })
+//        viewModel.navigateToEditProduct.observe(viewLifecycleOwner, Observer<Boolean> {
+//            if (it) {
+//                val action =
+//                    ProductDetailFragmentDirections.actionProductDetailFragmentToEditProductFragment(
+//                        false
+//                    ).setProduct(product)
+//                findNavController(this).navigate(action)
+//                Timber.i("navigate to edit product screen")
+//                viewModel.navigateToEditProductFinish()
+//            }
+//        })
 
-        viewModel.deleteResponse.observe(this, Observer<Boolean> {
+        viewModel.deleteResponse.observe(viewLifecycleOwner, Observer<Boolean> {
             if (it) {
                 Timber.i("item deleted")
                 val action =
@@ -78,6 +79,27 @@ class ProductDetailFragment : Fragment() {
                 findNavController(this).navigate(action)
                 Timber.i("navigate to products fragment")
                 viewModel.onDeleteResponseFinish()
+            }
+        })
+
+        viewModel.showDeleteDialog.observe(viewLifecycleOwner, Observer {
+            if (it) {
+                val mDialog: MaterialDialog = MaterialDialog.Builder(requireActivity())
+                    .setTitle("Delete?")
+                    .setMessage("Are you sure want to delete this product?")
+                    .setCancelable(true)
+                    .setPositiveButton(
+                        "Delete", R.drawable.ic_delete_24px
+                    ) { dialogInterface, _ ->
+                        viewModel.deleteProduct()
+                        dialogInterface?.dismiss()
+                    }
+                    .setNegativeButton(
+                        "Cancel", R.drawable.ic_close_24px
+                    ) { dialogInterface, _ -> dialogInterface?.dismiss() }
+                    .build()
+
+                mDialog.show()
             }
         })
     }

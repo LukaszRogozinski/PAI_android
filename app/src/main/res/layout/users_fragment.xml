@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+
         <variable
             name="vm"
             type="com.example.pai.features.users.UsersViewModel" />
@@ -13,11 +15,30 @@
         android:layout_height="match_parent"
         tools:context=".features.users.UsersFragment">
 
-        <!-- TODO: Update blank fragment layout -->
-        <TextView
+        <ProgressBar
+            android:id="@+id/loading_spinner"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:isNetworkError="@{safeUnbox(vm.eventNetworkError)}"
+            app:layout_constraintBottom_toBottomOf="@+id/users_recyclerView"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/users_recyclerView"
+            app:itemlist="@{vm.users}" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/users_recyclerView"
+            itemBinding="@{vm.itemBinding}"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:text="Users" />
+            android:layout_marginBottom="68dp"
+            app:diffConfig="@{vm.diff}"
+            app:items="@{vm.users}"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            app:layout_constraintBottom_toBottomOf="parent"
+            tools:layout_editor_absoluteX="0dp"
+            tools:listitem="@layout/user_item" />
+
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

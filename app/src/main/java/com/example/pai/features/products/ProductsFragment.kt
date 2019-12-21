@@ -23,9 +23,7 @@ import com.example.pai.utils.Utils
 class ProductsFragment : Fragment() {
 
     private val viewModel: ProductsViewModel by lazy {
-        val activity = requireNotNull(this.activity) {
-        }
-        ViewModelProviders.of(this, ProductsViewModel.Factory(activity.application))
+        ViewModelProviders.of(this, ProductsViewModel.Factory())
             .get(ProductsViewModel::class.java)
     }
     private lateinit var binding: ProductsFragmentBinding
@@ -57,8 +55,7 @@ class ProductsFragment : Fragment() {
     }
 
     private fun setObservers() {
-
-        viewModel.navigateToSelectedProduct.observe(this, Observer<Product> {
+        viewModel.navigateToSelectedProduct.observe(viewLifecycleOwner, Observer<Product> {
             if (it != null) {
                 val action =
                     ProductsFragmentDirections.actionProductsFragmentToProductDetailFragment()
@@ -68,23 +65,23 @@ class ProductsFragment : Fragment() {
             }
         })
 
-        viewModel.navigateToEditProduct.observe(this, Observer<Boolean> {
-            if (it) {
-                val action =
-                    ProductsFragmentDirections.actionProductsFragmentToEditProductFragment(true)
-                findNavController(this).navigate(action)
-                viewModel.navigateToEditProductFinish()
-            }
-        })
+//        viewModel.navigateToEditProduct.observe(viewLifecycleOwner, Observer<Boolean> {
+//            if (it) {
+//                val action =
+//                    ProductsFragmentDirections.actionProductsFragmentToEditProductFragment(true)
+//                findNavController(this).navigate(action)
+//                viewModel.navigateToEditProductFinish()
+//            }
+//        })
 
-        viewModel.eventNetworkError.observe(this, Observer<Boolean> {
+        viewModel.eventNetworkError.observe(viewLifecycleOwner, Observer<Boolean> {
             if (it) {
                 onNetworkError()
             }
         })
     }
 
-    fun onNetworkError() {
+    private fun onNetworkError() {
         if (!viewModel.isNetworkErrorShown.value!!) {
             Toast.makeText(activity, "Network Error", Toast.LENGTH_LONG).show()
             viewModel.onNetworkErrorShown()

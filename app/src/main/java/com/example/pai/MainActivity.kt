@@ -19,7 +19,9 @@ class MainActivity : AppCompatActivity() {
         findNavController(R.id.nav_host_fragment).apply {
             addOnDestinationChangedListener { _, destination, _ ->
                 if (destination.id == R.id.loginFragment ||
-                    destination.id == R.id.productDetailFragment ) {
+                    destination.id == R.id.productDetailFragment ||
+                    destination.id == R.id.userDetailFragment
+                ) {
                     updateNavigationUiVisibility(false)
                 } else {
                     updateNavigationUiVisibility(true)

@@ -8,22 +8,22 @@ import com.example.pai.R
 import com.example.pai.database.getDatabase
 import com.example.pai.domain.Product
 import com.example.pai.network.*
-import com.example.pai.repository.ProductsRepository
+import com.example.pai.repository.NetworkRepository
 import kotlinx.coroutines.*
 import me.tatarka.bindingcollectionadapter2.OnItemBind
 import timber.log.Timber
 import java.lang.Exception
 
-class ProductsViewModel(application: Application) : AndroidViewModel(application) {
+class ProductsViewModel() : ViewModel() {
 
-    private val productsRepository = ProductsRepository(getDatabase(application))
+    private val productsRepository = NetworkRepository()
 
 
-    private val _eventNetworkError = MutableLiveData<Boolean>(false)
+    private val _eventNetworkError = MutableLiveData(false)
     val eventNetworkError: LiveData<Boolean>
         get() = _eventNetworkError
 
-    private val _isNetworkErrorShown = MutableLiveData<Boolean>(false)
+    private val _isNetworkErrorShown = MutableLiveData(false)
     val isNetworkErrorShown: LiveData<Boolean>
         get() = _isNetworkErrorShown
 
@@ -35,9 +35,9 @@ class ProductsViewModel(application: Application) : AndroidViewModel(application
     val navigateToSelectedProduct: LiveData<Product>
         get() = _navigateToSelectedProduct
 
-    private val _navigateToEditProduct = MutableLiveData<Boolean>()
-    val navigateToEditProduct: LiveData<Boolean>
-        get() = _navigateToEditProduct
+//    private val _navigateToEditProduct = MutableLiveData<Boolean>()
+//    val navigateToEditProduct: LiveData<Boolean>
+//        get() = _navigateToEditProduct
 
     fun onSelectedProduct(item: Product) {
         _navigateToSelectedProduct.value = item
@@ -76,8 +76,8 @@ class ProductsViewModel(application: Application) : AndroidViewModel(application
                     _isNetworkErrorShown.value = false
                 } else {
                     Timber.e(response.errorBody().toString())
+                    _eventNetworkError.value = true
                 }
-
             } catch (e: Exception) {
                 Timber.e(e)
                 _eventNetworkError.value = true
@@ -89,23 +89,23 @@ class ProductsViewModel(application: Application) : AndroidViewModel(application
         _isNetworkErrorShown.value = true
     }
 
-    fun navigateToEditProduct() {
-        _navigateToEditProduct.value = true
-    }
-
-    fun navigateToEditProductFinish() {
-        _navigateToEditProduct.value = false
-    }
+//    fun navigateToEditProduct() {
+//        _navigateToEditProduct.value = true
+//    }
+//
+//    fun navigateToEditProductFinish() {
+//        _navigateToEditProduct.value = false
+//    }
 
     override fun onCleared() {
         super.onCleared()
         viewModelScope.cancel()
     }
 
-    class Factory(val app: Application) : ViewModelProvider.Factory {
+    class Factory() : ViewModelProvider.Factory {
         override fun <T : ViewModel?> create(modelClass: Class<T>): T {
             if (modelClass.isAssignableFrom(ProductsViewModel::class.java)) {
-                return ProductsViewModel(app) as T
+                return ProductsViewModel() as T
             }
             throw IllegalArgumentException("Unable to construct viewmodel")
         }

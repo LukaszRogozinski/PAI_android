@@ -24,22 +24,22 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@+id/products_list"
-            app:playlist="@{vm.products}" />
+            app:itemlist="@{vm.products}" />
 
 
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/floatingActionButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="16dp"
-            android:layout_marginBottom="16dp"
-            android:clickable="true"
-            android:focusable="true"
-            android:onClick="@{() -> vm.navigateToEditProduct()}"
-            app:layout_constraintBottom_toBottomOf="@+id/products_list"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:maxImageSize="32dp"
-            app:srcCompat="@android:drawable/ic_menu_add" />
+<!--        <com.google.android.material.floatingactionbutton.FloatingActionButton-->
+<!--            android:id="@+id/floatingActionButton"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_marginEnd="16dp"-->
+<!--            android:layout_marginBottom="16dp"-->
+<!--            android:clickable="true"-->
+<!--            android:focusable="true"-->
+<!--            android:onClick="@{() -> vm.navigateToEditProduct()}"-->
+<!--            app:layout_constraintBottom_toBottomOf="@+id/products_list"-->
+<!--            app:layout_constraintEnd_toEndOf="parent"-->
+<!--            app:maxImageSize="32dp"-->
+<!--            app:srcCompat="@android:drawable/ic_menu_add" />-->
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/products_list"

@@ -22,18 +22,18 @@
         android:label="products_fragment"
         tools:layout="@layout/products_fragment" >
         <action
-            android:id="@+id/action_productsFragment_to_editProductFragment"
-            app:destination="@id/editProductFragment" />
-        <action
             android:id="@+id/action_productsFragment_to_productDetailFragment"
-            app:destination="@id/productDetailFragment"
-            app:enterAnim="@anim/nav_default_enter_anim" />
+            app:destination="@id/productDetailFragment" />
     </fragment>
     <fragment
         android:id="@+id/usersFragment"
         android:name="com.example.pai.features.users.UsersFragment"
         android:label="users_fragment"
-        tools:layout="@layout/users_fragment" />
+        tools:layout="@layout/users_fragment" >
+        <action
+            android:id="@+id/action_usersFragment_to_userDetailFragment"
+            app:destination="@id/userDetailFragment" />
+    </fragment>
     <fragment
         android:id="@+id/warehousesFragment"
         android:name="com.example.pai.features.warehouses.WarehousesFragment"
@@ -51,30 +51,22 @@
             app:argType="com.example.pai.domain.Product"
             app:nullable="true" />
         <action
-            android:id="@+id/action_productDetailFragment_to_editProductFragment"
-            app:destination="@id/editProductFragment"
-            app:enterAnim="@anim/nav_default_enter_anim" />
-        <action
             android:id="@+id/action_productDetailFragment_to_productsFragment"
-            app:destination="@id/productsFragment"
-            app:enterAnim="@anim/slide_out_left"
-            app:popExitAnim="@anim/slide_out_left" />
+            app:destination="@id/productsFragment" />
     </fragment>
     <fragment
-        android:id="@+id/editProductFragment"
-        android:name="com.example.pai.features.products.edit.EditProductFragment"
-        android:label="EditProductFragment"
-        tools:layout="@layout/edit_product_fragment">
+        android:id="@+id/userDetailFragment"
+        android:name="com.example.pai.features.users.detail.UserDetailFragment"
+        android:label="UserDetailFragment"
+        tools:layout="@layout/user_detail_fragment">
         <argument
-            android:name="product"
-            app:argType="com.example.pai.domain.Product"
-            app:nullable="true"
-            android:defaultValue="@null" />
-        <argument
-            android:name="isNewProduct"
-            app:argType="boolean" />
+            android:name="user"
+            android:defaultValue="@null"
+            app:argType="com.example.pai.domain.User"
+            app:nullable="true" />
+
         <action
-            android:id="@+id/action_editProductFragment_to_productsFragment"
-            app:destination="@id/productsFragment" />
+            android:id="@+id/action_userDetailFragment_to_usersFragment"
+            app:destination="@id/usersFragment" />
     </fragment>
 </navigation>

@@ -4,25 +4,33 @@ import android.app.Application
 import androidx.lifecycle.*
 import com.example.pai.database.getDatabase
 import com.example.pai.domain.Product
-import com.example.pai.repository.ProductsRepository
+import com.example.pai.repository.NetworkRepository
 import kotlinx.coroutines.launch
 import timber.log.Timber
 
-class ProductDetailViewModel(app: Application, val product: Product?) : ViewModel() {
+class ProductDetailViewModel(val product: Product?) : ViewModel() {
 
-    private val productsRepository = ProductsRepository(getDatabase(app))
+    private val productsRepository = NetworkRepository()
 
-    private val _navigateToEditProduct = MutableLiveData<Boolean>()
-    val navigateToEditProduct: LiveData<Boolean>
-        get() = _navigateToEditProduct
+//    private val _navigateToEditProduct = MutableLiveData<Boolean>()
+//    val navigateToEditProduct: LiveData<Boolean>
+//        get() = _navigateToEditProduct
 
     private val _deleteResponse = MutableLiveData<Boolean>()
     val deleteResponse: LiveData<Boolean>
         get() = _deleteResponse
 
+    private val _showDeleteDialog = MutableLiveData(false)
+    val showDeleteDialog: LiveData<Boolean>
+        get() = _showDeleteDialog
+
     fun onDeleteResponseFinish() {
         _deleteResponse.value = false
         Timber.i("deleteResponse value= ${_deleteResponse.value}")
+    }
+
+    fun deleteButtonClicked() {
+        _showDeleteDialog.value = true
     }
 
     fun deleteProduct() {
@@ -39,21 +47,21 @@ class ProductDetailViewModel(app: Application, val product: Product?) : ViewMode
         }
     }
 
-    fun navigateToEditProduct() {
-        _navigateToEditProduct.value = true
-        Timber.i("navigateToEditProduct value= ${_navigateToEditProduct.value}")
+//    fun navigateToEditProduct() {
+//        _navigateToEditProduct.value = true
+//        Timber.i("navigateToEditProduct value= ${_navigateToEditProduct.value}")
+//
+//    }
+//
+//    fun navigateToEditProductFinish() {
+//        _navigateToEditProduct.value = false
+//        Timber.i("navigateToEditProduct value= ${_navigateToEditProduct.value}")
+//    }
 
-    }
-
-    fun navigateToEditProductFinish() {
-        _navigateToEditProduct.value = false
-        Timber.i("navigateToEditProduct value= ${_navigateToEditProduct.value}")
-    }
-
-    class Factory(val app: Application, val product: Product?) : ViewModelProvider.Factory {
+    class Factory(val product: Product?) : ViewModelProvider.Factory {
         override fun <T : ViewModel?> create(modelClass: Class<T>): T {
             if (modelClass.isAssignableFrom(ProductDetailViewModel::class.java)) {
-                return ProductDetailViewModel(app, product) as T
+                return ProductDetailViewModel(product) as T
             }
             throw IllegalArgumentException("Unable to construct viewmodel")
         }

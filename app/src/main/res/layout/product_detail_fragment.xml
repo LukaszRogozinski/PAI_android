@@ -4,7 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
-
         <variable
             name="vm"
             type="com.example.pai.features.products.detail.ProductDetailViewModel" />
@@ -166,32 +165,32 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
-                android:text="@{vm.product.warehouse.name}"
+                android:text="@{vm.product.department.name}"
                 app:layout_constraintStart_toStartOf="@+id/warehouse_label"
                 app:layout_constraintTop_toBottomOf="@+id/warehouse_label" />
 
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/edit_button"
-                style="@style/Widget.AppCompat.Button.Colored"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="64dp"
-                android:text="edit"
-                android:onClick="@{() -> vm.navigateToEditProduct()}"
-                app:backgroundTint="@color/design_default_color_primary_dark"
-                app:layout_constraintStart_toStartOf="@+id/warehouse_label"
-                app:layout_constraintTop_toBottomOf="@+id/warehouse_label" />
+<!--            <com.google.android.material.button.MaterialButton-->
+<!--                android:id="@+id/edit_button"-->
+<!--                style="@style/Widget.AppCompat.Button.Colored"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_marginTop="64dp"-->
+<!--                android:text="edit"-->
+<!--                android:onClick="@{() -> vm.navigateToEditProduct()}"-->
+<!--                app:backgroundTint="@color/design_default_color_primary_dark"-->
+<!--                app:layout_constraintStart_toStartOf="@+id/warehouse_label"-->
+<!--                app:layout_constraintTop_toBottomOf="@+id/warehouse_label" />-->
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/delete_button"
                 style="@style/Widget.AppCompat.Button.Colored"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
+                android:layout_marginTop="64dp"
+                android:onClick="@{() -> vm.deleteButtonClicked()}"
                 android:text="delete"
-                android:onClick="@{() -> vm.deleteProduct()}"
                 app:backgroundTint="@android:color/holo_red_dark"
-                app:layout_constraintTop_toBottomOf="@+id/edit_button" />
+                app:layout_constraintTop_toBottomOf="@+id/warehouse_label" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

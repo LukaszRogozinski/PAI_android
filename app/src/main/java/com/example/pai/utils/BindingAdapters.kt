@@ -14,9 +14,16 @@ fun bindBoolean(txtView: TextView, boolean: Boolean) {
     txtView.text = boolean.toString()
 }
 
-@BindingAdapter("isNetworkError", "playlist")
-fun hideIfNetworkError(view: View, isNetWorkError: Boolean, playlist: Any?) {
-    view.visibility = if (playlist != null) View.GONE else View.VISIBLE
+@BindingAdapter("flatNumber")
+fun bindFlatNumber(txtView: TextView, text: String?) {
+    if(text != null) {
+        txtView.text = "/ $text"
+    }
+}
+
+@BindingAdapter("isNetworkError", "itemlist")
+fun hideIfNetworkError(view: View, isNetWorkError: Boolean, itemlist: Any?) {
+    view.visibility = if (itemlist != null) View.GONE else View.VISIBLE
 
     if(isNetWorkError) {
         view.visibility = View.GONE

@@ -7,6 +7,9 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.FragmentActivity
+import com.squareup.moshi.FromJson
+import com.squareup.moshi.ToJson
+import java.util.*
 
 val Boolean.asVisibility get() = if(this) View.VISIBLE else View.GONE
 
@@ -40,5 +43,18 @@ class Utils {
                 }
             }
         }
+    }
+}
+
+class UuidAdapter {
+
+    @ToJson
+    fun toJson(uuid: UUID) : String {
+        return uuid.toString()
+    }
+
+    @FromJson
+    fun fromJson(json: String) : UUID {
+        return UUID.fromString(json)
     }
 }
