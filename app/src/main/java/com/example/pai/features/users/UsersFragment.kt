@@ -14,6 +14,7 @@ import androidx.navigation.fragment.NavHostFragment.findNavController
 import com.example.pai.R
 import com.example.pai.databinding.UsersFragmentBinding
 import com.example.pai.utils.Utils
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 /**
  * A simple [Fragment] subclass.
@@ -22,10 +23,11 @@ class UsersFragment : Fragment() {
 
     private lateinit var binding: UsersFragmentBinding
 
-    private val viewModel: UsersViewModel by lazy {
-        ViewModelProviders.of(this, UsersViewModel.Factory())
-            .get(UsersViewModel::class.java)
-    }
+    private val viewModel: UsersViewModel by viewModel()
+//    {
+//        ViewModelProviders.of(this, UsersViewModel.Factory())
+//            .get(UsersViewModel::class.java)
+//    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -49,7 +51,7 @@ class UsersFragment : Fragment() {
 
         viewModel.navigateToSelectedUser.observe(viewLifecycleOwner, Observer {
             if(it != null){
-                val action = UsersFragmentDirections.actionUsersFragmentToUserDetailFragment().setUser(it)
+                val action = UsersFragmentDirections.actionUsersFragmentToUserDetailFragment(it)
                 findNavController(this).navigate(action)
                 viewModel.navigateToSelectedUserDone()
             }

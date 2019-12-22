@@ -1,7 +1,5 @@
 package com.example.pai.repository
 
-import com.example.pai.database.PaiDatabase
-
 import com.example.pai.network.*
 import retrofit2.Response
 import java.util.*
@@ -27,12 +25,20 @@ class NetworkRepository {
     suspend fun loadUsers() : Response<List<UserDto>> {
         return PaiApi.retrofitService.getUsers()
     }
+
+    suspend fun deleteUser(username: String) : Response<Unit> {
+        return PaiApi.retrofitService.deleteUserAsync(username)
+    }
     suspend fun getDepartmentsFromNetwork() : Response<List<DepartmentDto>> {
         return PaiApi.retrofitService.getDepartments()
     }
 
     suspend fun getProductTypesFromNetwork() : Response<List<ProductTypeDto>> {
         return PaiApi.retrofitService.getProductTypes()
+    }
+
+    fun logIn(username: String, password: String) : Boolean {
+        return username=="admin" && password=="admin"
     }
 
 //    suspend fun refreshProductDatabase() {

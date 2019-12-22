@@ -16,16 +16,18 @@ import com.example.pai.R
 import com.example.pai.databinding.ProductsFragmentBinding
 import com.example.pai.domain.Product
 import com.example.pai.utils.Utils
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 /**
  * A simple [Fragment] subclass.
  */
 class ProductsFragment : Fragment() {
 
-    private val viewModel: ProductsViewModel by lazy {
-        ViewModelProviders.of(this, ProductsViewModel.Factory())
-            .get(ProductsViewModel::class.java)
-    }
+    private val viewModel: ProductsViewModel by viewModel()
+//    {
+//        ViewModelProviders.of(this, ProductsViewModel.Factory())
+//            .get(ProductsViewModel::class.java)
+//    }
     private lateinit var binding: ProductsFragmentBinding
 
     override fun onCreateView(

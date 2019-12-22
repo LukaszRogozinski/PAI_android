@@ -12,11 +12,13 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.NavHostFragment.findNavController
+import androidx.navigation.fragment.navArgs
 import com.example.pai.R
 import com.example.pai.databinding.ProductDetailFragmentBinding
 import com.example.pai.domain.Product
 import com.shreyaspatil.MaterialDialog.MaterialDialog
 import timber.log.Timber
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 /**
  * A simple [Fragment] subclass.
@@ -24,19 +26,21 @@ import timber.log.Timber
 class ProductDetailFragment : Fragment() {
 
     private lateinit var binding: ProductDetailFragmentBinding
+    private val args by navArgs<ProductDetailFragmentArgs>()
+    //var product: Product? = null
 
-    var product: Product? = null
-
-    private val viewModel: ProductDetailViewModel by lazy {
-        Timber.i("ProductDetailViewModel called")
-        ViewModelProviders.of(
-            this,
-            ProductDetailViewModel.Factory(
-                product
-            )
-        )
-            .get(ProductDetailViewModel::class.java)
-    }
+    private val viewModel: ProductDetailViewModel by viewModel()
+    
+//    private val viewModel: ProductDetailViewModel by lazy {
+//        Timber.i("ProductDetailViewModel called")
+//        ViewModelProviders.of(
+//            this,
+//            ProductDetailViewModel.Factory(
+//                product
+//            )
+//        )
+//            .get(ProductDetailViewModel::class.java)
+//    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -49,7 +53,9 @@ class ProductDetailFragment : Fragment() {
             container,
             false
         )
-        product = ProductDetailFragmentArgs.fromBundle(arguments!!).product
+        val product = args.product
+        viewModel.setProduct(product!!)
+
         binding.vm = viewModel
         setObservers()
         return binding.root

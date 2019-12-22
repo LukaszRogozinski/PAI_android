@@ -56,7 +56,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
                 android:layout_marginEnd="8dp"
-                android:text="@{vm.product.serialNumber}"
+                android:text="@{vm.getProduct().serialNumber}"
                 app:layout_constraintBottom_toBottomOf="@+id/serial_number_label"
                 app:layout_constraintEnd_toEndOf="parent" />
 

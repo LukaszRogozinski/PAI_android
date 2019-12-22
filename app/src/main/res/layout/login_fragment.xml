@@ -23,19 +23,22 @@
             android:layout_marginTop="32dp"
             android:hint="@string/username"
             android:text="@={vm.username}"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:layout_editor_absoluteX="0dp" />
+            app:error="@{vm.usernameError}"
+            app:errorEnabled="true"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/password_edit_text"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="32dp"
+            android:layout_marginTop="40dp"
             android:hint="@string/password"
             android:inputType="textPassword"
             android:text="@={vm.password}"
-            app:layout_constraintTop_toBottomOf="@+id/login_edit_text"
-            tools:layout_editor_absoluteX="-16dp" />
+            app:error="@{vm.passwordError}"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/login_edit_text" />
 
         <Button
             android:id="@+id/login_button"
@@ -43,7 +46,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/login"
-            android:onClick="@{() -> vm.onNavigateToProducts()}"
+            android:onClick="@{() -> vm.onLoginButtonClicked()}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

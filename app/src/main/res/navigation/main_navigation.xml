@@ -35,11 +35,6 @@
             app:destination="@id/userDetailFragment" />
     </fragment>
     <fragment
-        android:id="@+id/warehousesFragment"
-        android:name="com.example.pai.features.warehouses.WarehousesFragment"
-        android:label="warehouses_fragment"
-        tools:layout="@layout/warehouses_fragment" />
-    <fragment
         android:id="@+id/productDetailFragment"
         android:name="com.example.pai.features.products.detail.ProductDetailFragment"
         android:label="ProductDetailFragment"
@@ -61,9 +56,8 @@
         tools:layout="@layout/user_detail_fragment">
         <argument
             android:name="user"
-            android:defaultValue="@null"
             app:argType="com.example.pai.domain.User"
-            app:nullable="true" />
+            app:nullable="false" />
 
         <action
             android:id="@+id/action_userDetailFragment_to_usersFragment"

@@ -84,6 +84,13 @@ data class Authority(
     val authority: String
 ) : Parcelable
 
+
+data class LoggedUser(
+    val id: UUID,
+    val username: String,
+    val password: String,
+    val token: String
+)
 //fun Product.asProductDtoToSave() : ProductDomainToDto {
 //    return ProductDomainToDto(
 //        id = this.id,

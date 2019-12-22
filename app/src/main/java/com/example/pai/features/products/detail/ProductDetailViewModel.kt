@@ -8,9 +8,19 @@ import com.example.pai.repository.NetworkRepository
 import kotlinx.coroutines.launch
 import timber.log.Timber
 
-class ProductDetailViewModel(val product: Product?) : ViewModel() {
+class ProductDetailViewModel(private val networkRepository: NetworkRepository) : ViewModel() {
 
-    private val productsRepository = NetworkRepository()
+     private lateinit var product: Product
+
+    fun setProduct(product: Product) {
+        this.product = product
+    }
+
+    fun getProduct(): Product {
+        return product
+    }
+
+//    private val productsRepository = NetworkRepository()
 
 //    private val _navigateToEditProduct = MutableLiveData<Boolean>()
 //    val navigateToEditProduct: LiveData<Boolean>
@@ -36,9 +46,10 @@ class ProductDetailViewModel(val product: Product?) : ViewModel() {
     fun deleteProduct() {
         viewModelScope.launch {
             try {
-                val response = productsRepository.deleteProduct(product!!.id)
+                val response = networkRepository.deleteProduct(product.id)
                 if (response.isSuccessful) {
                     _deleteResponse.postValue(true)
+                    _showDeleteDialog.value = false
                     Timber.i("deleteResponse value= ${_deleteResponse.value}")
                 }
             } catch (e: Exception) {
@@ -58,12 +69,12 @@ class ProductDetailViewModel(val product: Product?) : ViewModel() {
 //        Timber.i("navigateToEditProduct value= ${_navigateToEditProduct.value}")
 //    }
 
-    class Factory(val product: Product?) : ViewModelProvider.Factory {
-        override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-            if (modelClass.isAssignableFrom(ProductDetailViewModel::class.java)) {
-                return ProductDetailViewModel(product) as T
-            }
-            throw IllegalArgumentException("Unable to construct viewmodel")
-        }
-    }
+//    class Factory(val product: Product?) : ViewModelProvider.Factory {
+//        override fun <T : ViewModel?> create(modelClass: Class<T>): T {
+//            if (modelClass.isAssignableFrom(ProductDetailViewModel::class.java)) {
+//                return ProductDetailViewModel(product) as T
+//            }
+//            throw IllegalArgumentException("Unable to construct viewmodel")
+//        }
+//    }
 }

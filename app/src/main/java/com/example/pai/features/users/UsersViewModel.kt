@@ -14,9 +14,9 @@ import me.tatarka.bindingcollectionadapter2.OnItemBind
 import timber.log.Timber
 import java.lang.Exception
 
-class UsersViewModel() : ViewModel() {
+class UsersViewModel(private val networkRepository: NetworkRepository) : ViewModel() {
 
-    val usersRepository = NetworkRepository()
+//    val usersRepository = NetworkRepository()
 
     val _users = MutableLiveData<List<User>>()
     val users: LiveData<List<User>>
@@ -64,7 +64,7 @@ class UsersViewModel() : ViewModel() {
     private fun loadUsersFromNetwork() {
         viewModelScope.launch {
             try {
-                val response = usersRepository.loadUsers()
+                val response = networkRepository.loadUsers()
                 if (response.isSuccessful) {
                     _users.value = response.body()!!.asUserDomainModel()
                     _eventNetworkError.value = false
@@ -85,12 +85,12 @@ class UsersViewModel() : ViewModel() {
         _isNetworkErrorShown.value = true
     }
 
-    class Factory() : ViewModelProvider.Factory {
-        override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-            if (modelClass.isAssignableFrom(UsersViewModel::class.java)) {
-                return UsersViewModel() as T
-            }
-            throw IllegalArgumentException("Unable to construct viewmodel")
-        }
-    }
+//    class Factory() : ViewModelProvider.Factory {
+//        override fun <T : ViewModel?> create(modelClass: Class<T>): T {
+//            if (modelClass.isAssignableFrom(UsersViewModel::class.java)) {
+//                return UsersViewModel() as T
+//            }
+//            throw IllegalArgumentException("Unable to construct viewmodel")
+//        }
+//    }
 }

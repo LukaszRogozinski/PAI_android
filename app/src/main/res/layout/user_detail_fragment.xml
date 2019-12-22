@@ -7,6 +7,10 @@
         <variable
             name="item"
             type="com.example.pai.domain.User" />
+
+        <variable
+            name="vm"
+            type="com.example.pai.features.users.detail.UserDetailViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -18,7 +22,7 @@
             android:id="@+id/imageView3"
             android:layout_width="200dp"
             android:layout_height="200dp"
-            android:layout_marginTop="32dp"
+            android:layout_marginTop="16dp"
             android:src="@drawable/ic_person_24px"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -118,6 +122,7 @@
             style="@style/detailViewValues"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
             app:booleanToString="@{item.enabled}"
             app:layout_constraintStart_toStartOf="@+id/account_enabled_label"
             app:layout_constraintTop_toBottomOf="@+id/account_enabled_label" />
@@ -137,6 +142,7 @@
             style="@style/detailViewValues"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
             app:booleanToString="@{item.credentialsExpired}"
             app:layout_constraintStart_toStartOf="@+id/credentials_expired_label"
             app:layout_constraintTop_toBottomOf="@+id/credentials_expired_label" />
@@ -250,6 +256,21 @@
             app:flatNumber="@{item.userdata.address.flatNumber}"
             app:layout_constraintStart_toEndOf="@+id/house_no_value"
             app:layout_constraintTop_toTopOf="@+id/house_no_value" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/delete_button"
+            style="@style/Widget.AppCompat.Button.Colored"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="32dp"
+            android:layout_marginEnd="16dp"
+            android:onClick="@{() -> vm.deleteButtonClicked()}"
+            android:text="delete"
+            app:backgroundTint="@android:color/holo_red_dark"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/account_enabled_value" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
