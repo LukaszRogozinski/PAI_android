@@ -9,6 +9,7 @@ import com.example.pai.database.getDatabase
 import com.example.pai.domain.User
 import com.example.pai.network.asUserDomainModel
 import com.example.pai.repository.NetworkRepository
+import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
 import me.tatarka.bindingcollectionadapter2.OnItemBind
 import timber.log.Timber
@@ -25,6 +26,10 @@ class UsersViewModel(private val networkRepository: NetworkRepository) : ViewMod
     private val _navigateToSelectedUser = MutableLiveData<User>()
     val navigateToSelectedUser: LiveData<User>
         get() = _navigateToSelectedUser
+
+    private val _navigateToNewUser = MutableLiveData<Boolean>()
+    val navigateToNewUser: LiveData<Boolean>
+    get() = _navigateToNewUser
 
     fun onSelectedUser(item: User) {
         _navigateToSelectedUser.value = item
@@ -81,8 +86,21 @@ class UsersViewModel(private val networkRepository: NetworkRepository) : ViewMod
         }
     }
 
+    fun newUserButtonClicked() {
+        _navigateToNewUser.value = true
+    }
+
+    fun navigateToNewUserDone() {
+        _navigateToNewUser.value = false
+    }
+
     fun onNetworkErrorShown() {
         _isNetworkErrorShown.value = true
+    }
+
+    override fun onCleared() {
+        super.onCleared()
+        viewModelScope.cancel()
     }
 
 //    class Factory() : ViewModelProvider.Factory {

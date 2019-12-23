@@ -33,6 +33,9 @@
         <action
             android:id="@+id/action_usersFragment_to_userDetailFragment"
             app:destination="@id/userDetailFragment" />
+        <action
+            android:id="@+id/action_usersFragment_to_userEditFragment"
+            app:destination="@id/userEditFragment" />
     </fragment>
     <fragment
         android:id="@+id/productDetailFragment"
@@ -61,6 +64,31 @@
 
         <action
             android:id="@+id/action_userDetailFragment_to_usersFragment"
+            app:destination="@id/usersFragment" />
+        <action
+            android:id="@+id/action_userDetailFragment_to_userEditFragment"
+            app:destination="@id/userEditFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/productTypesFragment"
+        android:name="com.example.pai.features.products.types.ProductTypesFragment"
+        android:label="product_types_fragment"
+        tools:layout="@layout/product_types_fragment" />
+    <fragment
+        android:id="@+id/userEditFragment"
+        android:name="com.example.pai.features.users.edit.UserEditFragment"
+        android:label="user_edit_fragment"
+        tools:layout="@layout/user_edit_fragment" >
+        <argument
+            android:name="user"
+            android:defaultValue="@null"
+            app:argType="com.example.pai.domain.User"
+            app:nullable="true" />
+        <action
+            android:id="@+id/action_userEditFragment_to_userDetailFragment2"
+            app:destination="@id/userDetailFragment" />
+        <action
+            android:id="@+id/action_userEditFragment_to_usersFragment2"
             app:destination="@id/usersFragment" />
     </fragment>
 </navigation>

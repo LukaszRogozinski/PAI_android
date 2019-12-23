@@ -5,6 +5,7 @@ import androidx.lifecycle.*
 import com.example.pai.database.getDatabase
 import com.example.pai.domain.Product
 import com.example.pai.repository.NetworkRepository
+import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
 import timber.log.Timber
 
@@ -56,6 +57,11 @@ class ProductDetailViewModel(private val networkRepository: NetworkRepository) :
                 Timber.e(e)
             }
         }
+    }
+
+    override fun onCleared() {
+        super.onCleared()
+        viewModelScope.cancel()
     }
 
 //    fun navigateToEditProduct() {

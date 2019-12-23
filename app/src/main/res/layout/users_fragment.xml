@@ -39,6 +39,17 @@
             tools:layout_editor_absoluteX="0dp"
             tools:listitem="@layout/user_item" />
 
+        <ImageView
+            android:id="@+id/add_new_user_button"
+            android:layout_width="64dp"
+            android:onClick="@{() -> vm.newUserButtonClicked()}"
+            android:layout_height="64dp"
+            android:layout_marginEnd="32dp"
+            android:layout_marginBottom="32dp"
+            app:layout_constraintBottom_toBottomOf="@+id/users_recyclerView"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:srcCompat="@drawable/ic_add_box_24px" />
+
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

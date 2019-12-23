@@ -38,18 +38,18 @@ data class Department(
 @Parcelize
 data class User(
     val id: UUID,
-    val version: Int,
-    val username: String,
-    val password: String,
-    val accountExpired: Boolean,
-    val accountLocked: Boolean,
-    val credentialsExpired: Boolean,
-    val enabled: Boolean,
-    val userdata: Userdata,
-    val authorities: List<Authority>,
-    val credentialsNonExpired: Boolean,
-    val accountNonLocked: Boolean,
-    val accountNonExpired: Boolean
+    var version: Int,
+    var username: String,
+    var password: String,
+    var accountExpired: Boolean,
+    var accountLocked: Boolean,
+    var credentialsExpired: Boolean,
+    var enabled: Boolean,
+    var userdata: Userdata,
+    var authorities: List<Authority>,
+    var credentialsNonExpired: Boolean,
+    var accountNonLocked: Boolean,
+    var accountNonExpired: Boolean
     ) : Parcelable
 
 @Parcelize
@@ -83,7 +83,6 @@ data class Authority(
     val active: Boolean,
     val authority: String
 ) : Parcelable
-
 
 data class LoggedUser(
     val id: UUID,

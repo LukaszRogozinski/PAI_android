@@ -12,6 +12,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.NavHostFragment
+import androidx.navigation.fragment.findNavController
 import com.example.pai.DataBinderMapperImpl
 
 import com.example.pai.R
@@ -54,6 +55,14 @@ class UserDetailFragment : Fragment() {
         binding.item = viewModel.user
         binding.vm = viewModel
 
+
+        viewModel.navigateToEditUser.observe(viewLifecycleOwner, Observer {
+            if(it) {
+                val action = UserDetailFragmentDirections.actionUserDetailFragmentToUserEditFragment().setUser(viewModel.user)
+                NavHostFragment.findNavController(this).navigate(action)
+                viewModel.navigateToEditUserDone()
+            }
+        })
 
         viewModel.deleteResponse.observe(viewLifecycleOwner, Observer<Boolean> {
             if (it) {

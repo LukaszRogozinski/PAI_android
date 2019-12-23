@@ -1,33 +1,28 @@
-package com.example.pai.features.users
+package com.example.pai.features.products.types
 
 
 import android.os.Bundle
+import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
-import androidx.navigation.fragment.NavHostFragment.findNavController
+
 import com.example.pai.R
-import com.example.pai.databinding.UsersFragmentBinding
+import com.example.pai.databinding.ProductTypesFragmentBinding
 import com.example.pai.utils.Utils
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 /**
  * A simple [Fragment] subclass.
  */
-class UsersFragment : Fragment() {
+class ProductTypesFragment : Fragment() {
 
-    private lateinit var binding: UsersFragmentBinding
+    private lateinit var binding: ProductTypesFragmentBinding
 
-    private val viewModel: UsersViewModel by viewModel()
-//    {
-//        ViewModelProviders.of(this, UsersViewModel.Factory())
-//            .get(UsersViewModel::class.java)
-//    }
+    private val viewModel: ProductTypesViewModel by viewModel()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -36,32 +31,17 @@ class UsersFragment : Fragment() {
 
         binding = DataBindingUtil.inflate(
             inflater,
-            R.layout.users_fragment,
+            R.layout.product_types_fragment,
             container,
             false
         )
         binding.vm = viewModel
         binding.lifecycleOwner = viewLifecycleOwner
+        // Inflate the layout for this fragment
 
         viewModel.eventNetworkError.observe(viewLifecycleOwner, Observer<Boolean> {
             if (it) {
                 onNetworkError()
-            }
-        })
-
-        viewModel.navigateToSelectedUser.observe(viewLifecycleOwner, Observer {
-            if(it != null){
-                val action = UsersFragmentDirections.actionUsersFragmentToUserDetailFragment(it)
-                findNavController(this).navigate(action)
-                viewModel.navigateToSelectedUserDone()
-            }
-        })
-
-        viewModel.navigateToNewUser.observe(viewLifecycleOwner, Observer {
-            if(it) {
-                val action = UsersFragmentDirections.actionUsersFragmentToUserEditFragment().setUser(null)
-                findNavController(this).navigate(action)
-                viewModel.navigateToNewUserDone()
             }
         })
 

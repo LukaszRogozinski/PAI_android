@@ -3,6 +3,14 @@ package com.example.pai.utils
 import android.view.View
 import android.widget.TextView
 import androidx.databinding.BindingAdapter
+import com.example.pai.domain.User
+
+@BindingAdapter("intToString")
+fun bindInt(txtView: TextView, integer: Int?) {
+    if(integer != null) {
+        txtView.text = integer.toString()
+    }
+}
 
 @BindingAdapter("priceToDisplay")
 fun bindPrice(txtView: TextView, price: Int) {
@@ -27,5 +35,12 @@ fun hideIfNetworkError(view: View, isNetWorkError: Boolean, itemlist: Any?) {
 
     if(isNetWorkError) {
         view.visibility = View.GONE
+    }
+}
+
+@BindingAdapter("setTextIfNotNull")
+fun checkUser(txtView: TextView, value: String?) {
+    if(value != null){
+        txtView.text = value
     }
 }

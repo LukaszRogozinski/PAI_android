@@ -24,6 +24,8 @@ class LoginViewModel(private val networkRepository: NetworkRepository) : ViewMod
 
 
     fun onLoginButtonClicked() {
+//        onNavigateToProducts()
+
         var valid = true
         if (username.value.isNullOrBlank()) {
             usernameError.set("Username can't be empty!")

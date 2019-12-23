@@ -3,6 +3,7 @@ package com.example.pai.features.users.detail
 import androidx.lifecycle.*
 import com.example.pai.domain.User
 import com.example.pai.repository.NetworkRepository
+import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
 import timber.log.Timber
 
@@ -18,6 +19,10 @@ class UserDetailViewModel(val user: User) : ViewModel() {
     val showDeleteDialog: LiveData<Boolean>
         get() = _showDeleteDialog
 
+    private val _navigateToEditUser = MutableLiveData<Boolean>()
+    val navigateToEditUser: LiveData<Boolean>
+        get() = _navigateToEditUser
+
     fun onDeleteResponseFinish() {
         _deleteResponse.value = false
         Timber.i("deleteResponse value= ${_deleteResponse.value}")
@@ -25,6 +30,14 @@ class UserDetailViewModel(val user: User) : ViewModel() {
 
     fun deleteButtonClicked() {
         _showDeleteDialog.value = true
+    }
+
+    fun editButtonClicked() {
+        _navigateToEditUser.value = true
+    }
+
+    fun navigateToEditUserDone() {
+        _navigateToEditUser.value = false
     }
 
     fun deleteUser() {
@@ -40,6 +53,11 @@ class UserDetailViewModel(val user: User) : ViewModel() {
                 Timber.e(e)
             }
         }
+    }
+
+    override fun onCleared() {
+        super.onCleared()
+        viewModelScope.cancel()
     }
 
     class Factory(val user: User) : ViewModelProvider.Factory {

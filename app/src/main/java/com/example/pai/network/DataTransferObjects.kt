@@ -76,15 +76,24 @@ data class AuthorityDto(
     val active: Boolean,
     val authority: String
 )
-//data class ProductDomainToDto(
-//    var id: UUID? = null,
-//    val createDate: String,
-//    val lastUpdate: String,
-//    var productTypeId: UUID? = null,
-//    var serialNumber: String? = null,
-//    var status: String? = null,
-//    var warehouseId: UUID? = null
-//)
+
+data class NewUserDto(
+    val city: String,
+    val email: String,
+    val flatNumber: String? = null,
+    val houseNumber: String,
+    val name: String,
+    val password: String,
+    val position: String? = null,
+    val roles: List<String>,
+    val street: String,
+    val surname: String,
+    val username: String,
+    val workplace: String? = null,
+    val versionUser: Int? = null,
+    val versionUserData: Int? = null
+)
+
 
 fun List<ProductDto>.asProductDomainModel(): List<Product> {
     return map {

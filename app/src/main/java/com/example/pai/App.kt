@@ -6,7 +6,9 @@ import com.example.pai.features.products.ProductsViewModel
 import com.example.pai.features.login.LoginViewModel
 import com.example.pai.features.products.detail.ProductDetailFragmentArgs
 import com.example.pai.features.products.detail.ProductDetailViewModel
+import com.example.pai.features.products.types.ProductTypesViewModel
 import com.example.pai.features.users.UsersViewModel
+import com.example.pai.features.users.edit.UserEditViewModel
 import com.example.pai.repository.NetworkRepository
 import com.example.pai.repository.SessionRepository
 import com.facebook.stetho.Stetho
@@ -30,11 +32,14 @@ class App : Application() {
 
 val appModule = module {
 
+    single { NetworkRepository() }
+
     viewModel { LoginViewModel(get()) }
     viewModel { ProductsViewModel(get()) }
     viewModel { ProductDetailViewModel(get()) }
     viewModel { UsersViewModel(get()) }
-    single { NetworkRepository() }
+    viewModel { ProductTypesViewModel(get()) }
+    viewModel { UserEditViewModel(get()) }
 //    single { SessionRepository(PreferenceManager.getDefaultSharedPreferences(androidContext())) }
     //viewModel { ProductDetailViewModel() }
 }

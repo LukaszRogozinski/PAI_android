@@ -9,8 +9,8 @@
         android:id="@+id/usersFragment"
         android:icon="@drawable/ic_perm_identity_24px"
         android:title="Users" />
-<!--    <item-->
-<!--        android:id="@+id/warehousesFragment"-->
-<!--        android:icon="@drawable/ic_store_24px"-->
-<!--        android:title="Warehouses" />-->
+    <item
+        android:id="@+id/productTypesFragment"
+        android:icon="@drawable/ic_shop_two_24px"
+        android:title="Products type" />
 </menu>

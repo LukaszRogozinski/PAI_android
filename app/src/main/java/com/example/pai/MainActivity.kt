@@ -20,7 +20,8 @@ class MainActivity : AppCompatActivity() {
             addOnDestinationChangedListener { _, destination, _ ->
                 if (destination.id == R.id.loginFragment ||
                     destination.id == R.id.productDetailFragment ||
-                    destination.id == R.id.userDetailFragment
+                    destination.id == R.id.userDetailFragment ||
+                    destination.id == R.id.userEditFragment
                 ) {
                     updateNavigationUiVisibility(false)
                 } else {

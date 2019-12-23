@@ -16,29 +16,43 @@
 
         tools:context=".features.login.LoginFragment">
 
-        <com.google.android.material.textfield.TextInputEditText
+        <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/login_edit_text"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="32dp"
-            android:hint="@string/username"
-            android:text="@={vm.username}"
-            app:error="@{vm.usernameError}"
+
             app:errorEnabled="true"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent" >
 
-        <com.google.android.material.textfield.TextInputEditText
+            <EditText
+                android:id="@+id/login_edit_text_value"
+                android:layout_width="match_parent"
+                android:hint="@string/username"
+                android:text="@={vm.username}"
+                app:error="@{vm.usernameError}"
+                android:layout_height="wrap_content"/>
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/password_edit_text"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="40dp"
-            android:hint="@string/password"
-            android:inputType="textPassword"
-            android:text="@={vm.password}"
-            app:error="@{vm.passwordError}"
+            android:layout_marginTop="24dp"
+
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/login_edit_text" />
+            app:layout_constraintTop_toBottomOf="@+id/login_edit_text">
+
+            <EditText
+                android:id="@+id/password_edit_text_value"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/password"
+                android:inputType="textPassword"
+                android:text="@={vm.password}"
+                app:error="@{vm.passwordError}" />
+        </com.google.android.material.textfield.TextInputLayout>
 
         <Button
             android:id="@+id/login_button"
