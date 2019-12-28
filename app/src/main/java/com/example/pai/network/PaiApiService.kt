@@ -47,6 +47,15 @@ interface PaiApiService {
 
     @DELETE("api/users/{username}")
     suspend fun deleteUserAsync(@Path("username") username: String) : Response<Unit>
+
+    @POST("/api/account/admin/create")
+    suspend fun createNewUserByAdmin(@Body newUserDto: NewUserDto) : Response<Unit>
+
+    @PUT("/api/account/admin/edit")
+    suspend fun updateUserByAdmin(@Body updateUserDto: UpdateUserDto) : Response<Unit>
+
+    @PUT("/api/users/password/admin")
+    suspend fun updatePasswordByAdmin(@Body updatePasswordDto: UpdatePasswordDto) : Response<Unit>
 }
 
 interface UserService {

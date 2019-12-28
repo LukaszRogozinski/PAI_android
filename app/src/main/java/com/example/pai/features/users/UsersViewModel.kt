@@ -19,7 +19,7 @@ class UsersViewModel(private val networkRepository: NetworkRepository) : ViewMod
 
 //    val usersRepository = NetworkRepository()
 
-    val _users = MutableLiveData<List<User>>()
+    private val _users = MutableLiveData<List<User>>()
     val users: LiveData<List<User>>
         get() = _users
 

@@ -22,6 +22,7 @@ class LoginViewModel(private val networkRepository: NetworkRepository) : ViewMod
     val password = MutableLiveData<String>()
     val passwordError = ObservableField<String>()
 
+    val usernameErrorEnabled = ObservableField<Boolean>()
 
     fun onLoginButtonClicked() {
 //        onNavigateToProducts()

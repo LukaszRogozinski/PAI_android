@@ -37,43 +37,43 @@ data class Department(
 
 @Parcelize
 data class User(
-    val id: UUID,
-    var version: Int,
-    var username: String,
-    var password: String,
-    var accountExpired: Boolean,
-    var accountLocked: Boolean,
-    var credentialsExpired: Boolean,
-    var enabled: Boolean,
-    var userdata: Userdata,
-    var authorities: List<Authority>,
-    var credentialsNonExpired: Boolean,
-    var accountNonLocked: Boolean,
-    var accountNonExpired: Boolean
+    var id: UUID? = null,
+    var version: Int? = null,
+    var username: String? = null,
+    var password: String? = null,
+    var accountExpired: Boolean? = null,
+    var accountLocked: Boolean? = null,
+    var credentialsExpired: Boolean? = null,
+    var enabled: Boolean? = null,
+    var userdata: Userdata = Userdata(),
+    var authorities: List<Authority>? = null,
+    var credentialsNonExpired: Boolean? = null,
+    var accountNonLocked: Boolean? = null,
+    var accountNonExpired: Boolean? = null
     ) : Parcelable
 
 @Parcelize
 data class Userdata(
-    val id: UUID,
-    val version: Int,
-    val name: String,
-    val surname: String,
-    val email: String,
-    val position: String?,
-    val workplace: String?,
-    val dateOfJoin: String,
-    val address: Address
+    var id: UUID? = null,
+    var version: Int? = null,
+    var name: String? = null,
+    var surname: String?= null,
+    var email: String?= null,
+    var position: String?= null,
+    var workplace: String?= null,
+    var dateOfJoin: String?= null,
+    var address: Address= Address()
 ) : Parcelable
 
 @Parcelize
 data class Address(
-    val id: UUID,
-    val version: Int,
-    val city: String,
-    val street: String,
-    val buildingNumber: String,
-    val flatNumber: String?,
-    val deleted: Boolean
+    var id: UUID?= null,
+    var version: Int?= null,
+    var city: String?= null,
+    var street: String?= null,
+    var buildingNumber: String?= null,
+    var flatNumber: String?= null,
+    var deleted: Boolean?= null
 ) : Parcelable
 
 @Parcelize
@@ -83,6 +83,12 @@ data class Authority(
     val active: Boolean,
     val authority: String
 ) : Parcelable
+
+data class NewPassword(
+    var newPassword: String? = null,
+    var oldPassword: String? = null,
+    var username: String? = null
+)
 
 data class LoggedUser(
     val id: UUID,

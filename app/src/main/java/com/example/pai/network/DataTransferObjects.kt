@@ -94,6 +94,71 @@ data class NewUserDto(
     val versionUserData: Int? = null
 )
 
+data class UpdateUserDto(
+    val city: String,
+    val email: String,
+    val flatNumber: String,
+    val houseNumber: String,
+    val id: UUID,
+    val name: String,
+    val position: String? = null,
+    val roles: List<String>,
+    val street: String,
+    val surname: String,
+    val username: String,
+    val workplace: String? = null
+)
+
+data class UpdatePasswordDto(
+    val newPassword: String,
+    val oldPassword: String,
+    val username: String
+)
+
+fun NewPassword.asUpdatePasswordDto() : UpdatePasswordDto {
+    return UpdatePasswordDto(
+        newPassword = this.newPassword!!,
+        oldPassword = this.oldPassword!!,
+        username = this.username!!
+    )
+}
+
+fun User.asUpdateUserDto(authorities: List<String>): UpdateUserDto {
+    return UpdateUserDto(
+    city = this.userdata.address.city!!,
+        email = this.userdata.email!!,
+        flatNumber = this.userdata.address.flatNumber!!,
+        houseNumber = this.userdata.address.buildingNumber!!,
+        id = this.id!!,
+        name = this.userdata.name!!,
+        position = this.userdata.position,
+        roles = authorities,//TODO
+    street = this.userdata.address.street!!,
+        surname = this.userdata.surname!!,
+        username = this.username!!,
+        workplace = this.userdata.workplace
+    )
+}
+
+fun User.asNewUserDto(authorities: List<String>): NewUserDto {
+    return NewUserDto(
+        city = this.userdata.address.city!!,
+        email = this.userdata.email!!,
+        flatNumber = this.userdata.address.flatNumber,
+        houseNumber = this.userdata.address.buildingNumber!!,
+        name = this.userdata.name!!,
+        password = this.password!!,
+        position = this.userdata.position,
+        roles = authorities,//TODO
+        street = this.userdata.address.street!!,
+        surname = this.userdata.surname!!,
+        username = this.username!!,
+        workplace = this.userdata.workplace,
+        versionUser = this.version,
+        versionUserData = this.userdata.version
+    )
+}
+
 
 fun List<ProductDto>.asProductDomainModel(): List<Product> {
     return map {

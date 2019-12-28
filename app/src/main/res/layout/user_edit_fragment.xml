@@ -38,13 +38,14 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent">
-                    <EditText
+                    <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/username_edit_text_value"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="username"
-                        android:text=""
-                        app:setTextIfNotNull="@{vm.user.username}" />
+                        android:hint="username *"
+                        app:customtext="@={vm.user.username}"
+                        />
+
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.textfield.TextInputLayout
@@ -56,54 +57,52 @@
                     android:layout_marginEnd="8dp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/username_edit_text">
+                    app:layout_constraintTop_toBottomOf="@+id/username_edit_text"
+                    app:setVisibility="@{vm.isNewUser}">
 
-                    <EditText
+                    <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/password_edit_text_new_user_value"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="password"
-                        app:setTextIfNotNull="@{vm.user.password}" />
+                        android:hint="password *"
+                        android:inputType="textPassword"
+                        app:customtext="@={vm.user.password}" />
 
                 </com.google.android.material.textfield.TextInputLayout>
 
-                <com.google.android.material.textfield.TextInputLayout
+                <TextView
                     android:id="@+id/roles_edit_text_new_user"
-                    android:layout_width="387dp"
-                    android:layout_height="42dp"
-                    android:layout_marginStart="8dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="12dp"
                     android:layout_marginTop="16dp"
                     android:layout_marginEnd="8dp"
+                    android:onClick="@{() -> vm.selectRolesClickedBegin()}"
+                    android:text="roles * (click to select)"
+                    android:textSize="18sp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/password_edit_text_new_user">
+                    app:layout_constraintTop_toBottomOf="@+id/password_edit_text_new_user" />
 
-                    <EditText
-                        android:id="@+id/roles_edit_text_new_user_value"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:hint="roles(TODO)"/>
-                </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/name_edit_text"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="8dp"
-                    android:layout_marginTop="16dp"
+                    android:layout_marginTop="12dp"
                     android:layout_marginEnd="8dp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0.0"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/roles_edit_text_new_user"
-                    >
+                    app:layout_constraintTop_toBottomOf="@+id/roles_edit_text_new_user">
 
-                    <EditText
+                    <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/name_edit_text_value"
                         android:layout_width="match_parent"
-                        android:hint="name"
-                        app:setTextIfNotNull="@{vm.user.userdata.name}"
-                        android:layout_height="wrap_content"/>
+                        android:layout_height="wrap_content"
+                        android:hint="name *"
+                        app:customtext="@={vm.user.userdata.name}" />
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.textfield.TextInputLayout
@@ -119,11 +118,11 @@
                     app:layout_constraintTop_toBottomOf="@+id/surname_edit_text"
                     >
 
-                    <EditText
+                    <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/email_edit_text_value"
                         android:layout_width="match_parent"
-                        android:hint="email"
-                        app:setTextIfNotNull="@{vm.user.userdata.email}"
+                        android:hint="email *"
+                        app:customtext="@={vm.user.userdata.email}"
                         android:layout_height="wrap_content"/>
                 </com.google.android.material.textfield.TextInputLayout>
 
@@ -140,11 +139,11 @@
                     app:layout_constraintTop_toBottomOf="@+id/name_edit_text"
                     >
 
-                    <EditText
+                    <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/surname_edit_text_value"
                         android:layout_width="match_parent"
-                        android:hint="surname"
-                        app:setTextIfNotNull="@{vm.user.userdata.surname}"
+                        android:hint="surname *"
+                        app:customtext="@={vm.user.userdata.surname}"
                         android:layout_height="wrap_content"/>
                 </com.google.android.material.textfield.TextInputLayout>
 
@@ -160,11 +159,11 @@
                     app:layout_constraintTop_toBottomOf="@+id/email_edit_text"
                      >
 
-                    <EditText
+                    <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/city_edit_text_value"
                         android:layout_width="match_parent"
-                        android:hint="city"
-                        app:setTextIfNotNull="@{vm.user.userdata.address.city}"
+                        android:hint="city *"
+                        app:customtext="@={vm.user.userdata.address.city}"
                         android:layout_height="wrap_content"/>
                 </com.google.android.material.textfield.TextInputLayout>
 
@@ -180,11 +179,11 @@
                     app:layout_constraintTop_toBottomOf="@+id/city_edit_text"
                     >
 
-                    <EditText
+                    <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/street_edit_text_value"
                         android:layout_width="match_parent"
-                        android:hint="street"
-                        app:setTextIfNotNull="@{vm.user.userdata.address.street}"
+                        android:hint="street *"
+                        app:customtext="@={vm.user.userdata.address.street}"
                         android:layout_height="wrap_content"/>
                 </com.google.android.material.textfield.TextInputLayout>
 
@@ -200,11 +199,12 @@
                     app:layout_constraintTop_toBottomOf="@+id/street_edit_text"
                     >
 
-                    <EditText
+                    <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/house_number_edit_text_value"
                         android:layout_width="match_parent"
-                        android:hint="house No"
-                        app:setTextIfNotNull="@{vm.user.userdata.address.buildingNumber}"
+                        android:hint="house No *"
+                        android:inputType="number"
+                        app:customtext="@={vm.user.userdata.address.buildingNumber}"
                         android:layout_height="wrap_content"/>
                 </com.google.android.material.textfield.TextInputLayout>
 
@@ -223,12 +223,13 @@
                     app:layout_constraintStart_toStartOf="@+id/guideline3"
                     app:layout_constraintTop_toTopOf="@+id/house_number_edit_text">
 
-                    <EditText
+                    <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/flat_number_edit_text_value"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="flat No"
-                        app:setTextIfNotNull="@{vm.user.userdata.address.flatNumber}" />
+                        android:hint="flat No *"
+                        android:inputType="number"
+                        app:customtext="@={vm.user.userdata.address.flatNumber}" />
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.textfield.TextInputLayout
@@ -243,11 +244,11 @@
                     app:layout_constraintTop_toBottomOf="@+id/house_number_edit_text"
                      >
 
-                    <EditText
+                    <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/position_edit_text_value"
                         android:layout_width="match_parent"
                         android:hint="position"
-                        app:setTextIfNotNull="@{vm.user.userdata.position}"
+                        app:customtext="@={vm.user.userdata.position}"
                         android:layout_height="wrap_content"/>
                 </com.google.android.material.textfield.TextInputLayout>
 
@@ -264,52 +265,64 @@
                     app:layout_constraintTop_toBottomOf="@+id/position_edit_text"
                     >
 
-                    <EditText
+                    <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/workplace_edit_text_value"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="workplace"
-                        app:setTextIfNotNull="@{vm.user.userdata.workplace}" />
+                        app:customtext="@={vm.user.userdata.workplace}" />
                 </com.google.android.material.textfield.TextInputLayout>
 
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/version_user_edit_text"
-                    android:layout_width="188dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="8dp"
-                    android:layout_marginTop="16dp"
-                    android:layout_marginEnd="8dp"
-                    app:layout_constraintEnd_toStartOf="@+id/guideline3"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/workplace_edit_text">
+                <!--                <com.google.android.material.textfield.TextInputLayout-->
+<!--                    android:id="@+id/version_user_edit_text"-->
+<!--                    android:layout_width="188dp"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:layout_marginStart="8dp"-->
+<!--                    android:layout_marginTop="16dp"-->
+<!--                    android:layout_marginEnd="8dp"-->
+<!--                    app:layout_constraintEnd_toStartOf="@+id/guideline3"-->
+<!--                    app:layout_constraintStart_toStartOf="parent"-->
+<!--                    app:layout_constraintTop_toBottomOf="@+id/workplace_edit_text">-->
 
-                    <EditText
-                        android:hint="version user"
-                        app:intToString="@{vm.user.version}"
-                        android:id="@+id/TextInputLayout_value"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"/>
-                </com.google.android.material.textfield.TextInputLayout>
+<!--                    <EditText-->
+<!--                        android:hint="version user"-->
+<!--                        app:intToString="@{vm.user.version}"-->
+<!--                        android:id="@+id/TextInputLayout_value"-->
+<!--                        android:layout_width="match_parent"-->
+<!--                        android:layout_height="wrap_content"/>-->
+<!--                </com.google.android.material.textfield.TextInputLayout>-->
 
 
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/version_user_data_edit_text"
-                    android:layout_width="188dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="8dp"
-                    app:layout_constraintStart_toStartOf="@+id/guideline3"
-                    app:layout_constraintTop_toTopOf="@+id/version_user_edit_text">
+<!--                <com.google.android.material.textfield.TextInputLayout-->
+<!--                    android:id="@+id/version_user_data_edit_text"-->
+<!--                    android:layout_width="188dp"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:layout_marginStart="8dp"-->
+<!--                    app:layout_constraintStart_toStartOf="@+id/guideline3"-->
+<!--                    app:layout_constraintTop_toTopOf="@+id/version_user_edit_text">-->
 
-                    <EditText
-                        android:id="@+id/version_user_data_edit_text_value"
-                        android:layout_width="match_parent"
-                        android:hint="version user data"
-                        app:intToString="@{vm.user.userdata.version}"
-                        android:layout_height="wrap_content" />
-                </com.google.android.material.textfield.TextInputLayout>
+<!--                    <EditText-->
+<!--                        android:id="@+id/version_user_data_edit_text_value"-->
+<!--                        android:layout_width="match_parent"-->
+<!--                        android:hint="version user data"-->
+<!--                        app:intToString="@{vm.user.userdata.version}"-->
+<!--                        android:layout_height="wrap_content" />-->
+<!--                </com.google.android.material.textfield.TextInputLayout>-->
+
+<!--                <Button-->
+<!--                    android:id="@+id/linear_layout"-->
+<!--                    android:layout_width="100dp"-->
+<!--                    android:layout_height="100dp"-->
+<!--                    app:layout_constraintStart_toStartOf="parent"-->
+<!--                    android:gravity="center"-->
+<!--                    android:onClick="@{() -> vm.selectRolesClickedBegin()}"-->
+<!--                    app:layout_constraintTop_toBottomOf="@+id/workplace_edit_text"-->
+<!--                    tools:layout_editor_absoluteX="23dp" />-->
 
             </androidx.constraintlayout.widget.ConstraintLayout>
         </ScrollView>
+
+
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/save_new_user_button"
@@ -320,6 +333,7 @@
             android:layout_marginTop="16dp"
             android:layout_marginEnd="8dp"
             android:text="save"
+            android:onClick="@{() -> vm.saveUser()}"
             app:backgroundTint="@android:color/holo_green_light"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

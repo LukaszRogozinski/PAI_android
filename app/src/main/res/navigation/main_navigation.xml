@@ -68,6 +68,9 @@
         <action
             android:id="@+id/action_userDetailFragment_to_userEditFragment"
             app:destination="@id/userEditFragment" />
+        <action
+            android:id="@+id/action_userDetailFragment_to_changeUserPasswordFragment"
+            app:destination="@id/changeUserPasswordFragment" />
     </fragment>
     <fragment
         android:id="@+id/productTypesFragment"
@@ -86,9 +89,22 @@
             app:nullable="true" />
         <action
             android:id="@+id/action_userEditFragment_to_userDetailFragment2"
-            app:destination="@id/userDetailFragment" />
+            app:popUpTo="@id/userDetailFragment" />
         <action
-            android:id="@+id/action_userEditFragment_to_usersFragment2"
-            app:destination="@id/usersFragment" />
+            android:id="@+id/action_userEditFragment_to_usersFragment"
+            app:popUpTo="@id/usersFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/changeUserPasswordFragment"
+        android:name="com.example.pai.features.users.changepassword.ChangeUserPasswordFragment"
+        android:label="ChangeUserPasswordFragment"
+        tools:layout="@layout/change_user_password_fragment">
+        <argument
+            android:name="username"
+            app:argType="string"
+            app:nullable="false" />
+        <action
+            android:id="@+id/action_changeUserPasswordFragment_to_userDetailFragment"
+            app:popUpTo="@id/userDetailFragment" />
     </fragment>
 </navigation>

@@ -21,7 +21,8 @@ class MainActivity : AppCompatActivity() {
                 if (destination.id == R.id.loginFragment ||
                     destination.id == R.id.productDetailFragment ||
                     destination.id == R.id.userDetailFragment ||
-                    destination.id == R.id.userEditFragment
+                    destination.id == R.id.userEditFragment ||
+                            destination.id == R.id.changeUserPasswordFragment
                 ) {
                     updateNavigationUiVisibility(false)
                 } else {

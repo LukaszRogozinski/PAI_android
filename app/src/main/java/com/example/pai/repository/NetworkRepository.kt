@@ -37,6 +37,18 @@ class NetworkRepository {
         return PaiApi.retrofitService.getProductTypes()
     }
 
+    suspend fun createNewUserByAdminNetwork(newUserDto: NewUserDto) : Response<Unit> {
+        return PaiApi.retrofitService.createNewUserByAdmin(newUserDto)
+    }
+
+    suspend fun updateUserByAdminNetwork(updateUserDto: UpdateUserDto) : Response<Unit> {
+        return PaiApi.retrofitService.updateUserByAdmin(updateUserDto)
+    }
+
+    suspend fun updatePasswordByAdminNetwork(updatePasswordDto: UpdatePasswordDto) : Response<Unit> {
+        return PaiApi.retrofitService.updatePasswordByAdmin(updatePasswordDto)
+    }
+
     fun logIn(username: String, password: String) : Boolean {
         return username=="admin" && password=="admin"
     }

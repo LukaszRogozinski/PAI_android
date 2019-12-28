@@ -8,6 +8,7 @@ import com.example.pai.features.products.detail.ProductDetailFragmentArgs
 import com.example.pai.features.products.detail.ProductDetailViewModel
 import com.example.pai.features.products.types.ProductTypesViewModel
 import com.example.pai.features.users.UsersViewModel
+import com.example.pai.features.users.changepassword.ChangeUserPasswordViewModel
 import com.example.pai.features.users.edit.UserEditViewModel
 import com.example.pai.repository.NetworkRepository
 import com.example.pai.repository.SessionRepository
@@ -40,6 +41,7 @@ val appModule = module {
     viewModel { UsersViewModel(get()) }
     viewModel { ProductTypesViewModel(get()) }
     viewModel { UserEditViewModel(get()) }
+    viewModel { ChangeUserPasswordViewModel(get()) }
 //    single { SessionRepository(PreferenceManager.getDefaultSharedPreferences(androidContext())) }
     //viewModel { ProductDetailViewModel() }
 }

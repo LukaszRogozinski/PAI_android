@@ -23,6 +23,10 @@ class UserDetailViewModel(val user: User) : ViewModel() {
     val navigateToEditUser: LiveData<Boolean>
         get() = _navigateToEditUser
 
+    private val _navigateToChangePasswordUser = MutableLiveData<Boolean>()
+    val navigateToChangePasswordUser: LiveData<Boolean>
+        get() = _navigateToChangePasswordUser
+
     fun onDeleteResponseFinish() {
         _deleteResponse.value = false
         Timber.i("deleteResponse value= ${_deleteResponse.value}")
@@ -36,6 +40,14 @@ class UserDetailViewModel(val user: User) : ViewModel() {
         _navigateToEditUser.value = true
     }
 
+    fun changePasswordButtonClicked() {
+        _navigateToChangePasswordUser.value = true
+    }
+
+    fun navigateToChangePasswordUserDone() {
+        _navigateToChangePasswordUser.value = false
+    }
+
     fun navigateToEditUserDone() {
         _navigateToEditUser.value = false
     }
@@ -43,7 +55,7 @@ class UserDetailViewModel(val user: User) : ViewModel() {
     fun deleteUser() {
         viewModelScope.launch {
             try {
-                val response = usersRepository.deleteUser(user.username)
+                val response = usersRepository.deleteUser(user.username!!)
                 if (response.isSuccessful) {
                     _deleteResponse.postValue(true)
                     _showDeleteDialog.value = false

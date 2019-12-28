@@ -21,17 +21,16 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="32dp"
-
             app:errorEnabled="true"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" >
 
-            <EditText
+            <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/login_edit_text_value"
                 android:layout_width="match_parent"
-                android:hint="@string/username"
                 android:text="@={vm.username}"
                 app:error="@{vm.usernameError}"
+                android:hint="username *"
                 android:layout_height="wrap_content"/>
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -44,14 +43,15 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/login_edit_text">
 
-            <EditText
+            <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/password_edit_text_value"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="@string/password"
+                app:error="@{vm.passwordError}"
+                android:hint="password *"
                 android:inputType="textPassword"
                 android:text="@={vm.password}"
-                app:error="@{vm.passwordError}" />
+                 />
         </com.google.android.material.textfield.TextInputLayout>
 
         <Button

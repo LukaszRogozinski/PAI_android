@@ -76,6 +76,15 @@ class UserDetailFragment : Fragment() {
             }
         })
 
+        viewModel.navigateToChangePasswordUser.observe(viewLifecycleOwner, Observer {
+            if(it) {
+                val action = UserDetailFragmentDirections.actionUserDetailFragmentToChangeUserPasswordFragment(user.username!!)
+//                val action = UserDetailFragmentDirections.actionUserDetailFragmentToChangeUserPasswordFragment()
+                NavHostFragment.findNavController(this).navigate(action)
+                viewModel.navigateToChangePasswordUserDone()
+            }
+        })
+
         viewModel.showDeleteDialog.observe(viewLifecycleOwner, Observer {
             if (it) {
                 val mDialog: MaterialDialog = MaterialDialog.Builder(requireActivity())
