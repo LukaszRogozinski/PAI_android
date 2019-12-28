@@ -3,13 +3,15 @@ package com.example.pai.features.products.detail
 import android.app.Application
 import androidx.lifecycle.*
 import com.example.pai.database.getDatabase
+import com.example.pai.domain.LoggedUser
 import com.example.pai.domain.Product
 import com.example.pai.repository.NetworkRepository
+import com.example.pai.repository.SessionRepository
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
 import timber.log.Timber
 
-class ProductDetailViewModel(private val networkRepository: NetworkRepository) : ViewModel() {
+class ProductDetailViewModel(private val networkRepository: NetworkRepository, val sessionRepository: SessionRepository) : ViewModel() {
 
      private lateinit var product: Product
 
@@ -42,6 +44,10 @@ class ProductDetailViewModel(private val networkRepository: NetworkRepository) :
 
     fun deleteButtonClicked() {
         _showDeleteDialog.value = true
+    }
+
+    fun getLoggedUser() : LoggedUser {
+        return sessionRepository.currentUser!!
     }
 
     fun deleteProduct() {

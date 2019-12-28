@@ -6,16 +6,18 @@ import androidx.recyclerview.widget.DiffUtil
 import com.example.pai.BR
 import com.example.pai.R
 import com.example.pai.database.getDatabase
+import com.example.pai.domain.LoggedUser
 import com.example.pai.domain.User
 import com.example.pai.network.asUserDomainModel
 import com.example.pai.repository.NetworkRepository
+import com.example.pai.repository.SessionRepository
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
 import me.tatarka.bindingcollectionadapter2.OnItemBind
 import timber.log.Timber
 import java.lang.Exception
 
-class UsersViewModel(private val networkRepository: NetworkRepository) : ViewModel() {
+class UsersViewModel(private val networkRepository: NetworkRepository,val sessionRepository: SessionRepository) : ViewModel() {
 
 //    val usersRepository = NetworkRepository()
 
@@ -65,6 +67,14 @@ class UsersViewModel(private val networkRepository: NetworkRepository) : ViewMod
     init {
         loadUsersFromNetwork()
     }
+
+    fun getLoggedUser() : LoggedUser {
+        return sessionRepository.currentUser!!
+    }
+
+//    fun logout() {
+//        sessionRepository.clearCurrentUserToken()
+//    }
 
     private fun loadUsersFromNetwork() {
         viewModelScope.launch {

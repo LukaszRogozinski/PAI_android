@@ -24,6 +24,9 @@
         <action
             android:id="@+id/action_productsFragment_to_productDetailFragment"
             app:destination="@id/productDetailFragment" />
+        <action
+            android:id="@+id/action_productsFragment_to_userDetailFragment"
+            app:destination="@id/userDetailFragment" />
     </fragment>
     <fragment
         android:id="@+id/usersFragment"
@@ -51,6 +54,9 @@
         <action
             android:id="@+id/action_productDetailFragment_to_productsFragment"
             app:destination="@id/productsFragment" />
+        <action
+            android:id="@+id/action_productDetailFragment_to_userDetailFragment"
+            app:destination="@id/userDetailFragment" />
     </fragment>
     <fragment
         android:id="@+id/userDetailFragment"
@@ -76,7 +82,11 @@
         android:id="@+id/productTypesFragment"
         android:name="com.example.pai.features.products.types.ProductTypesFragment"
         android:label="product_types_fragment"
-        tools:layout="@layout/product_types_fragment" />
+        tools:layout="@layout/product_types_fragment" >
+        <action
+            android:id="@+id/action_productTypesFragment_to_userDetailFragment"
+            app:destination="@id/userDetailFragment" />
+    </fragment>
     <fragment
         android:id="@+id/userEditFragment"
         android:name="com.example.pai.features.users.edit.UserEditFragment"

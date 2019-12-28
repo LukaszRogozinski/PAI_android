@@ -45,6 +45,9 @@ interface PaiApiService {
     @GET("api/users")
     suspend fun getUsers(): Response<List<UserDto>>
 
+    @GET("/api/users/{username}")
+    suspend fun getLoggedUser(@Path("username") username: String) : Response<UserDto>
+
     @DELETE("api/users/{username}")
     suspend fun deleteUserAsync(@Path("username") username: String) : Response<Unit>
 

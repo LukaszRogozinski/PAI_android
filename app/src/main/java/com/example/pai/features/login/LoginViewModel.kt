@@ -4,11 +4,17 @@ import androidx.databinding.ObservableField
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.example.pai.domain.User
+import com.example.pai.domain.asLoggedUser
+import com.example.pai.network.asDomainModel
 import com.example.pai.repository.NetworkRepository
 import com.example.pai.repository.SessionRepository
+import kotlinx.coroutines.launch
 import timber.log.Timber
+import java.lang.Exception
 
-class LoginViewModel(private val networkRepository: NetworkRepository) : ViewModel() {
+class LoginViewModel(private val networkRepository: NetworkRepository, private val sessionRepository: SessionRepository) : ViewModel() {
 
 //    private val networkRepository = NetworkRepository()
   //  private val sessionRepository = SessionRepository()
@@ -27,19 +33,34 @@ class LoginViewModel(private val networkRepository: NetworkRepository) : ViewMod
     fun onLoginButtonClicked() {
 //        onNavigateToProducts()
 
-        var valid = true
-        if (username.value.isNullOrBlank()) {
-            usernameError.set("Username can't be empty!")
-            valid = false
-        }
-        if(password.value.isNullOrBlank()) {
-            passwordError.set("Password can't be empty!")
-            valid = false
-        }
-        if(valid){
-            val response = networkRepository.logIn(username.value!!, password.value!!)
-            if(response){
-                onNavigateToProducts()
+//        var valid = true
+//        if (username.value.isNullOrBlank()) {
+//            usernameError.set("Username can't be empty!")
+//            valid = false
+//        }
+//        if(password.value.isNullOrBlank()) {
+//            passwordError.set("Password can't be empty!")
+//            valid = false
+//        }
+//        if(valid){
+//            val response = networkRepository.logIn(username.value!!, password.value!!)
+//            if(response){
+//                onNavigateToProducts()
+//            }
+//        }
+
+        viewModelScope.launch {
+            try {
+                val response = networkRepository.logInSuspend("admin")
+                if(response.isSuccessful) {
+                    val user: User = response.body()!!.asDomainModel()
+                    sessionRepository.saveCurrentUserToken(user.asLoggedUser())
+                    onNavigateToProducts()
+                } else {
+                    print("ups")
+                }
+            } catch (e: Exception) {
+                Timber.e(e)
             }
         }
     }

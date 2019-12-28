@@ -1,5 +1,6 @@
 package com.example.pai.repository
 
+import com.example.pai.domain.User
 import com.example.pai.network.*
 import retrofit2.Response
 import java.util.*
@@ -47,6 +48,10 @@ class NetworkRepository {
 
     suspend fun updatePasswordByAdminNetwork(updatePasswordDto: UpdatePasswordDto) : Response<Unit> {
         return PaiApi.retrofitService.updatePasswordByAdmin(updatePasswordDto)
+    }
+
+    suspend fun logInSuspend(username: String) : Response<UserDto> {
+        return PaiApi.retrofitService.getLoggedUser(username)
     }
 
     fun logIn(username: String, password: String) : Boolean {

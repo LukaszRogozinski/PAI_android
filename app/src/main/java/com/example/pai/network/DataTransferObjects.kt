@@ -176,6 +176,24 @@ fun List<ProductDto>.asProductDomainModel(): List<Product> {
     }
 }
 
+fun UserDto.asDomainModel() : User {
+    return User(
+        id = this.id,
+        username = this.username,
+        version = this.version,
+        password = this.password,
+        accountExpired = this.accountExpired,
+        accountLocked = this.accountLocked,
+        credentialsExpired = this.credentialsExpired,
+        enabled = this.enabled,
+        userdata = this.userdata.asDomainModel(),
+        authorities = this.authorities.asAuthorityDomainModel(),
+        credentialsNonExpired = this.credentialsNonExpired,
+        accountNonExpired = this.accountNonExpired,
+        accountNonLocked = this.accountNonLocked
+    )
+}
+
 fun List<UserDto>.asUserDomainModel(): List<User> {
     return map {
         User(

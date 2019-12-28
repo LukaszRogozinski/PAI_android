@@ -13,7 +13,9 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import com.example.pai.DataBinderMapperImpl
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 import com.example.pai.R
 import com.example.pai.databinding.UserDetailFragmentBinding
@@ -28,17 +30,18 @@ class UserDetailFragment : Fragment() {
 
     private lateinit var binding: UserDetailFragmentBinding
 
-    private lateinit var user: User
-
-    private val viewModel: UserDetailViewModel by lazy {
-        ViewModelProviders.of(
-            this,
-            UserDetailViewModel.Factory(
-                user
-            )
-        )
-            .get(UserDetailViewModel::class.java)
-    }
+    private val args by navArgs<UserDetailFragmentArgs>()
+    private val viewModel: UserDetailViewModel by viewModel()
+//
+//    private val viewModel: UserDetailViewModel by lazy {
+//        ViewModelProviders.of(
+//            this,
+//            UserDetailViewModel.Factory(
+//                user
+//            )
+//        )
+//            .get(UserDetailViewModel::class.java)
+//    }
 
     @SuppressLint("RestrictedApi")
     override fun onCreateView(
@@ -51,14 +54,16 @@ class UserDetailFragment : Fragment() {
             container,
             false
         )
-        user = UserDetailFragmentArgs.fromBundle(arguments!!).user
-        binding.item = viewModel.user
+        val user = args.user
+        viewModel.setUser(user)
+//        user = UserDetailFragmentArgs.fromBundle(arguments!!).user
+        binding.item = viewModel.getUser()
         binding.vm = viewModel
 
 
         viewModel.navigateToEditUser.observe(viewLifecycleOwner, Observer {
             if(it) {
-                val action = UserDetailFragmentDirections.actionUserDetailFragmentToUserEditFragment().setUser(viewModel.user)
+                val action = UserDetailFragmentDirections.actionUserDetailFragmentToUserEditFragment().setUser(viewModel.getUser())
                 NavHostFragment.findNavController(this).navigate(action)
                 viewModel.navigateToEditUserDone()
             }

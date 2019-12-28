@@ -7,16 +7,18 @@ import androidx.lifecycle.viewModelScope
 import androidx.recyclerview.widget.DiffUtil
 import com.example.pai.BR
 import com.example.pai.R
+import com.example.pai.domain.LoggedUser
 import com.example.pai.domain.ProductType
 import com.example.pai.network.asProductTypeDomainModel
 import com.example.pai.repository.NetworkRepository
+import com.example.pai.repository.SessionRepository
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
 import me.tatarka.bindingcollectionadapter2.OnItemBind
 import timber.log.Timber
 import java.lang.Exception
 
-class ProductTypesViewModel(private val networkRepository: NetworkRepository) : ViewModel() {
+class ProductTypesViewModel(private val networkRepository: NetworkRepository, val sessionRepository: SessionRepository) : ViewModel() {
 
     private val _eventNetworkError = MutableLiveData(false)
     val eventNetworkError: LiveData<Boolean>
@@ -32,6 +34,10 @@ class ProductTypesViewModel(private val networkRepository: NetworkRepository) : 
 
     init {
         loadProductTypesFromNetwork()
+    }
+
+    fun getLoggedUser() : LoggedUser {
+        return sessionRepository.currentUser!!
     }
 
     val itemBinding: OnItemBind<ProductType> = OnItemBind { itemBinding, _, _ ->

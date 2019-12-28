@@ -4,16 +4,18 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.pai.domain.LoggedUser
 import com.example.pai.domain.User
 import com.example.pai.network.asNewUserDto
 import com.example.pai.network.asUpdateUserDto
 import com.example.pai.repository.NetworkRepository
+import com.example.pai.repository.SessionRepository
 import kotlinx.coroutines.launch
 import retrofit2.Response
 import timber.log.Timber
 import java.lang.Exception
 
-class UserEditViewModel(private val networkRepository: NetworkRepository) : ViewModel() {
+class UserEditViewModel(private val networkRepository: NetworkRepository, val sessionRepository: SessionRepository) : ViewModel() {
 
     var rolesArray = mutableListOf<String>()
 
@@ -27,6 +29,10 @@ class UserEditViewModel(private val networkRepository: NetworkRepository) : View
 
     fun selectRolesClickedBegin() {
         _selectRolesClicked.value = true
+    }
+
+    fun getLoggedUser() : LoggedUser {
+        return sessionRepository.currentUser!!
     }
 
     private val _navBackToListOfUsers = MutableLiveData<Boolean>()

@@ -3,9 +3,7 @@ package com.example.pai.features.products.detail
 
 import android.annotation.SuppressLint
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
@@ -16,6 +14,7 @@ import androidx.navigation.fragment.navArgs
 import com.example.pai.R
 import com.example.pai.databinding.ProductDetailFragmentBinding
 import com.example.pai.domain.Product
+import com.example.pai.utils.Utils
 import com.shreyaspatil.MaterialDialog.MaterialDialog
 import timber.log.Timber
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -58,23 +57,33 @@ class ProductDetailFragment : Fragment() {
 
         binding.vm = viewModel
         setObservers()
+        setHasOptionsMenu(true)
         return binding.root
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        super.onCreateOptionsMenu(menu, inflater)
+        inflater.inflate(R.menu.logged_user_menu, menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.userDetailFragmentMenu -> {
+                val loggedUser = viewModel.getLoggedUser()
+                val action = ProductDetailFragmentDirections.actionProductDetailFragmentToUserDetailFragment(loggedUser.user)
+                findNavController(this).navigate(action)
+                true
+            }
+            R.id.logout_menu -> {
+                Utils.logOutDialog(requireActivity(), viewModel.sessionRepository)
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
     }
 
     @SuppressLint("RestrictedApi")
     private fun setObservers() {
-
-//        viewModel.navigateToEditProduct.observe(viewLifecycleOwner, Observer<Boolean> {
-//            if (it) {
-//                val action =
-//                    ProductDetailFragmentDirections.actionProductDetailFragmentToEditProductFragment(
-//                        false
-//                    ).setProduct(product)
-//                findNavController(this).navigate(action)
-//                Timber.i("navigate to edit product screen")
-//                viewModel.navigateToEditProductFinish()
-//            }
-//        })
 
         viewModel.deleteResponse.observe(viewLifecycleOwner, Observer<Boolean> {
             if (it) {

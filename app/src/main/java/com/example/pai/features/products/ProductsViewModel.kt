@@ -6,15 +6,17 @@ import androidx.recyclerview.widget.DiffUtil
 import com.example.pai.BR
 import com.example.pai.R
 import com.example.pai.database.getDatabase
+import com.example.pai.domain.LoggedUser
 import com.example.pai.domain.Product
 import com.example.pai.network.*
 import com.example.pai.repository.NetworkRepository
+import com.example.pai.repository.SessionRepository
 import kotlinx.coroutines.*
 import me.tatarka.bindingcollectionadapter2.OnItemBind
 import timber.log.Timber
 import java.lang.Exception
 
-class ProductsViewModel(private val networkRepository: NetworkRepository) : ViewModel() {
+class ProductsViewModel(private val networkRepository: NetworkRepository, val sessionRepository: SessionRepository) : ViewModel() {
 
 //    private val productsRepository = NetworkRepository()
 
@@ -45,6 +47,10 @@ class ProductsViewModel(private val networkRepository: NetworkRepository) : View
 
     fun navigateToSelectedProductDone() {
         _navigateToSelectedProduct.value = null
+    }
+
+    fun getLoggedUser() : LoggedUser {
+        return sessionRepository.currentUser!!
     }
 
     val itemBinding: OnItemBind<Product> = OnItemBind { itemBinding, _, item ->

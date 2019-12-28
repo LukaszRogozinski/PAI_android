@@ -1,15 +1,27 @@
 package com.example.pai.features.users.detail
 
 import androidx.lifecycle.*
+import com.example.pai.domain.LoggedUser
 import com.example.pai.domain.User
 import com.example.pai.repository.NetworkRepository
+import com.example.pai.repository.SessionRepository
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
 import timber.log.Timber
 
-class UserDetailViewModel(val user: User) : ViewModel() {
+class UserDetailViewModel(val sessionRepository: SessionRepository) : ViewModel() {
 
     private val usersRepository = NetworkRepository()
+
+    private lateinit var user: User
+
+    fun setUser(user: User) {
+        this.user = user
+    }
+
+    fun getUser(): User {
+        return this.user
+    }
 
     private val _deleteResponse = MutableLiveData<Boolean>()
     val deleteResponse: LiveData<Boolean>
@@ -67,17 +79,21 @@ class UserDetailViewModel(val user: User) : ViewModel() {
         }
     }
 
+    fun getLoggedUser() : LoggedUser {
+        return sessionRepository.currentUser!!
+    }
+
     override fun onCleared() {
         super.onCleared()
         viewModelScope.cancel()
     }
 
-    class Factory(val user: User) : ViewModelProvider.Factory {
-        override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-            if (modelClass.isAssignableFrom(UserDetailViewModel::class.java)) {
-                return UserDetailViewModel(user) as T
-            }
-            throw IllegalArgumentException("Unable to construct viewmodel")
-        }
-    }
+//    class Factory(val user: User) : ViewModelProvider.Factory {
+//        override fun <T : ViewModel?> create(modelClass: Class<T>): T {
+//            if (modelClass.isAssignableFrom(UserDetailViewModel::class.java)) {
+//                return UserDetailViewModel(user) as T
+//            }
+//            throw IllegalArgumentException("Unable to construct viewmodel")
+//        }
+//    }
 }

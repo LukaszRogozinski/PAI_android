@@ -9,6 +9,7 @@ import com.example.pai.features.products.detail.ProductDetailViewModel
 import com.example.pai.features.products.types.ProductTypesViewModel
 import com.example.pai.features.users.UsersViewModel
 import com.example.pai.features.users.changepassword.ChangeUserPasswordViewModel
+import com.example.pai.features.users.detail.UserDetailViewModel
 import com.example.pai.features.users.edit.UserEditViewModel
 import com.example.pai.repository.NetworkRepository
 import com.example.pai.repository.SessionRepository
@@ -34,14 +35,16 @@ class App : Application() {
 val appModule = module {
 
     single { NetworkRepository() }
+    single { SessionRepository(PreferenceManager.getDefaultSharedPreferences(androidContext()), get()) }
 
-    viewModel { LoginViewModel(get()) }
-    viewModel { ProductsViewModel(get()) }
-    viewModel { ProductDetailViewModel(get()) }
-    viewModel { UsersViewModel(get()) }
-    viewModel { ProductTypesViewModel(get()) }
-    viewModel { UserEditViewModel(get()) }
-    viewModel { ChangeUserPasswordViewModel(get()) }
+    viewModel { LoginViewModel(get(), get()) }
+    viewModel { ProductsViewModel(get(), get()) }
+    viewModel { ProductDetailViewModel(get(), get()) }
+    viewModel { UsersViewModel(get(), get()) }
+    viewModel { ProductTypesViewModel(get(), get()) }
+    viewModel { UserEditViewModel(get(), get()) }
+    viewModel { ChangeUserPasswordViewModel(get(), get()) }
+    viewModel { UserDetailViewModel(get()) }
 //    single { SessionRepository(PreferenceManager.getDefaultSharedPreferences(androidContext())) }
     //viewModel { ProductDetailViewModel() }
 }

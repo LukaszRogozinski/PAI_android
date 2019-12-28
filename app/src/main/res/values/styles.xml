@@ -9,7 +9,17 @@
 
         <item name="material_dialog_positive_button_color">@android:color/holo_red_dark</item>
         <item name="material_dialog_positive_button_text_color">#FFFFFF</item>
-        <item name="material_dialog_negative_button_text_color">@android:color/holo_red_dark</item>    </style>
+        <item name="material_dialog_negative_button_text_color">@android:color/holo_red_dark</item>
+
+<!--        <item name="android:actionOverflowButtonStyle">@style/MyActionButtonOverflow</item>-->
+    </style>
+
+    <style name="MyActionButtonOverflow">
+        <item name="android:src">@drawable/ic_computer_24px</item>
+        <item name="android:background">?android:attr/actionBarItemBackground</item>
+        <item name="android:contentDescription">"Lala"</item>
+        <item name="android:text">"BEBE"</item>
+    </style>
 
     <style name="detailViewLabels">
         <item name="android:textSize">14sp</item>

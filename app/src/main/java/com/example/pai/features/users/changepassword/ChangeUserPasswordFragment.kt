@@ -2,10 +2,8 @@ package com.example.pai.features.users.changepassword
 
 
 import android.os.Bundle
+import android.view.*
 import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
@@ -15,6 +13,7 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 
 import com.example.pai.R
 import com.example.pai.databinding.ChangeUserPasswordFragmentBinding
+import com.example.pai.utils.Utils
 
 /**
  * A simple [Fragment] subclass.
@@ -48,7 +47,28 @@ class ChangeUserPasswordFragment : Fragment() {
                 viewModel.navBackDone()
             }
         })
+        setHasOptionsMenu(true)
         return binding.root
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        super.onCreateOptionsMenu(menu, inflater)
+        inflater.inflate(R.menu.logged_user_menu, menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.userDetailFragmentMenu -> {
+                val action = ChangeUserPasswordFragmentDirections.actionChangeUserPasswordFragmentToUserDetailFragment()
+                findNavController(this).navigate(action)
+                true
+            }
+            R.id.logout_menu -> {
+                Utils.logOutDialog(requireActivity(), viewModel.sessionRepository)
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
     }
 
 

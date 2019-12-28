@@ -84,18 +84,26 @@ data class Authority(
     val authority: String
 ) : Parcelable
 
+@Parcelize
 data class NewPassword(
     var newPassword: String? = null,
     var oldPassword: String? = null,
     var username: String? = null
-)
+) : Parcelable
 
+@Parcelize
 data class LoggedUser(
-    val id: UUID,
-    val username: String,
-    val password: String,
+    val user: User,
     val token: String
-)
+) : Parcelable
+
+fun User.asLoggedUser() : LoggedUser {
+    return LoggedUser(
+        this,
+        "generated_token" //TODO
+    )
+}
+
 //fun Product.asProductDtoToSave() : ProductDomainToDto {
 //    return ProductDomainToDto(
 //        id = this.id,
