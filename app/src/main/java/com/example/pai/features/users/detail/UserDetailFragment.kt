@@ -55,7 +55,9 @@ class UserDetailFragment : Fragment() {
             false
         )
         val user = args.user
+        val isMyAcount = args.isMyAccount
         viewModel.setUser(user)
+        viewModel.setIsMyAccount(isMyAcount)
 //        user = UserDetailFragmentArgs.fromBundle(arguments!!).user
         binding.item = viewModel.getUser()
         binding.vm = viewModel
@@ -63,7 +65,7 @@ class UserDetailFragment : Fragment() {
 
         viewModel.navigateToEditUser.observe(viewLifecycleOwner, Observer {
             if(it) {
-                val action = UserDetailFragmentDirections.actionUserDetailFragmentToUserEditFragment().setUser(viewModel.getUser())
+                val action = UserDetailFragmentDirections.actionUserDetailFragmentToUserEditFragment(viewModel.getIsMyAccount()).setUser(viewModel.getUser())
                 NavHostFragment.findNavController(this).navigate(action)
                 viewModel.navigateToEditUserDone()
             }
@@ -83,7 +85,7 @@ class UserDetailFragment : Fragment() {
 
         viewModel.navigateToChangePasswordUser.observe(viewLifecycleOwner, Observer {
             if(it) {
-                val action = UserDetailFragmentDirections.actionUserDetailFragmentToChangeUserPasswordFragment(user.username!!)
+                val action = UserDetailFragmentDirections.actionUserDetailFragmentToChangeUserPasswordFragment(user, viewModel.getIsMyAccount())
 //                val action = UserDetailFragmentDirections.actionUserDetailFragmentToChangeUserPasswordFragment()
                 NavHostFragment.findNavController(this).navigate(action)
                 viewModel.navigateToChangePasswordUserDone()
@@ -95,7 +97,7 @@ class UserDetailFragment : Fragment() {
                 val mDialog: MaterialDialog = MaterialDialog.Builder(requireActivity())
                     .setTitle("Delete?")
                     .setMessage("Are you sure want to delete this user?")
-                    .setCancelable(true)
+                    .setCancelable(false)
                     .setPositiveButton(
                         "Delete", R.drawable.ic_delete_24px
                     ) { dialogInterface, _ ->
@@ -104,7 +106,12 @@ class UserDetailFragment : Fragment() {
                     }
                     .setNegativeButton(
                         "Cancel", R.drawable.ic_close_24px
-                    ) { dialogInterface, _ -> dialogInterface?.dismiss() }
+                    ) { dialogInterface, _ ->
+                        run {
+                            dialogInterface?.dismiss()
+                            viewModel.showDeleteButtonClickedCanceled()
+                        }
+                    }
                     .build()
 
                 mDialog.show()

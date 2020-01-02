@@ -88,29 +88,6 @@ data class Authority(
 data class NewPassword(
     var newPassword: String? = null,
     var oldPassword: String? = null,
+    var version: Int? = null,
     var username: String? = null
 ) : Parcelable
-
-@Parcelize
-data class LoggedUser(
-    val user: User,
-    val token: String
-) : Parcelable
-
-fun User.asLoggedUser() : LoggedUser {
-    return LoggedUser(
-        this,
-        "generated_token" //TODO
-    )
-}
-
-//fun Product.asProductDtoToSave() : ProductDomainToDto {
-//    return ProductDomainToDto(
-//        id = this.id,
-//        createDate = LocalDateTime.now().toString(),
-//        lastUpdate = LocalDateTime.now().toString(),
-//        productTypeId = this.productType.id,
-//        serialNumber = this.serialNumber,
-//        status = this.status,
-//        warehouseId = this.department.id)
-//}

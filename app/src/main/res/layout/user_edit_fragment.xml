@@ -79,6 +79,7 @@
                     android:layout_marginEnd="8dp"
                     android:onClick="@{() -> vm.selectRolesClickedBegin()}"
                     android:text="roles * (click to select)"
+                    app:setVisibility="@{!vm.isMyAccount()}"
                     android:textSize="18sp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"

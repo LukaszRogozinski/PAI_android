@@ -20,19 +20,16 @@
         android:id="@+id/productsFragment"
         android:name="com.example.pai.features.products.ProductsFragment"
         android:label="products_fragment"
-        tools:layout="@layout/products_fragment" >
+        tools:layout="@layout/products_fragment">
         <action
             android:id="@+id/action_productsFragment_to_productDetailFragment"
             app:destination="@id/productDetailFragment" />
-        <action
-            android:id="@+id/action_productsFragment_to_userDetailFragment"
-            app:destination="@id/userDetailFragment" />
     </fragment>
     <fragment
         android:id="@+id/usersFragment"
         android:name="com.example.pai.features.users.UsersFragment"
         android:label="users_fragment"
-        tools:layout="@layout/users_fragment" >
+        tools:layout="@layout/users_fragment">
         <action
             android:id="@+id/action_usersFragment_to_userDetailFragment"
             app:destination="@id/userDetailFragment" />
@@ -48,15 +45,11 @@
 
         <argument
             android:name="product"
-            android:defaultValue="@null"
             app:argType="com.example.pai.domain.Product"
-            app:nullable="true" />
+            />
         <action
             android:id="@+id/action_productDetailFragment_to_productsFragment"
             app:destination="@id/productsFragment" />
-        <action
-            android:id="@+id/action_productDetailFragment_to_userDetailFragment"
-            app:destination="@id/userDetailFragment" />
     </fragment>
     <fragment
         android:id="@+id/userDetailFragment"
@@ -67,6 +60,11 @@
             android:name="user"
             app:argType="com.example.pai.domain.User"
             app:nullable="false" />
+        <argument
+            android:name="isMyAccount"
+            app:argType="boolean"
+            app:nullable="false"
+            android:defaultValue="true"/>
 
         <action
             android:id="@+id/action_userDetailFragment_to_usersFragment"
@@ -82,21 +80,23 @@
         android:id="@+id/productTypesFragment"
         android:name="com.example.pai.features.products.types.ProductTypesFragment"
         android:label="product_types_fragment"
-        tools:layout="@layout/product_types_fragment" >
-        <action
-            android:id="@+id/action_productTypesFragment_to_userDetailFragment"
-            app:destination="@id/userDetailFragment" />
-    </fragment>
+        tools:layout="@layout/product_types_fragment" />
     <fragment
         android:id="@+id/userEditFragment"
         android:name="com.example.pai.features.users.edit.UserEditFragment"
         android:label="user_edit_fragment"
-        tools:layout="@layout/user_edit_fragment" >
+        tools:layout="@layout/user_edit_fragment">
         <argument
             android:name="user"
             android:defaultValue="@null"
             app:argType="com.example.pai.domain.User"
             app:nullable="true" />
+
+        <argument
+            android:name="isMyAccount"
+            app:argType="boolean"
+            app:nullable="false"
+            />
         <action
             android:id="@+id/action_userEditFragment_to_userDetailFragment2"
             app:popUpTo="@id/userDetailFragment" />
@@ -110,11 +110,24 @@
         android:label="ChangeUserPasswordFragment"
         tools:layout="@layout/change_user_password_fragment">
         <argument
-            android:name="username"
-            app:argType="string"
+            android:name="user"
+            app:argType="com.example.pai.domain.User"
             app:nullable="false" />
+        <argument
+            android:name="isMyAccount"
+            app:argType="boolean"
+            app:nullable="false"
+            />
         <action
             android:id="@+id/action_changeUserPasswordFragment_to_userDetailFragment"
             app:popUpTo="@id/userDetailFragment" />
     </fragment>
+    <action
+        android:id="@+id/action_global_userDetailFragment"
+        app:destination="@id/userDetailFragment" />
+    <action
+        android:id="@+id/action_global_loginFragment"
+        app:destination="@id/loginFragment"
+        app:popUpTo="@+id/loginFragment"
+        app:popUpToInclusive="true"/>
 </navigation>

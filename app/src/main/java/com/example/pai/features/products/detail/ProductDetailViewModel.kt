@@ -1,17 +1,15 @@
 package com.example.pai.features.products.detail
 
-import android.app.Application
 import androidx.lifecycle.*
-import com.example.pai.database.getDatabase
-import com.example.pai.domain.LoggedUser
 import com.example.pai.domain.Product
-import com.example.pai.repository.NetworkRepository
+import com.example.pai.domain.User
+import com.example.pai.repository.ProductRepository
 import com.example.pai.repository.SessionRepository
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
 import timber.log.Timber
 
-class ProductDetailViewModel(private val networkRepository: NetworkRepository, val sessionRepository: SessionRepository) : ViewModel() {
+class ProductDetailViewModel(private val productRepository: ProductRepository, val sessionRepository: SessionRepository) : ViewModel() {
 
      private lateinit var product: Product
 
@@ -22,12 +20,6 @@ class ProductDetailViewModel(private val networkRepository: NetworkRepository, v
     fun getProduct(): Product {
         return product
     }
-
-//    private val productsRepository = NetworkRepository()
-
-//    private val _navigateToEditProduct = MutableLiveData<Boolean>()
-//    val navigateToEditProduct: LiveData<Boolean>
-//        get() = _navigateToEditProduct
 
     private val _deleteResponse = MutableLiveData<Boolean>()
     val deleteResponse: LiveData<Boolean>
@@ -42,18 +34,24 @@ class ProductDetailViewModel(private val networkRepository: NetworkRepository, v
         Timber.i("deleteResponse value= ${_deleteResponse.value}")
     }
 
+    fun showDeleteDialogCanceled() {
+        _showDeleteDialog.value = false
+    }
+
     fun deleteButtonClicked() {
         _showDeleteDialog.value = true
     }
 
-    fun getLoggedUser() : LoggedUser {
-        return sessionRepository.currentUser!!
+    fun getLoggedUser() : User {
+        return sessionRepository.user!!
     }
+
+    fun isLoggedUserAdmin() : Boolean = sessionRepository.isAdmin()
 
     fun deleteProduct() {
         viewModelScope.launch {
             try {
-                val response = networkRepository.deleteProduct(product.id)
+                val response = productRepository.deleteProduct(sessionRepository.token!!, product.id)
                 if (response.isSuccessful) {
                     _deleteResponse.postValue(true)
                     _showDeleteDialog.value = false

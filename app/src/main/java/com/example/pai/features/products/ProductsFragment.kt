@@ -8,6 +8,7 @@ import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.NavHostFragment.findNavController
+import com.example.pai.MainNavigationDirections
 
 import com.example.pai.R
 import com.example.pai.databinding.ProductsFragmentBinding
@@ -54,12 +55,13 @@ class ProductsFragment : Fragment() {
         return when (item.itemId) {
             R.id.userDetailFragmentMenu -> {
                 val loggedUser = viewModel.getLoggedUser()
-                val action = ProductsFragmentDirections.actionProductsFragmentToUserDetailFragment(loggedUser.user)
+                val isLoggedUserAdmin = viewModel.isLoggedUserAdmin()
+                val action = MainNavigationDirections.actionGlobalUserDetailFragment(loggedUser)
                 findNavController(this).navigate(action)
                 true
             }
             R.id.logout_menu -> {
-                Utils.logOutDialog(requireActivity(), viewModel.sessionRepository)
+                Utils.logOutDialog(requireActivity(), viewModel.sessionRepository, this)
                 true
             }
             else -> super.onOptionsItemSelected(item)
@@ -70,7 +72,7 @@ class ProductsFragment : Fragment() {
         super.onCreate(savedInstanceState)
         requireActivity().onBackPressedDispatcher.addCallback(
             this,
-            Utils.onBackPressed(requireActivity(), viewModel.sessionRepository)
+            Utils.onBackPressed(requireActivity(), viewModel.sessionRepository, this)
         )
     }
 
@@ -78,8 +80,7 @@ class ProductsFragment : Fragment() {
         viewModel.navigateToSelectedProduct.observe(viewLifecycleOwner, Observer<Product> {
             if (it != null) {
                 val action =
-                    ProductsFragmentDirections.actionProductsFragmentToProductDetailFragment()
-                        .setProduct(it)
+                    ProductsFragmentDirections.actionProductsFragmentToProductDetailFragment(it)
                 findNavController(this).navigate(action)
                 viewModel.navigateToSelectedProductDone()
             }

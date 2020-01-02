@@ -8,16 +8,15 @@ import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.NavHostFragment.findNavController
 import androidx.navigation.fragment.navArgs
+import com.example.pai.MainNavigationDirections
 import com.example.pai.R
 import com.example.pai.databinding.ProductDetailFragmentBinding
-import com.example.pai.domain.Product
 import com.example.pai.utils.Utils
 import com.shreyaspatil.MaterialDialog.MaterialDialog
-import timber.log.Timber
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import timber.log.Timber
 
 /**
  * A simple [Fragment] subclass.
@@ -29,7 +28,7 @@ class ProductDetailFragment : Fragment() {
     //var product: Product? = null
 
     private val viewModel: ProductDetailViewModel by viewModel()
-    
+
 //    private val viewModel: ProductDetailViewModel by lazy {
 //        Timber.i("ProductDetailViewModel called")
 //        ViewModelProviders.of(
@@ -53,7 +52,7 @@ class ProductDetailFragment : Fragment() {
             false
         )
         val product = args.product
-        viewModel.setProduct(product!!)
+        viewModel.setProduct(product)
 
         binding.vm = viewModel
         setObservers()
@@ -70,21 +69,19 @@ class ProductDetailFragment : Fragment() {
         return when (item.itemId) {
             R.id.userDetailFragmentMenu -> {
                 val loggedUser = viewModel.getLoggedUser()
-                val action = ProductDetailFragmentDirections.actionProductDetailFragmentToUserDetailFragment(loggedUser.user)
+                val action = MainNavigationDirections.actionGlobalUserDetailFragment(loggedUser)
                 findNavController(this).navigate(action)
                 true
             }
             R.id.logout_menu -> {
-                Utils.logOutDialog(requireActivity(), viewModel.sessionRepository)
+                Utils.logOutDialog(requireActivity(), viewModel.sessionRepository, this)
                 true
             }
             else -> super.onOptionsItemSelected(item)
         }
     }
 
-    @SuppressLint("RestrictedApi")
     private fun setObservers() {
-
         viewModel.deleteResponse.observe(viewLifecycleOwner, Observer<Boolean> {
             if (it) {
                 Timber.i("item deleted")
@@ -99,24 +96,33 @@ class ProductDetailFragment : Fragment() {
 
         viewModel.showDeleteDialog.observe(viewLifecycleOwner, Observer {
             if (it) {
-                val mDialog: MaterialDialog = MaterialDialog.Builder(requireActivity())
-                    .setTitle("Delete?")
-                    .setMessage("Are you sure want to delete this product?")
-                    .setCancelable(true)
-                    .setPositiveButton(
-                        "Delete", R.drawable.ic_delete_24px
-                    ) { dialogInterface, _ ->
-                        viewModel.deleteProduct()
-                        dialogInterface?.dismiss()
-                    }
-                    .setNegativeButton(
-                        "Cancel", R.drawable.ic_close_24px
-                    ) { dialogInterface, _ -> dialogInterface?.dismiss() }
-                    .build()
-
-                mDialog.show()
+                createDialog()
             }
         })
     }
 
+    @SuppressLint("RestrictedApi")
+    private fun createDialog() {
+        val mDialog: MaterialDialog = MaterialDialog.Builder(requireActivity())
+            .setTitle("Delete?")
+            .setMessage("Are you sure want to delete this product?")
+            .setCancelable(false)
+            .setPositiveButton(
+                "Delete", R.drawable.ic_delete_24px
+            ) { dialogInterface, _ ->
+                viewModel.deleteProduct()
+                dialogInterface?.dismiss()
+            }
+            .setNegativeButton(
+                "Cancel", R.drawable.ic_close_24px
+            ) { dialogInterface, _ ->
+                run {
+                    dialogInterface?.dismiss()
+                    viewModel.showDeleteDialogCanceled()
+                }
+            }
+            .build()
+
+        mDialog.show()
+    }
 }

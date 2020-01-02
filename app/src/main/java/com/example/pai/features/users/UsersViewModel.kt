@@ -1,23 +1,20 @@
 package com.example.pai.features.users
 
-import android.app.Application
 import androidx.lifecycle.*
 import androidx.recyclerview.widget.DiffUtil
 import com.example.pai.BR
 import com.example.pai.R
-import com.example.pai.database.getDatabase
-import com.example.pai.domain.LoggedUser
 import com.example.pai.domain.User
 import com.example.pai.network.asUserDomainModel
-import com.example.pai.repository.NetworkRepository
 import com.example.pai.repository.SessionRepository
+import com.example.pai.repository.UserRepository
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
 import me.tatarka.bindingcollectionadapter2.OnItemBind
 import timber.log.Timber
 import java.lang.Exception
 
-class UsersViewModel(private val networkRepository: NetworkRepository,val sessionRepository: SessionRepository) : ViewModel() {
+class UsersViewModel(private val userRepository: UserRepository, val sessionRepository: SessionRepository) : ViewModel() {
 
 //    val usersRepository = NetworkRepository()
 
@@ -68,8 +65,12 @@ class UsersViewModel(private val networkRepository: NetworkRepository,val sessio
         loadUsersFromNetwork()
     }
 
-    fun getLoggedUser() : LoggedUser {
-        return sessionRepository.currentUser!!
+    fun getLoggedUser() : User {
+        return sessionRepository.user!!
+    }
+
+    fun isLoggedUserAdmin(): Boolean {
+        return sessionRepository.isAdmin()
     }
 
 //    fun logout() {
@@ -79,7 +80,7 @@ class UsersViewModel(private val networkRepository: NetworkRepository,val sessio
     private fun loadUsersFromNetwork() {
         viewModelScope.launch {
             try {
-                val response = networkRepository.loadUsers()
+                val response = userRepository.loadUsers(sessionRepository.token!!)
                 if (response.isSuccessful) {
                     _users.value = response.body()!!.asUserDomainModel()
                     _eventNetworkError.value = false

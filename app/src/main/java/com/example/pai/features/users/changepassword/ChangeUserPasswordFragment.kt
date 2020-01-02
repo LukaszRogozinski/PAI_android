@@ -9,6 +9,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.NavHostFragment.findNavController
 import androidx.navigation.fragment.navArgs
+import com.example.pai.MainNavigationDirections
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 import com.example.pai.R
@@ -34,8 +35,10 @@ class ChangeUserPasswordFragment : Fragment() {
             container,
             false
         )
-        val username = args.username
-        viewModel.setUsername(username)
+        val user = args.user
+        val isMyAccount = args.isMyAccount
+        viewModel.user = user
+        viewModel.isMyAccount = isMyAccount
         binding.vm = viewModel
 
         viewModel.navBack.observe(viewLifecycleOwner, Observer {
@@ -59,12 +62,13 @@ class ChangeUserPasswordFragment : Fragment() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.userDetailFragmentMenu -> {
-                val action = ChangeUserPasswordFragmentDirections.actionChangeUserPasswordFragmentToUserDetailFragment()
+                val loggedUser = viewModel.getLoggedUser()
+                val action = MainNavigationDirections.actionGlobalUserDetailFragment(loggedUser)
                 findNavController(this).navigate(action)
                 true
             }
             R.id.logout_menu -> {
-                Utils.logOutDialog(requireActivity(), viewModel.sessionRepository)
+                Utils.logOutDialog(requireActivity(), viewModel.sessionRepository, this)
                 true
             }
             else -> super.onOptionsItemSelected(item)

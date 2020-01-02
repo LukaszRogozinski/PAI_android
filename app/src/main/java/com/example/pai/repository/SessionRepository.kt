@@ -1,29 +1,52 @@
 package com.example.pai.repository
 
-import android.content.SharedPreferences
-import com.example.pai.domain.LoggedUser
+import com.example.pai.domain.User
+import com.example.pai.network.*
+import kotlinx.coroutines.runBlocking
+import retrofit2.Response
 
-class SessionRepository(
-    private val sharedPreferences: SharedPreferences,
-    private val networkRepository: NetworkRepository
-) {
-    companion object {
-        const val USER_TOKEN_KEY = "user_token"
+class SessionRepository {
+
+    private var _user: User? = null
+    val user: User?
+    get() = _user
+
+    private var _token: String? = null
+    val token: String?
+    get() = _token
+
+    fun saveToken(token: String) {
+        _token = token
     }
 
-    private var loggedUser: LoggedUser? = null
+    fun saveUser(user: User) {
+        _user = user
+    }
 
-    val currentUser: LoggedUser?
-    get() = loggedUser
+    fun isAdmin(): Boolean = _user!!.username == "admin"
+
+    suspend fun getLoggedUserNetwork(token: String, username: String) : Response<UserDto> {
+        return PaiApi.retrofitService.getLoggedUser(createAuthorizationHeader(token),username)
+    }
+
+    private suspend fun logoutUser(token: String) : Response<String> {
+        return PaiApi.retrofitService.revokeToken(createAuthorizationHeader(token))
+    }
+
+    suspend fun logIn(username: String, password: String): Response<TokenDto> {
+        return PaiApi.retrofitService.getToken(LOGIN_TOKEN, username = username, password = password)
+    }
 
     fun logout() {
-        loggedUser = null
-        sharedPreferences.edit().remove(USER_TOKEN_KEY).apply()
-    }
-
-    fun saveCurrentUserToken(loggedUser: LoggedUser) {
-        this.loggedUser = loggedUser
-        sharedPreferences.edit().putString(USER_TOKEN_KEY, loggedUser.token).apply()
+        runBlocking {
+            val response = logoutUser(_token!!)
+            if(response.isSuccessful) {
+                _user = null
+                _token = null
+            } else{
+                print("eee")
+            }
+        }
     }
 
 }

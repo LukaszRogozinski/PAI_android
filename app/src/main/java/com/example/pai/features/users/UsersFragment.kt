@@ -13,6 +13,7 @@ import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment.findNavController
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.NavigationUI
+import com.example.pai.MainNavigationDirections
 import com.example.pai.R
 import com.example.pai.databinding.UsersFragmentBinding
 import com.example.pai.utils.Utils
@@ -54,7 +55,8 @@ class UsersFragment : Fragment() {
 
         viewModel.navigateToSelectedUser.observe(viewLifecycleOwner, Observer {
             if(it != null){
-                val action = UsersFragmentDirections.actionUsersFragmentToUserDetailFragment(it)
+                val isLoggedUserAdmin = viewModel.isLoggedUserAdmin()
+                val action = UsersFragmentDirections.actionUsersFragmentToUserDetailFragment(it).setIsMyAccount(false)
                 findNavController(this).navigate(action)
                 viewModel.navigateToSelectedUserDone()
             }
@@ -62,7 +64,7 @@ class UsersFragment : Fragment() {
 
         viewModel.navigateToNewUser.observe(viewLifecycleOwner, Observer {
             if(it) {
-                val action = UsersFragmentDirections.actionUsersFragmentToUserEditFragment().setUser(null)
+                val action = UsersFragmentDirections.actionUsersFragmentToUserEditFragment(false).setUser(null)
                 findNavController(this).navigate(action)
                 viewModel.navigateToNewUserDone()
             }
@@ -103,12 +105,13 @@ class UsersFragment : Fragment() {
         return when (item.itemId) {
             R.id.userDetailFragmentMenu -> {
                 val loggedUser = viewModel.getLoggedUser()
-                val action = UsersFragmentDirections.actionUsersFragmentToUserDetailFragment(loggedUser.user)
+                val isLoggedUserAdmin = viewModel.isLoggedUserAdmin()
+                val action = MainNavigationDirections.actionGlobalUserDetailFragment(loggedUser)
                 findNavController(this).navigate(action)
                 true
             }
             R.id.logout_menu -> {
-                Utils.logOutDialog(requireActivity(), viewModel.sessionRepository)
+                Utils.logOutDialog(requireActivity(), viewModel.sessionRepository, this)
                 true
             }
             else -> super.onOptionsItemSelected(item)
@@ -119,7 +122,7 @@ class UsersFragment : Fragment() {
         super.onCreate(savedInstanceState)
         requireActivity().onBackPressedDispatcher.addCallback(
             this,
-            Utils.onBackPressed(requireActivity(), viewModel.sessionRepository)
+            Utils.onBackPressed(requireActivity(), viewModel.sessionRepository, this)
         )
     }
 

@@ -8,6 +8,7 @@ import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.NavHostFragment
+import com.example.pai.MainNavigationDirections
 
 import com.example.pai.R
 import com.example.pai.databinding.ProductTypesFragmentBinding
@@ -56,12 +57,14 @@ class ProductTypesFragment : Fragment() {
         return when (item.itemId) {
             R.id.userDetailFragmentMenu -> {
                 val loggedUser = viewModel.getLoggedUser()
-                val action = ProductTypesFragmentDirections.actionProductTypesFragmentToUserDetailFragment(loggedUser.user)
+                val isLoggedUserAdmin = viewModel.isLoggedUserAdmin()
+                val action = MainNavigationDirections.actionGlobalUserDetailFragment(loggedUser)
+//                val action = ProductTypesFragmentDirections.actionProductTypesFragmentToUserDetailFragment(loggedUser)
                 NavHostFragment.findNavController(this).navigate(action)
                 true
             }
             R.id.logout_menu -> {
-                Utils.logOutDialog(requireActivity(), viewModel.sessionRepository)
+                Utils.logOutDialog(requireActivity(), viewModel.sessionRepository, this)
                 true
             }
             else -> super.onOptionsItemSelected(item)
@@ -72,7 +75,7 @@ class ProductTypesFragment : Fragment() {
         super.onCreate(savedInstanceState)
         requireActivity().onBackPressedDispatcher.addCallback(
             this,
-            Utils.onBackPressed(requireActivity(), viewModel.sessionRepository)
+            Utils.onBackPressed(requireActivity(), viewModel.sessionRepository, this)
         )
     }
 

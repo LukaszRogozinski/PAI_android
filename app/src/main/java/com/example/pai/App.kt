@@ -1,18 +1,17 @@
 package com.example.pai
 
 import android.app.Application
-import android.preference.PreferenceManager
 import com.example.pai.features.products.ProductsViewModel
 import com.example.pai.features.login.LoginViewModel
-import com.example.pai.features.products.detail.ProductDetailFragmentArgs
 import com.example.pai.features.products.detail.ProductDetailViewModel
 import com.example.pai.features.products.types.ProductTypesViewModel
 import com.example.pai.features.users.UsersViewModel
 import com.example.pai.features.users.changepassword.ChangeUserPasswordViewModel
 import com.example.pai.features.users.detail.UserDetailViewModel
 import com.example.pai.features.users.edit.UserEditViewModel
-import com.example.pai.repository.NetworkRepository
+import com.example.pai.repository.ProductRepository
 import com.example.pai.repository.SessionRepository
+import com.example.pai.repository.UserRepository
 import com.facebook.stetho.Stetho
 import org.koin.android.ext.koin.androidContext
 import org.koin.androidx.viewmodel.dsl.viewModel
@@ -34,17 +33,16 @@ class App : Application() {
 
 val appModule = module {
 
-    single { NetworkRepository() }
-    single { SessionRepository(PreferenceManager.getDefaultSharedPreferences(androidContext()), get()) }
+    single { ProductRepository() }
+    single { UserRepository() }
+    single { SessionRepository() }
 
-    viewModel { LoginViewModel(get(), get()) }
+    viewModel { LoginViewModel(get()) }
     viewModel { ProductsViewModel(get(), get()) }
     viewModel { ProductDetailViewModel(get(), get()) }
     viewModel { UsersViewModel(get(), get()) }
     viewModel { ProductTypesViewModel(get(), get()) }
     viewModel { UserEditViewModel(get(), get()) }
     viewModel { ChangeUserPasswordViewModel(get(), get()) }
-    viewModel { UserDetailViewModel(get()) }
-//    single { SessionRepository(PreferenceManager.getDefaultSharedPreferences(androidContext())) }
-    //viewModel { ProductDetailViewModel() }
+    viewModel { UserDetailViewModel(get(), get()) }
 }

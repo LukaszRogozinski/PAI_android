@@ -1,25 +1,23 @@
 package com.example.pai.features.products
 
-import android.app.Application
-import androidx.lifecycle.*
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import androidx.recyclerview.widget.DiffUtil
 import com.example.pai.BR
 import com.example.pai.R
-import com.example.pai.database.getDatabase
-import com.example.pai.domain.LoggedUser
 import com.example.pai.domain.Product
-import com.example.pai.network.*
-import com.example.pai.repository.NetworkRepository
+import com.example.pai.domain.User
+import com.example.pai.network.asProductDomainModel
+import com.example.pai.repository.ProductRepository
 import com.example.pai.repository.SessionRepository
-import kotlinx.coroutines.*
+import kotlinx.coroutines.cancel
+import kotlinx.coroutines.launch
 import me.tatarka.bindingcollectionadapter2.OnItemBind
 import timber.log.Timber
-import java.lang.Exception
 
-class ProductsViewModel(private val networkRepository: NetworkRepository, val sessionRepository: SessionRepository) : ViewModel() {
-
-//    private val productsRepository = NetworkRepository()
-
+class ProductsViewModel(private val productRepository: ProductRepository, val sessionRepository: SessionRepository) : ViewModel() {
 
     private val _eventNetworkError = MutableLiveData(false)
     val eventNetworkError: LiveData<Boolean>
@@ -49,9 +47,11 @@ class ProductsViewModel(private val networkRepository: NetworkRepository, val se
         _navigateToSelectedProduct.value = null
     }
 
-    fun getLoggedUser() : LoggedUser {
-        return sessionRepository.currentUser!!
+    fun getLoggedUser() : User {
+        return sessionRepository.user!!
     }
+
+    fun isLoggedUserAdmin(): Boolean = sessionRepository.isAdmin()
 
     val itemBinding: OnItemBind<Product> = OnItemBind { itemBinding, _, item ->
         itemBinding.set(BR.item, R.layout.product_item)
@@ -75,7 +75,7 @@ class ProductsViewModel(private val networkRepository: NetworkRepository, val se
     private fun loadProductsFromNetwork() {
         viewModelScope.launch {
             try {
-                val response = networkRepository.loadProducts()
+                val response = productRepository.loadProducts(sessionRepository.token!!)
                 if (response.isSuccessful) {
                     _products.value = response.body()!!.asProductDomainModel()
                     _eventNetworkError.value = false

@@ -14,6 +14,7 @@ import androidx.lifecycle.Observer
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import com.example.pai.MainNavigationDirections
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 import com.example.pai.R
@@ -43,7 +44,9 @@ class UserEditFragment : Fragment() {
             false
         )
         val user = args.user
+        val isMyAccount = args.isMyAccount
         viewModel.user = user
+        viewModel.isMyAccount = isMyAccount
         binding.vm = viewModel
 
         viewModel.navBackToListOfUsers.observe(viewLifecycleOwner, Observer {
@@ -89,12 +92,13 @@ class UserEditFragment : Fragment() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.userDetailFragmentMenu -> {
-                val action = UserEditFragmentDirections.actionUserEditFragmentToUserDetailFragment2()// UsersFragmentDirections.actionUsersFragmentToUserDetailFragment(loggedUser.user)
+                val loggedUser = viewModel.getLoggedUser()
+                val action = MainNavigationDirections.actionGlobalUserDetailFragment(loggedUser)
                 NavHostFragment.findNavController(this).navigate(action)
                 true
             }
             R.id.logout_menu -> {
-                Utils.logOutDialog(requireActivity(), viewModel.sessionRepository)
+                Utils.logOutDialog(requireActivity(), viewModel.sessionRepository, this)
                 true
             }
             else -> super.onOptionsItemSelected(item)

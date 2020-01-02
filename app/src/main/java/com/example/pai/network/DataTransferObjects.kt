@@ -90,8 +90,8 @@ data class NewUserDto(
     val surname: String,
     val username: String,
     val workplace: String? = null,
-    val versionUser: Int? = null,
-    val versionUserData: Int? = null
+    val versionUser: Int?,
+    val versionUserData: Int?
 )
 
 data class UpdateUserDto(
@@ -106,26 +106,38 @@ data class UpdateUserDto(
     val street: String,
     val surname: String,
     val username: String,
+    val versionUser: Int,
+    val versionUserdata: Int,
     val workplace: String? = null
 )
 
 data class UpdatePasswordDto(
     val newPassword: String,
     val oldPassword: String,
+    val version: Int,
     val username: String
 )
 
-fun NewPassword.asUpdatePasswordDto() : UpdatePasswordDto {
+data class TokenDto(
+    val access_token: String,
+    val token_type: String,
+    val refresh_token: String,
+    val expires_in: Int,
+    val scope: String
+    )
+
+fun NewPassword.asUpdatePasswordDto(): UpdatePasswordDto {
     return UpdatePasswordDto(
         newPassword = this.newPassword!!,
         oldPassword = this.oldPassword!!,
+        version = this.version!!,
         username = this.username!!
     )
 }
 
 fun User.asUpdateUserDto(authorities: List<String>): UpdateUserDto {
     return UpdateUserDto(
-    city = this.userdata.address.city!!,
+        city = this.userdata.address.city!!,
         email = this.userdata.email!!,
         flatNumber = this.userdata.address.flatNumber!!,
         houseNumber = this.userdata.address.buildingNumber!!,
@@ -133,9 +145,11 @@ fun User.asUpdateUserDto(authorities: List<String>): UpdateUserDto {
         name = this.userdata.name!!,
         position = this.userdata.position,
         roles = authorities,//TODO
-    street = this.userdata.address.street!!,
+        street = this.userdata.address.street!!,
         surname = this.userdata.surname!!,
         username = this.username!!,
+        versionUser = this.version!!,
+        versionUserdata = this.userdata.version!!,
         workplace = this.userdata.workplace
     )
 }
@@ -176,7 +190,7 @@ fun List<ProductDto>.asProductDomainModel(): List<Product> {
     }
 }
 
-fun UserDto.asDomainModel() : User {
+fun UserDto.asDomainModel(): User {
     return User(
         id = this.id,
         username = this.username,
@@ -251,22 +265,6 @@ fun AddressDto.asDomainModel(): Address {
     )
 }
 
-//fun List<ProductDto>.asProductDatabaseModel(): List<DatabaseProduct> {
-//    return map {
-//        DatabaseProduct(
-//            id = it.id,
-//            version = it.version,
-//            serialNumber = it.serialNumber,
-//            status = it.status,
-//            databaseProductTypeId = it.productType.id,
-//            lastUpdate = it.lastUpdate,
-//            createDate = it.createDate,
-//            deleted = it.deleted,
-//            databaseWarehouseId = it.department.id
-//        )
-//    }
-//}
-
 fun List<ProductTypeDto>.asProductTypeDomainModel(): List<ProductType> {
     return map {
         ProductType(
@@ -280,20 +278,7 @@ fun List<ProductTypeDto>.asProductTypeDomainModel(): List<ProductType> {
     }
 }
 
-//fun List<ProductTypeDto>.asProductTypeDatabaseModel(): List<DatabaseProductType> {
-//    return map {
-//        DatabaseProductType(
-//            id = it.id,
-//            version = it.version,
-//            name = it.name,
-//            manufacture = it.manufacture,
-//            cost = it.cost,
-//            deleted = it.deleted
-//        )
-//    }
-//}
-
-fun ProductTypeDto.asDomainModel() : ProductType {
+fun ProductTypeDto.asDomainModel(): ProductType {
     return ProductType(
         id = this.id,
         version = this.version,
@@ -304,26 +289,6 @@ fun ProductTypeDto.asDomainModel() : ProductType {
     )
 }
 
-//fun ProductTypeDto.asDatabaseModel(): DatabaseProductType {
-//    return DatabaseProductType(
-//        id = this.id,
-//        version = this.version,
-//        name = this.name,
-//        manufacture = this.manufacture,
-//        cost = this.cost,
-//        deleted = this.deleted
-//    )
-//}
-
-//fun DepartmentDto.asDatabaseModel(): DatabaseWarehouse {
-//    return DatabaseWarehouse(
-//        id = this.id,
-//        version = this.version,
-//        name = this.name,
-//        deleted = this.deleted
-//    )
-//}
-
 fun DepartmentDto.asDomainModel(): Department {
     return Department(
         id = this.id,
@@ -332,25 +297,3 @@ fun DepartmentDto.asDomainModel(): Department {
         deleted = this.deleted
     )
 }
-
-fun List<DepartmentDto>.asDomainModel(): List<Department> {
-    return map {
-        Department(
-            id = it.id,
-            version = it.version,
-            name = it.name,
-            deleted = it.deleted
-        )
-    }
-}
-
-//fun List<DepartmentDto>.asWarehouseDatabaseModel(): List<DatabaseWarehouse> {
-//    return map {
-//        DatabaseWarehouse(
-//            id = it.id,
-//            version = it.version,
-//            name = it.name,
-//            deleted = it.deleted
-//        )
-//    }
-//}

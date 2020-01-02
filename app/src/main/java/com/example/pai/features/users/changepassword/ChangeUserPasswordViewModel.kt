@@ -4,16 +4,16 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.pai.domain.LoggedUser
 import com.example.pai.domain.NewPassword
+import com.example.pai.domain.User
 import com.example.pai.network.asUpdatePasswordDto
-import com.example.pai.repository.NetworkRepository
 import com.example.pai.repository.SessionRepository
+import com.example.pai.repository.UserRepository
 import kotlinx.coroutines.launch
 import timber.log.Timber
 import java.lang.Exception
 
-class ChangeUserPasswordViewModel(private val networkRepository: NetworkRepository, val sessionRepository: SessionRepository) : ViewModel() {
+class ChangeUserPasswordViewModel(private val userRepository: UserRepository, val sessionRepository: SessionRepository) : ViewModel() {
 
     private val _navBack = MutableLiveData<Boolean>()
     val navBack: LiveData<Boolean>
@@ -21,19 +21,32 @@ class ChangeUserPasswordViewModel(private val networkRepository: NetworkReposito
 
     var newPassword = NewPassword()
 
-    fun setUsername(username: String) {
-        newPassword.username = username
+    var user: User? = null
+    set(value) {
+        field = value
+        newPassword.version = value!!.version
+        newPassword.username = value.username
     }
 
     fun navBackDone() {
         _navBack.value = false
     }
 
+    fun getLoggedUser() : User {
+        return sessionRepository.user!!
+    }
+
+    var isMyAccount: Boolean? = null
+
     fun saveNewPassword() {
         viewModelScope.launch {
             try {
                 val updatePasswordDto = newPassword.asUpdatePasswordDto()
-                val response = networkRepository.updatePasswordByAdminNetwork(updatePasswordDto)
+                val response = if(isMyAccount!!) {
+                    userRepository.updatePassword(sessionRepository.token!!, updatePasswordDto)
+                } else {
+                    userRepository.updatePasswordByAdminNetwork(sessionRepository.token!!, updatePasswordDto)
+                }
                 if (response.isSuccessful) {
                     print("yea")
                     _navBack.postValue(true)
@@ -46,8 +59,8 @@ class ChangeUserPasswordViewModel(private val networkRepository: NetworkReposito
         }
     }
 
-    fun getLoggedUser() : LoggedUser {
-        return sessionRepository.currentUser!!
-    }
+//    fun getLoggedUser() : LoggedUser {
+//        return sessionRepository.currentUser!!
+//    }
 
 }

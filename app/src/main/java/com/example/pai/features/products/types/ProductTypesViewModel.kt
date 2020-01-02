@@ -7,10 +7,10 @@ import androidx.lifecycle.viewModelScope
 import androidx.recyclerview.widget.DiffUtil
 import com.example.pai.BR
 import com.example.pai.R
-import com.example.pai.domain.LoggedUser
 import com.example.pai.domain.ProductType
+import com.example.pai.domain.User
 import com.example.pai.network.asProductTypeDomainModel
-import com.example.pai.repository.NetworkRepository
+import com.example.pai.repository.ProductRepository
 import com.example.pai.repository.SessionRepository
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
@@ -18,7 +18,7 @@ import me.tatarka.bindingcollectionadapter2.OnItemBind
 import timber.log.Timber
 import java.lang.Exception
 
-class ProductTypesViewModel(private val networkRepository: NetworkRepository, val sessionRepository: SessionRepository) : ViewModel() {
+class ProductTypesViewModel(private val productRepository: ProductRepository, val sessionRepository: SessionRepository) : ViewModel() {
 
     private val _eventNetworkError = MutableLiveData(false)
     val eventNetworkError: LiveData<Boolean>
@@ -36,9 +36,11 @@ class ProductTypesViewModel(private val networkRepository: NetworkRepository, va
         loadProductTypesFromNetwork()
     }
 
-    fun getLoggedUser() : LoggedUser {
-        return sessionRepository.currentUser!!
+    fun getLoggedUser() : User {
+        return sessionRepository.user!!
     }
+
+    fun isLoggedUserAdmin(): Boolean = sessionRepository.isAdmin()
 
     val itemBinding: OnItemBind<ProductType> = OnItemBind { itemBinding, _, _ ->
         itemBinding.set(BR.item, R.layout.product_type_item)
@@ -58,7 +60,7 @@ class ProductTypesViewModel(private val networkRepository: NetworkRepository, va
     private fun loadProductTypesFromNetwork() {
         viewModelScope.launch {
             try {
-                val response = networkRepository.getProductTypesFromNetwork()
+                val response = productRepository.getProductTypesFromNetwork(sessionRepository.token!!)
                 if(response.isSuccessful){
                     _productTypes.value = response.body()!!.asProductTypeDomainModel()
                     _eventNetworkError.value = false

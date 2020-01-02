@@ -4,18 +4,20 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.pai.domain.LoggedUser
 import com.example.pai.domain.User
 import com.example.pai.network.asNewUserDto
 import com.example.pai.network.asUpdateUserDto
-import com.example.pai.repository.NetworkRepository
 import com.example.pai.repository.SessionRepository
+import com.example.pai.repository.UserRepository
 import kotlinx.coroutines.launch
 import retrofit2.Response
 import timber.log.Timber
 import java.lang.Exception
 
-class UserEditViewModel(private val networkRepository: NetworkRepository, val sessionRepository: SessionRepository) : ViewModel() {
+class UserEditViewModel(
+    private val userRepository: UserRepository,
+    val sessionRepository: SessionRepository
+) : ViewModel() {
 
     var rolesArray = mutableListOf<String>()
 
@@ -31,8 +33,12 @@ class UserEditViewModel(private val networkRepository: NetworkRepository, val se
         _selectRolesClicked.value = true
     }
 
-    fun getLoggedUser() : LoggedUser {
-        return sessionRepository.currentUser!!
+//    fun getLoggedUser() : LoggedUser {
+//        return sessionRepository.currentUser!!
+//    }
+
+    fun getLoggedUser(): User {
+        return sessionRepository.user!!
     }
 
     private val _navBackToListOfUsers = MutableLiveData<Boolean>()
@@ -45,10 +51,10 @@ class UserEditViewModel(private val networkRepository: NetworkRepository, val se
 
     private val _isNewUser = MutableLiveData<Boolean>()
     val isNewUser: LiveData<Boolean>
-    get() = _isNewUser
+        get() = _isNewUser
 
     var user: User? = User()
-        set(value) =
+        set(value) {
             if (value != null) {
                 _isNewUser.value = false
                 value.authorities!!.forEach { rolesArray.add(it.authority) }
@@ -56,6 +62,9 @@ class UserEditViewModel(private val networkRepository: NetworkRepository, val se
             } else {
                 _isNewUser.value = true
             }
+        }
+
+    var isMyAccount: Boolean? = null
 
     fun navBackToListOfUsersDone() {
         _navBackToListOfUsers.value = false
@@ -69,17 +78,31 @@ class UserEditViewModel(private val networkRepository: NetworkRepository, val se
         viewModelScope.launch {
             try {
                 lateinit var response: Response<Unit>
-                response = if(_isNewUser.value!!){
+                response = if (_isNewUser.value!!) {
                     val newUser = user!!.asNewUserDto(rolesArray.toList())
-                    networkRepository.createNewUserByAdminNetwork(newUser)
-                } else{
+                    userRepository.createNewUserByAdminNetwork(
+                        sessionRepository.token!!,
+                        newUser
+                    )
+                } else {
                     val updateUser = user!!.asUpdateUserDto(rolesArray.toList())
-                    networkRepository.updateUserByAdminNetwork(updateUser)
+                    if(isMyAccount!!) {
+                        userRepository.updateUser(
+                            sessionRepository.token!!,
+                            updateUser
+                        )
+                    } else {
+                        userRepository.updateUserByAdminNetwork(
+                            sessionRepository.token!!,
+                            updateUser
+                        )
+                    }
+
                 }
                 if (response.isSuccessful) {
-                    if(_isNewUser.value!!){
+                    if (_isNewUser.value!!) {
                         _navBackToListOfUsers.postValue(true)
-                    } else{
+                    } else {
                         _navBackToDetailUser.postValue(true)
                     }
                 } else {

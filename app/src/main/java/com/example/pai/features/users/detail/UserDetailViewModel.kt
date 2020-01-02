@@ -1,17 +1,14 @@
 package com.example.pai.features.users.detail
 
 import androidx.lifecycle.*
-import com.example.pai.domain.LoggedUser
 import com.example.pai.domain.User
-import com.example.pai.repository.NetworkRepository
 import com.example.pai.repository.SessionRepository
+import com.example.pai.repository.UserRepository
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
 import timber.log.Timber
 
-class UserDetailViewModel(val sessionRepository: SessionRepository) : ViewModel() {
-
-    private val usersRepository = NetworkRepository()
+class UserDetailViewModel(private  val userRepository: UserRepository, val sessionRepository: SessionRepository) : ViewModel() {
 
     private lateinit var user: User
 
@@ -21,6 +18,16 @@ class UserDetailViewModel(val sessionRepository: SessionRepository) : ViewModel(
 
     fun getUser(): User {
         return this.user
+    }
+
+    private var isMyAccount: Boolean? = null
+
+    fun setIsMyAccount(value: Boolean) {
+        isMyAccount = value
+    }
+
+    fun getIsMyAccount(): Boolean {
+        return isMyAccount!!
     }
 
     private val _deleteResponse = MutableLiveData<Boolean>()
@@ -48,6 +55,10 @@ class UserDetailViewModel(val sessionRepository: SessionRepository) : ViewModel(
         _showDeleteDialog.value = true
     }
 
+    fun showDeleteButtonClickedCanceled() {
+        _showDeleteDialog.value = false
+    }
+
     fun editButtonClicked() {
         _navigateToEditUser.value = true
     }
@@ -67,7 +78,7 @@ class UserDetailViewModel(val sessionRepository: SessionRepository) : ViewModel(
     fun deleteUser() {
         viewModelScope.launch {
             try {
-                val response = usersRepository.deleteUser(user.username!!)
+                val response = userRepository.deleteUser(sessionRepository.token!!, user.username!!)
                 if (response.isSuccessful) {
                     _deleteResponse.postValue(true)
                     _showDeleteDialog.value = false
@@ -79,9 +90,9 @@ class UserDetailViewModel(val sessionRepository: SessionRepository) : ViewModel(
         }
     }
 
-    fun getLoggedUser() : LoggedUser {
-        return sessionRepository.currentUser!!
-    }
+//    fun getLoggedUser() : LoggedUser {
+//        return sessionRepository.currentUser!!
+//    }
 
     override fun onCleared() {
         super.onCleared()
