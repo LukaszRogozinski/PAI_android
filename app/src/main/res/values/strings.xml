@@ -8,19 +8,21 @@
     <string name="password">Password</string>
 
     <string-array name="roles">
-        <item>PRODUCT_READ</item>
-        <item>PRODUCT_LIST_READ</item>
-        <item>PRODUCT_DELETE</item>
-        <item>PRODUCT_TYPE_READ</item>
-        <item>PRODUCT_TYPE_LIST_READ</item>
-        <item>USER_DELETE</item>
-        <item>ACCOUNT_UPDATE_ADMIN</item>
-        <item>USER_READ</item>
-        <item>USER_ROLES_READ</item>
-        <item>PASSWORD_UPDATE</item>
-        <item>PASSWORD_READ</item>
-        <item>PASSWORD_ADMIN_UPDATE</item>
-        <item>PASSWORD_ADMIN_READ</item>
+        <item>ADMIN</item>
+        <item>USER</item>
+<!--        <item>PRODUCT_READ</item>-->
+<!--        <item>PRODUCT_LIST_READ</item>-->
+<!--        <item>PRODUCT_DELETE</item>-->
+<!--        <item>PRODUCT_TYPE_READ</item>-->
+<!--        <item>PRODUCT_TYPE_LIST_READ</item>-->
+<!--        <item>USER_DELETE</item>-->
+<!--        <item>ACCOUNT_UPDATE_ADMIN</item>-->
+<!--        <item>USER_READ</item>-->
+<!--        <item>USER_ROLES_READ</item>-->
+<!--        <item>PASSWORD_UPDATE</item>-->
+<!--        <item>PASSWORD_READ</item>-->
+<!--        <item>PASSWORD_ADMIN_UPDATE</item>-->
+<!--        <item>PASSWORD_ADMIN_READ</item>-->
     </string-array>
 
 </resources>

@@ -23,7 +23,7 @@ class SessionRepository {
         _user = user
     }
 
-    fun isAdmin(): Boolean = _user!!.username == "admin"
+    fun isAdmin(): Boolean = _user!!.userRoles!!.any { it.name == "ADMIN" }
 
     suspend fun getLoggedUserNetwork(token: String, username: String) : Response<UserDto> {
         return PaiApi.retrofitService.getLoggedUser(createAuthorizationHeader(token),username)

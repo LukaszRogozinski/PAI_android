@@ -17,7 +17,10 @@ import kotlinx.coroutines.launch
 import me.tatarka.bindingcollectionadapter2.OnItemBind
 import timber.log.Timber
 
-class ProductsViewModel(private val productRepository: ProductRepository, val sessionRepository: SessionRepository) : ViewModel() {
+class ProductsViewModel(
+    private val productRepository: ProductRepository,
+    val sessionRepository: SessionRepository
+) : ViewModel() {
 
     private val _eventNetworkError = MutableLiveData(false)
     val eventNetworkError: LiveData<Boolean>
@@ -27,7 +30,7 @@ class ProductsViewModel(private val productRepository: ProductRepository, val se
     val isNetworkErrorShown: LiveData<Boolean>
         get() = _isNetworkErrorShown
 
-    val _products = MutableLiveData<List<Product>>()
+    private val _products = MutableLiveData<List<Product>>()
     val products: LiveData<List<Product>>
         get() = _products
 
@@ -35,25 +38,7 @@ class ProductsViewModel(private val productRepository: ProductRepository, val se
     val navigateToSelectedProduct: LiveData<Product>
         get() = _navigateToSelectedProduct
 
-//    private val _navigateToEditProduct = MutableLiveData<Boolean>()
-//    val navigateToEditProduct: LiveData<Boolean>
-//        get() = _navigateToEditProduct
-
-    fun onSelectedProduct(item: Product) {
-        _navigateToSelectedProduct.value = item
-    }
-
-    fun navigateToSelectedProductDone() {
-        _navigateToSelectedProduct.value = null
-    }
-
-    fun getLoggedUser() : User {
-        return sessionRepository.user!!
-    }
-
-    fun isLoggedUserAdmin(): Boolean = sessionRepository.isAdmin()
-
-    val itemBinding: OnItemBind<Product> = OnItemBind { itemBinding, _, item ->
+    val itemBinding: OnItemBind<Product> = OnItemBind { itemBinding, _, _ ->
         itemBinding.set(BR.item, R.layout.product_item)
         itemBinding.bindExtra(BR.vm, this)
     }
@@ -70,6 +55,18 @@ class ProductsViewModel(private val productRepository: ProductRepository, val se
 
     init {
         loadProductsFromNetwork()
+    }
+
+    fun onSelectedProduct(item: Product) {
+        _navigateToSelectedProduct.value = item
+    }
+
+    fun navigateToSelectedProductDone() {
+        _navigateToSelectedProduct.value = null
+    }
+
+    fun getLoggedUser(): User {
+        return sessionRepository.user!!
     }
 
     private fun loadProductsFromNetwork() {
@@ -95,25 +92,8 @@ class ProductsViewModel(private val productRepository: ProductRepository, val se
         _isNetworkErrorShown.value = true
     }
 
-//    fun navigateToEditProduct() {
-//        _navigateToEditProduct.value = true
-//    }
-//
-//    fun navigateToEditProductFinish() {
-//        _navigateToEditProduct.value = false
-//    }
-
     override fun onCleared() {
         super.onCleared()
         viewModelScope.cancel()
     }
-
-//    class Factory() : ViewModelProvider.Factory {
-//        override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-//            if (modelClass.isAssignableFrom(ProductsViewModel::class.java)) {
-//                return ProductsViewModel() as T
-//            }
-//            throw IllegalArgumentException("Unable to construct viewmodel")
-//        }
-//    }
 }

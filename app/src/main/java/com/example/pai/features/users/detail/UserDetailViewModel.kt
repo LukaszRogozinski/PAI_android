@@ -8,7 +8,10 @@ import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
 import timber.log.Timber
 
-class UserDetailViewModel(private  val userRepository: UserRepository, val sessionRepository: SessionRepository) : ViewModel() {
+class UserDetailViewModel(
+    private val userRepository: UserRepository,
+    val sessionRepository: SessionRepository
+) : ViewModel() {
 
     private lateinit var user: User
 
@@ -90,21 +93,8 @@ class UserDetailViewModel(private  val userRepository: UserRepository, val sessi
         }
     }
 
-//    fun getLoggedUser() : LoggedUser {
-//        return sessionRepository.currentUser!!
-//    }
-
     override fun onCleared() {
         super.onCleared()
         viewModelScope.cancel()
     }
-
-//    class Factory(val user: User) : ViewModelProvider.Factory {
-//        override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-//            if (modelClass.isAssignableFrom(UserDetailViewModel::class.java)) {
-//                return UserDetailViewModel(user) as T
-//            }
-//            throw IllegalArgumentException("Unable to construct viewmodel")
-//        }
-//    }
 }

@@ -46,11 +46,19 @@ data class User(
     var credentialsExpired: Boolean? = null,
     var enabled: Boolean? = null,
     var userdata: Userdata = Userdata(),
-    var authorities: List<Authority>? = null,
+    var userRoles: List<UserRole>? = null,
+//    var authorities: List<Authority>? = null,
     var credentialsNonExpired: Boolean? = null,
     var accountNonLocked: Boolean? = null,
     var accountNonExpired: Boolean? = null
     ) : Parcelable
+
+@Parcelize
+data class UserRole(
+    val id: UUID,
+    val name: String,
+    val active: Boolean
+) : Parcelable
 
 @Parcelize
 data class Userdata(

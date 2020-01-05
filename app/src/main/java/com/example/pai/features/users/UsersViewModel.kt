@@ -14,9 +14,10 @@ import me.tatarka.bindingcollectionadapter2.OnItemBind
 import timber.log.Timber
 import java.lang.Exception
 
-class UsersViewModel(private val userRepository: UserRepository, val sessionRepository: SessionRepository) : ViewModel() {
-
-//    val usersRepository = NetworkRepository()
+class UsersViewModel(
+    private val userRepository: UserRepository,
+    val sessionRepository: SessionRepository
+) : ViewModel() {
 
     private val _users = MutableLiveData<List<User>>()
     val users: LiveData<List<User>>
@@ -28,7 +29,7 @@ class UsersViewModel(private val userRepository: UserRepository, val sessionRepo
 
     private val _navigateToNewUser = MutableLiveData<Boolean>()
     val navigateToNewUser: LiveData<Boolean>
-    get() = _navigateToNewUser
+        get() = _navigateToNewUser
 
     fun onSelectedUser(item: User) {
         _navigateToSelectedUser.value = item
@@ -62,22 +63,15 @@ class UsersViewModel(private val userRepository: UserRepository, val sessionRepo
     }
 
     init {
-        loadUsersFromNetwork()
+//        loadUsersFromNetwork()
     }
 
-    fun getLoggedUser() : User {
+    fun getLoggedUser(): User {
         return sessionRepository.user!!
     }
 
-    fun isLoggedUserAdmin(): Boolean {
-        return sessionRepository.isAdmin()
-    }
 
-//    fun logout() {
-//        sessionRepository.clearCurrentUserToken()
-//    }
-
-    private fun loadUsersFromNetwork() {
+    fun loadUsersFromNetwork() {
         viewModelScope.launch {
             try {
                 val response = userRepository.loadUsers(sessionRepository.token!!)
@@ -113,13 +107,4 @@ class UsersViewModel(private val userRepository: UserRepository, val sessionRepo
         super.onCleared()
         viewModelScope.cancel()
     }
-
-//    class Factory() : ViewModelProvider.Factory {
-//        override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-//            if (modelClass.isAssignableFrom(UsersViewModel::class.java)) {
-//                return UsersViewModel() as T
-//            }
-//            throw IllegalArgumentException("Unable to construct viewmodel")
-//        }
-//    }
 }

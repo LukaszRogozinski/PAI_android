@@ -3,16 +3,12 @@ package com.example.pai.utils
 import android.annotation.SuppressLint
 import android.content.Context
 import android.os.Handler
-import android.text.Editable
-import android.text.TextWatcher
 import android.view.View
 import android.view.inputmethod.InputMethodManager
-import android.widget.Button
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
-import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
 import com.example.pai.MainNavigationDirections
 import com.example.pai.R

@@ -1,6 +1,5 @@
 package com.example.pai.features.products
 
-
 import android.os.Bundle
 import android.view.*
 import androidx.fragment.app.Fragment
@@ -55,7 +54,6 @@ class ProductsFragment : Fragment() {
         return when (item.itemId) {
             R.id.userDetailFragmentMenu -> {
                 val loggedUser = viewModel.getLoggedUser()
-                val isLoggedUserAdmin = viewModel.isLoggedUserAdmin()
                 val action = MainNavigationDirections.actionGlobalUserDetailFragment(loggedUser)
                 findNavController(this).navigate(action)
                 true
@@ -85,15 +83,6 @@ class ProductsFragment : Fragment() {
                 viewModel.navigateToSelectedProductDone()
             }
         })
-
-//        viewModel.navigateToEditProduct.observe(viewLifecycleOwner, Observer<Boolean> {
-//            if (it) {
-//                val action =
-//                    ProductsFragmentDirections.actionProductsFragmentToEditProductFragment(true)
-//                findNavController(this).navigate(action)
-//                viewModel.navigateToEditProductFinish()
-//            }
-//        })
 
         viewModel.eventNetworkError.observe(viewLifecycleOwner, Observer<Boolean> {
             if (it) {

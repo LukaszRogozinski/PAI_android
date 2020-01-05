@@ -33,10 +33,6 @@ class UserEditViewModel(
         _selectRolesClicked.value = true
     }
 
-//    fun getLoggedUser() : LoggedUser {
-//        return sessionRepository.currentUser!!
-//    }
-
     fun getLoggedUser(): User {
         return sessionRepository.user!!
     }
@@ -57,7 +53,7 @@ class UserEditViewModel(
         set(value) {
             if (value != null) {
                 _isNewUser.value = false
-                value.authorities!!.forEach { rolesArray.add(it.authority) }
+                value.userRoles!!.forEach { rolesArray.add(it.name) }
                 field = value
             } else {
                 _isNewUser.value = true
@@ -86,7 +82,7 @@ class UserEditViewModel(
                     )
                 } else {
                     val updateUser = user!!.asUpdateUserDto(rolesArray.toList())
-                    if(isMyAccount!!) {
+                    if (isMyAccount!!) {
                         userRepository.updateUser(
                             sessionRepository.token!!,
                             updateUser
@@ -97,7 +93,6 @@ class UserEditViewModel(
                             updateUser
                         )
                     }
-
                 }
                 if (response.isSuccessful) {
                     if (_isNewUser.value!!) {
@@ -112,7 +107,5 @@ class UserEditViewModel(
                 Timber.e(e)
             }
         }
-
     }
-
 }

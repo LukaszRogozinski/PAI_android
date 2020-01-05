@@ -40,11 +40,8 @@ class ProductTypesViewModel(private val productRepository: ProductRepository, va
         return sessionRepository.user!!
     }
 
-    fun isLoggedUserAdmin(): Boolean = sessionRepository.isAdmin()
-
     val itemBinding: OnItemBind<ProductType> = OnItemBind { itemBinding, _, _ ->
         itemBinding.set(BR.item, R.layout.product_type_item)
-//        itemBinding.bindExtra(BR.vm, this)
     }
 
     val diff = object : DiffUtil.ItemCallback<ProductType>() {

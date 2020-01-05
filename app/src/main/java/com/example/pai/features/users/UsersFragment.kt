@@ -28,10 +28,6 @@ class UsersFragment : Fragment() {
     private lateinit var binding: UsersFragmentBinding
 
     private val viewModel: UsersViewModel by viewModel()
-//    {
-//        ViewModelProviders.of(this, UsersViewModel.Factory())
-//            .get(UsersViewModel::class.java)
-//    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -47,6 +43,14 @@ class UsersFragment : Fragment() {
         binding.vm = viewModel
         binding.lifecycleOwner = viewLifecycleOwner
 
+        viewModel.loadUsersFromNetwork()
+
+        setObservers()
+        setHasOptionsMenu(true)
+        return binding.root
+    }
+
+    private fun setObservers() {
         viewModel.eventNetworkError.observe(viewLifecycleOwner, Observer<Boolean> {
             if (it) {
                 onNetworkError()
@@ -54,47 +58,23 @@ class UsersFragment : Fragment() {
         })
 
         viewModel.navigateToSelectedUser.observe(viewLifecycleOwner, Observer {
-            if(it != null){
-                val isLoggedUserAdmin = viewModel.isLoggedUserAdmin()
-                val action = UsersFragmentDirections.actionUsersFragmentToUserDetailFragment(it).setIsMyAccount(false)
+            if (it != null) {
+                val action = UsersFragmentDirections.actionUsersFragmentToUserDetailFragment(it)
+                    .setIsMyAccount(false)
                 findNavController(this).navigate(action)
                 viewModel.navigateToSelectedUserDone()
             }
         })
 
         viewModel.navigateToNewUser.observe(viewLifecycleOwner, Observer {
-            if(it) {
-                val action = UsersFragmentDirections.actionUsersFragmentToUserEditFragment(false).setUser(null)
+            if (it) {
+                val action = UsersFragmentDirections.actionUsersFragmentToUserEditFragment(false)
+                    .setUser(null)
                 findNavController(this).navigate(action)
                 viewModel.navigateToNewUserDone()
             }
         })
-
-        setHasOptionsMenu(true)
-        return binding.root
     }
-
-//    @SuppressLint("RestrictedApi")
-//    fun showLogoutDialog() {
-//        val mDialog: MaterialDialog = MaterialDialog.Builder(requireActivity())
-//            .setTitle("Logout")
-//            .setMessage("Are you sure want to logout?")
-//            .setCancelable(true)
-//            .setPositiveButton(
-//                "Logout", R.drawable.ic_delete_24px
-//            ) { dialogInterface, _ ->
-//                viewModel.logout()
-//                dialogInterface?.dismiss()
-//                requireActivity().finish()
-//            }
-//            .setNegativeButton(
-//                "Cancel", R.drawable.ic_close_24px
-//            ) { dialogInterface, _ -> dialogInterface?.dismiss() }
-//            .build()
-//
-//        mDialog.show()
-//    }
-
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         super.onCreateOptionsMenu(menu, inflater)
@@ -105,7 +85,6 @@ class UsersFragment : Fragment() {
         return when (item.itemId) {
             R.id.userDetailFragmentMenu -> {
                 val loggedUser = viewModel.getLoggedUser()
-                val isLoggedUserAdmin = viewModel.isLoggedUserAdmin()
                 val action = MainNavigationDirections.actionGlobalUserDetailFragment(loggedUser)
                 findNavController(this).navigate(action)
                 true

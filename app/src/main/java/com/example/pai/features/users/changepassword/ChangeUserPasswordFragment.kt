@@ -41,6 +41,12 @@ class ChangeUserPasswordFragment : Fragment() {
         viewModel.isMyAccount = isMyAccount
         binding.vm = viewModel
 
+        setObservers()
+        setHasOptionsMenu(true)
+        return binding.root
+    }
+
+    private fun setObservers() {
         viewModel.navBack.observe(viewLifecycleOwner, Observer {
             if (it) {
                 val action =
@@ -50,8 +56,6 @@ class ChangeUserPasswordFragment : Fragment() {
                 viewModel.navBackDone()
             }
         })
-        setHasOptionsMenu(true)
-        return binding.root
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -74,6 +78,4 @@ class ChangeUserPasswordFragment : Fragment() {
             else -> super.onOptionsItemSelected(item)
         }
     }
-
-
 }

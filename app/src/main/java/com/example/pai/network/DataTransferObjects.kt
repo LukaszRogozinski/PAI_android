@@ -41,7 +41,7 @@ data class UserDto(
     val credentialsExpired: Boolean,
     val enabled: Boolean,
     val userdata: UserdataDto,
-    val authorities: List<AuthorityDto>,
+    val userRoles: List<UserRoleDto>,
     val credentialsNonExpired: Boolean,
     val accountNonLocked: Boolean,
     val accountNonExpired: Boolean
@@ -75,6 +75,12 @@ data class AuthorityDto(
     val name: String,
     val active: Boolean,
     val authority: String
+)
+
+data class UserRoleDto(
+    val id: UUID,
+    val name: String,
+    val active: Boolean
 )
 
 data class NewUserDto(
@@ -201,7 +207,8 @@ fun UserDto.asDomainModel(): User {
         credentialsExpired = this.credentialsExpired,
         enabled = this.enabled,
         userdata = this.userdata.asDomainModel(),
-        authorities = this.authorities.asAuthorityDomainModel(),
+        userRoles = this.userRoles.asUserRoleDomainModel(),
+//        authorities = this.authorities.asAuthorityDomainModel(),
         credentialsNonExpired = this.credentialsNonExpired,
         accountNonExpired = this.accountNonExpired,
         accountNonLocked = this.accountNonLocked
@@ -220,10 +227,21 @@ fun List<UserDto>.asUserDomainModel(): List<User> {
             credentialsExpired = it.credentialsExpired,
             enabled = it.enabled,
             userdata = it.userdata.asDomainModel(),
-            authorities = it.authorities.asAuthorityDomainModel(),
+            userRoles = it.userRoles.asUserRoleDomainModel(),
+//            authorities = it.authorities.asAuthorityDomainModel(),
             credentialsNonExpired = it.credentialsNonExpired,
             accountNonExpired = it.accountNonExpired,
             accountNonLocked = it.accountNonLocked
+        )
+    }
+}
+
+fun List<UserRoleDto>.asUserRoleDomainModel(): List<UserRole> {
+    return map {
+        UserRole(
+            id = it.id,
+            name = it.name,
+            active = it.active
         )
     }
 }

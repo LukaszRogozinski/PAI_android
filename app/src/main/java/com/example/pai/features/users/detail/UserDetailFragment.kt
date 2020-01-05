@@ -1,26 +1,21 @@
 package com.example.pai.features.users.detail
 
-
 import android.annotation.SuppressLint
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.NavHostFragment
-import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
-import com.example.pai.DataBinderMapperImpl
-import org.koin.androidx.viewmodel.ext.android.viewModel
-
 import com.example.pai.R
 import com.example.pai.databinding.UserDetailFragmentBinding
 import com.example.pai.domain.User
 import com.shreyaspatil.MaterialDialog.MaterialDialog
+import org.koin.androidx.viewmodel.ext.android.viewModel
 import timber.log.Timber
 
 /**
@@ -30,20 +25,11 @@ class UserDetailFragment : Fragment() {
 
     private lateinit var binding: UserDetailFragmentBinding
 
+    private lateinit var user: User
+
     private val args by navArgs<UserDetailFragmentArgs>()
     private val viewModel: UserDetailViewModel by viewModel()
-//
-//    private val viewModel: UserDetailViewModel by lazy {
-//        ViewModelProviders.of(
-//            this,
-//            UserDetailViewModel.Factory(
-//                user
-//            )
-//        )
-//            .get(UserDetailViewModel::class.java)
-//    }
 
-    @SuppressLint("RestrictedApi")
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -54,18 +40,26 @@ class UserDetailFragment : Fragment() {
             container,
             false
         )
-        val user = args.user
-        val isMyAcount = args.isMyAccount
+        user = args.user
+        val isMyAccount = args.isMyAccount
         viewModel.setUser(user)
-        viewModel.setIsMyAccount(isMyAcount)
-//        user = UserDetailFragmentArgs.fromBundle(arguments!!).user
+        viewModel.setIsMyAccount(isMyAccount)
         binding.item = viewModel.getUser()
         binding.vm = viewModel
 
+        setObservers()
+        return binding.root
+    }
 
+    private fun setObservers() {
         viewModel.navigateToEditUser.observe(viewLifecycleOwner, Observer {
-            if(it) {
-                val action = UserDetailFragmentDirections.actionUserDetailFragmentToUserEditFragment(viewModel.getIsMyAccount()).setUser(viewModel.getUser())
+            if (it) {
+                val action =
+                    UserDetailFragmentDirections.actionUserDetailFragmentToUserEditFragment(
+                        viewModel.getIsMyAccount()
+                    ).setUser(
+                        viewModel.getUser()
+                    )
                 NavHostFragment.findNavController(this).navigate(action)
                 viewModel.navigateToEditUserDone()
             }
@@ -84,9 +78,12 @@ class UserDetailFragment : Fragment() {
         })
 
         viewModel.navigateToChangePasswordUser.observe(viewLifecycleOwner, Observer {
-            if(it) {
-                val action = UserDetailFragmentDirections.actionUserDetailFragmentToChangeUserPasswordFragment(user, viewModel.getIsMyAccount())
-//                val action = UserDetailFragmentDirections.actionUserDetailFragmentToChangeUserPasswordFragment()
+            if (it) {
+                val action =
+                    UserDetailFragmentDirections.actionUserDetailFragmentToChangeUserPasswordFragment(
+                        user,
+                        viewModel.getIsMyAccount()
+                    )
                 NavHostFragment.findNavController(this).navigate(action)
                 viewModel.navigateToChangePasswordUserDone()
             }
@@ -94,32 +91,32 @@ class UserDetailFragment : Fragment() {
 
         viewModel.showDeleteDialog.observe(viewLifecycleOwner, Observer {
             if (it) {
-                val mDialog: MaterialDialog = MaterialDialog.Builder(requireActivity())
-                    .setTitle("Delete?")
-                    .setMessage("Are you sure want to delete this user?")
-                    .setCancelable(false)
-                    .setPositiveButton(
-                        "Delete", R.drawable.ic_delete_24px
-                    ) { dialogInterface, _ ->
-                        viewModel.deleteUser()
-                        dialogInterface?.dismiss()
-                    }
-                    .setNegativeButton(
-                        "Cancel", R.drawable.ic_close_24px
-                    ) { dialogInterface, _ ->
-                        run {
-                            dialogInterface?.dismiss()
-                            viewModel.showDeleteButtonClickedCanceled()
-                        }
-                    }
-                    .build()
-
-                mDialog.show()
+                showDeleteDialog()
             }
         })
-
-        return binding.root
     }
 
-
+    @SuppressLint("RestrictedApi")
+    private fun showDeleteDialog() {
+        val mDialog: MaterialDialog = MaterialDialog.Builder(requireActivity())
+            .setTitle("Delete?")
+            .setMessage("Are you sure want to delete this user?")
+            .setCancelable(false)
+            .setPositiveButton(
+                "Delete", R.drawable.ic_delete_24px
+            ) { dialogInterface, _ ->
+                viewModel.deleteUser()
+                dialogInterface?.dismiss()
+            }
+            .setNegativeButton(
+                "Cancel", R.drawable.ic_close_24px
+            ) { dialogInterface, _ ->
+                run {
+                    dialogInterface?.dismiss()
+                    viewModel.showDeleteButtonClickedCanceled()
+                }
+            }
+            .build()
+        mDialog.show()
+    }
 }

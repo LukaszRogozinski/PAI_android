@@ -39,11 +39,7 @@ class ProductTypesFragment : Fragment() {
         binding.lifecycleOwner = viewLifecycleOwner
         // Inflate the layout for this fragment
 
-        viewModel.eventNetworkError.observe(viewLifecycleOwner, Observer<Boolean> {
-            if (it) {
-                onNetworkError()
-            }
-        })
+        setObservers()
         setHasOptionsMenu(true)
         return binding.root
     }
@@ -57,9 +53,7 @@ class ProductTypesFragment : Fragment() {
         return when (item.itemId) {
             R.id.userDetailFragmentMenu -> {
                 val loggedUser = viewModel.getLoggedUser()
-                val isLoggedUserAdmin = viewModel.isLoggedUserAdmin()
                 val action = MainNavigationDirections.actionGlobalUserDetailFragment(loggedUser)
-//                val action = ProductTypesFragmentDirections.actionProductTypesFragmentToUserDetailFragment(loggedUser)
                 NavHostFragment.findNavController(this).navigate(action)
                 true
             }
@@ -77,6 +71,14 @@ class ProductTypesFragment : Fragment() {
             this,
             Utils.onBackPressed(requireActivity(), viewModel.sessionRepository, this)
         )
+    }
+
+    private fun setObservers() {
+        viewModel.eventNetworkError.observe(viewLifecycleOwner, Observer<Boolean> {
+            if (it) {
+                onNetworkError()
+            }
+        })
     }
 
     private fun onNetworkError() {

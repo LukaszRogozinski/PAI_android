@@ -49,6 +49,20 @@ class UserEditFragment : Fragment() {
         viewModel.isMyAccount = isMyAccount
         binding.vm = viewModel
 
+        setObservers()
+        setHasOptionsMenu(true)
+        // Inflate the layout for this fragment
+        return binding.root
+    }
+
+    private fun setObservers() {
+        viewModel.selectRolesClicked.observe(viewLifecycleOwner, Observer {
+            if (it) {
+                selectRolesDialog()
+                viewModel.selectRolesClickedDone()
+            }
+        })
+
         viewModel.navBackToListOfUsers.observe(viewLifecycleOwner, Observer {
             if (it) {
                 val action =
@@ -73,15 +87,6 @@ class UserEditFragment : Fragment() {
             }
         })
 
-        viewModel.selectRolesClicked.observe(viewLifecycleOwner, Observer {
-            if (it) {
-                selectRolesDialog()
-                viewModel.selectRolesClickedDone()
-            }
-        })
-        setHasOptionsMenu(true)
-        // Inflate the layout for this fragment
-        return binding.root
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -106,24 +111,12 @@ class UserEditFragment : Fragment() {
 
     }
 
-
     private fun selectRolesDialog() {
         val result = mutableListOf<String>()
         val builder = AlertDialog.Builder(requireContext())
         val listArray = resources.getStringArray(R.array.roles)
         val userAuthorities = viewModel.rolesArray
         val checkList = arrayOf(
-            false,
-            false,
-            false,
-            false,
-            false,
-            false,
-            false,
-            false,
-            false,
-            false,
-            false,
             false,
             false
         ).toBooleanArray()
@@ -146,7 +139,8 @@ class UserEditFragment : Fragment() {
 
         builder.setCancelable(true)
 
-        builder.setPositiveButton("ok"
+        builder.setPositiveButton(
+            "ok"
         ) { _, _ ->
             for (x in 0 until checkList.size step 1) {
                 if (checkList[x]) {
@@ -155,7 +149,6 @@ class UserEditFragment : Fragment() {
             }
             viewModel.rolesArray = result
         }
-
         val dialog = builder.create()
         dialog.show()
     }
