@@ -1,6 +1,7 @@
 package com.example.pai
 
 import android.app.Application
+import android.preference.PreferenceManager
 import com.example.pai.features.products.ProductsViewModel
 import com.example.pai.features.login.LoginViewModel
 import com.example.pai.features.products.detail.ProductDetailViewModel

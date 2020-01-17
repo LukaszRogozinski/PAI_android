@@ -72,7 +72,7 @@ class UsersViewModel(
         var loggedUser: User? = null
         runBlocking {
             try {
-                val response = sessionRepository.getLoggedUserNetwork(sessionRepository.token!!, sessionRepository.user!!.username!!)
+                val response = sessionRepository.getLoggedUserNetwork(sessionRepository.token!!, sessionRepository.username!!)
                 if(response.isSuccessful) {
                     loggedUser =  response.body()!!.asDomainModel()
                 } else{

@@ -24,15 +24,15 @@ class UserDetailViewModel(
     fun setUser(user: User?) {
         runBlocking {
             try {
-                val response = if (user != null) {
+                val response = if (!isMyAccount!!) {
                     sessionRepository.getLoggedUserNetwork(
                         sessionRepository.token!!,
-                        user.username!!
+                        user!!.username!!
                     )
                 } else {
                     sessionRepository.getLoggedUserNetwork(
                         sessionRepository.token!!,
-                        sessionRepository.getUsername()
+                        sessionRepository.username!!
                     )
                 }
                 if (response.isSuccessful) {

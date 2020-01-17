@@ -7,33 +7,39 @@ import retrofit2.Response
 
 class SessionRepository {
 
-    private var _user: User? = null
-    val user: User?
-    get() = _user
+//    private var _user: User? = null
+//    val user: User?
+//    get() = _user
 
     private var _username: String? = null
+    val username: String?
+    get() = _username
+
+    private var _isAdmin: Boolean = false
+    val isAdmin: Boolean
+    get() = _isAdmin
+
+    private var _token: String? = null
+    val token: String?
+        get() = _token
 
     fun saveUsername(username: String) {
         _username = username
     }
 
-    fun getUsername(): String {
-        return _username!!
-    }
-
-    private var _token: String? = null
-    val token: String?
-    get() = _token
-
     fun saveToken(token: String) {
         _token = token
     }
 
-    fun saveUser(user: User) {
-        _user = user
+//    fun saveUser(user: User) {
+//        _user = user
+//    }
+
+    fun checkIfAdmin(user: User) {
+        _isAdmin = user.userRoles!!.any{ it.name == "ADMIN" }
     }
 
-    fun isAdmin(): Boolean = _user!!.userRoles!!.any { it.name == "ADMIN" }
+//    fun isAdmin(): Boolean = _user!!.userRoles!!.any { it.name == "ADMIN" }
 
     suspend fun getLoggedUserNetwork(token: String, username: String) : Response<UserDto> {
         return PaiApi.retrofitService.getUserByUsername(createAuthorizationHeader(token),username)
@@ -51,12 +57,13 @@ class SessionRepository {
         runBlocking {
             val response = logoutUser(_token!!)
             if(response.isSuccessful) {
-                _user = null
+                _isAdmin = false
+//                _user = null
                 _token = null
+                _username = null
             } else{
                 print("eee")
             }
         }
     }
-
 }

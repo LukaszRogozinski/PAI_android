@@ -48,7 +48,7 @@ class ProductDetailViewModel(private val productRepository: ProductRepository, v
         var loggedUser: User? = null
         runBlocking {
             try {
-                val response = sessionRepository.getLoggedUserNetwork(sessionRepository.token!!, sessionRepository.user!!.username!!)
+                val response = sessionRepository.getLoggedUserNetwork(sessionRepository.token!!, sessionRepository.username!!)
                 if(response.isSuccessful) {
                     loggedUser =  response.body()!!.asDomainModel()
                 } else{
@@ -74,6 +74,10 @@ class ProductDetailViewModel(private val productRepository: ProductRepository, v
                 Timber.e(e)
             }
         }
+    }
+
+    fun isLoggedUserAdmin(): Boolean {
+        return sessionRepository.isAdmin
     }
 
     override fun onCleared() {

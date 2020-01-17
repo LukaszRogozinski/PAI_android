@@ -54,7 +54,8 @@ class LoginViewModel(private val sessionRepository: SessionRepository) : ViewMod
                             username.value!!
                         )
                         if (getUserResponse.isSuccessful) {
-                            sessionRepository.saveUser(getUserResponse.body()!!.asDomainModel())
+                            sessionRepository.checkIfAdmin(getUserResponse.body()!!.asDomainModel())
+//                            sessionRepository.saveUser(getUserResponse.body()!!.asDomainModel())
                             onNavigateToProducts()
                         } else {
 

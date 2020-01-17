@@ -37,7 +37,7 @@ class MainActivity : AppCompatActivity() {
                     updateNavigationUiVisibility(true)
                 }
                 if (destination.id == R.id.productsFragment) {
-                    bottomNavigation.menu.findItem(R.id.usersFragment).isVisible = sessionRepository.isAdmin()
+                    bottomNavigation.menu.findItem(R.id.usersFragment).isVisible = sessionRepository.isAdmin
                 }
             }
             bottomNavigation.setupWithNavController(this)

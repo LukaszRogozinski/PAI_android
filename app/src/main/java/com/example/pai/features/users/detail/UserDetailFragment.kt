@@ -42,8 +42,8 @@ class UserDetailFragment : Fragment() {
         )
         user = args.user
         val isMyAccount = args.isMyAccount
-        viewModel.setUser(user)
         viewModel.setIsMyAccount(isMyAccount)
+        viewModel.setUser(user)
         binding.item = viewModel.mutableUser.value
         binding.vm = viewModel
 
@@ -81,7 +81,7 @@ class UserDetailFragment : Fragment() {
             if (it) {
                 val action =
                     UserDetailFragmentDirections.actionUserDetailFragmentToChangeUserPasswordFragment(
-                        viewModel.mutableUser.value!!,
+                        viewModel.getUser(),
                         viewModel.getIsMyAccount()
                     )
                 NavHostFragment.findNavController(this).navigate(action)

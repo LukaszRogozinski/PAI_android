@@ -43,7 +43,7 @@ class ChangeUserPasswordViewModel(
         var loggedUser: User? = null
         runBlocking {
             try {
-                val response = sessionRepository.getLoggedUserNetwork(sessionRepository.token!!, sessionRepository.user!!.username!!)
+                val response = sessionRepository.getLoggedUserNetwork(sessionRepository.token!!, sessionRepository.username!!)
                 if(response.isSuccessful) {
                     loggedUser =  response.body()!!.asDomainModel()
                 } else{
@@ -70,13 +70,9 @@ class ChangeUserPasswordViewModel(
                     )
                 }
                 if (response.isSuccessful) {
-                    val userResponse = sessionRepository.getLoggedUserNetwork(sessionRepository.token!!, sessionRepository.user!!.username!!)
-                    if(userResponse.isSuccessful) {
-                        sessionRepository.saveUser(userResponse.body()!!.asDomainModel())
+//                        sessionRepository.saveUser(userResponse.body()!!.asDomainModel())
                         _navBack.postValue(true)
-                    } else {
-                        println("buuInside")
-                    }
+
                     println("yea")
                 } else {
                     println("buu")
