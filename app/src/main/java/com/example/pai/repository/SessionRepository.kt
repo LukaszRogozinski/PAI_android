@@ -11,6 +11,16 @@ class SessionRepository {
     val user: User?
     get() = _user
 
+    private var _username: String? = null
+
+    fun saveUsername(username: String) {
+        _username = username
+    }
+
+    fun getUsername(): String {
+        return _username!!
+    }
+
     private var _token: String? = null
     val token: String?
     get() = _token
@@ -26,7 +36,7 @@ class SessionRepository {
     fun isAdmin(): Boolean = _user!!.userRoles!!.any { it.name == "ADMIN" }
 
     suspend fun getLoggedUserNetwork(token: String, username: String) : Response<UserDto> {
-        return PaiApi.retrofitService.getLoggedUser(createAuthorizationHeader(token),username)
+        return PaiApi.retrofitService.getUserByUsername(createAuthorizationHeader(token),username)
     }
 
     private suspend fun logoutUser(token: String) : Response<String> {

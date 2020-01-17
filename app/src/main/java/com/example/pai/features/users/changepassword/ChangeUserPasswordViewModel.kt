@@ -6,10 +6,12 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.pai.domain.NewPassword
 import com.example.pai.domain.User
+import com.example.pai.network.asDomainModel
 import com.example.pai.network.asUpdatePasswordDto
 import com.example.pai.repository.SessionRepository
 import com.example.pai.repository.UserRepository
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import timber.log.Timber
 import java.lang.Exception
 
@@ -38,8 +40,22 @@ class ChangeUserPasswordViewModel(
     }
 
     fun getLoggedUser(): User {
-        return sessionRepository.user!!
+        var loggedUser: User? = null
+        runBlocking {
+            try {
+                val response = sessionRepository.getLoggedUserNetwork(sessionRepository.token!!, sessionRepository.user!!.username!!)
+                if(response.isSuccessful) {
+                    loggedUser =  response.body()!!.asDomainModel()
+                } else{
+                    println("nie moge pobrac zalogowanego uzytkownika")
+                }
+            } catch (e: Exception) {
+                println("getLoggedUser nie pyklo")
+            }
+        }
+        return loggedUser!!
     }
+
 
     fun saveNewPassword() {
         viewModelScope.launch {
@@ -54,10 +70,16 @@ class ChangeUserPasswordViewModel(
                     )
                 }
                 if (response.isSuccessful) {
-                    print("yea")
-                    _navBack.postValue(true)
+                    val userResponse = sessionRepository.getLoggedUserNetwork(sessionRepository.token!!, sessionRepository.user!!.username!!)
+                    if(userResponse.isSuccessful) {
+                        sessionRepository.saveUser(userResponse.body()!!.asDomainModel())
+                        _navBack.postValue(true)
+                    } else {
+                        println("buuInside")
+                    }
+                    println("yea")
                 } else {
-                    print("buu")
+                    println("buu")
                 }
             } catch (e: Exception) {
                 Timber.e(e)

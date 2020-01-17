@@ -5,11 +5,13 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.pai.domain.User
+import com.example.pai.network.asDomainModel
 import com.example.pai.network.asNewUserDto
 import com.example.pai.network.asUpdateUserDto
 import com.example.pai.repository.SessionRepository
 import com.example.pai.repository.UserRepository
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import retrofit2.Response
 import timber.log.Timber
 import java.lang.Exception
@@ -18,6 +20,8 @@ class UserEditViewModel(
     private val userRepository: UserRepository,
     val sessionRepository: SessionRepository
 ) : ViewModel() {
+
+    private var actualUsername: String? = null
 
     var rolesArray = mutableListOf<String>()
 
@@ -34,8 +38,22 @@ class UserEditViewModel(
     }
 
     fun getLoggedUser(): User {
-        return sessionRepository.user!!
+        var loggedUser: User? = null
+        runBlocking {
+            try {
+                val response = sessionRepository.getLoggedUserNetwork(sessionRepository.token!!, sessionRepository.user!!.username!!)
+                if(response.isSuccessful) {
+                    loggedUser =  response.body()!!.asDomainModel()
+                } else{
+                    println("nie moge pobrac zalogowanego uzytkownika")
+                }
+            } catch (e: Exception) {
+                println("getLoggedUser nie pyklo")
+            }
+        }
+        return loggedUser!!
     }
+
 
     private val _navBackToListOfUsers = MutableLiveData<Boolean>()
     val navBackToListOfUsers: LiveData<Boolean>
@@ -83,6 +101,7 @@ class UserEditViewModel(
                 } else {
                     val updateUser = user!!.asUpdateUserDto(rolesArray.toList())
                     if (isMyAccount!!) {
+                        actualUsername = updateUser.username
                         userRepository.updateUser(
                             sessionRepository.token!!,
                             updateUser
@@ -98,6 +117,9 @@ class UserEditViewModel(
                     if (_isNewUser.value!!) {
                         _navBackToListOfUsers.postValue(true)
                     } else {
+                        if(actualUsername != null) {
+                            sessionRepository.saveUsername(actualUsername!!)
+                        }
                         _navBackToDetailUser.postValue(true)
                     }
                 } else {

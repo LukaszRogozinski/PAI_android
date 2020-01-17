@@ -53,7 +53,7 @@ interface PaiApiService {
 
     @GET("/secured/users/{username}")
     @Headers("Content-type: $CONTENT_TYPE")
-    suspend fun getLoggedUser(@Header("authorization") authorization: String, @Path("username") username: String) : Response<UserDto>
+    suspend fun getUserByUsername(@Header("authorization") authorization: String, @Path("username") username: String) : Response<UserDto>
 
     @DELETE("secured/users/{username}")
     @Headers("Content-type: $CONTENT_TYPE")

@@ -228,7 +228,7 @@
                         android:id="@+id/flat_number_edit_text_value"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="flat No *"
+                        android:hint="flat No"
                         android:inputType="number"
                         app:customtext="@={vm.user.userdata.address.flatNumber}" />
                 </com.google.android.material.textfield.TextInputLayout>

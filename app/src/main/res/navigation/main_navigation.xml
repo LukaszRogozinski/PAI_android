@@ -59,7 +59,7 @@
         <argument
             android:name="user"
             app:argType="com.example.pai.domain.User"
-            app:nullable="false" />
+            app:nullable="true" />
         <argument
             android:name="isMyAccount"
             app:argType="boolean"

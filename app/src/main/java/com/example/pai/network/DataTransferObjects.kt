@@ -103,7 +103,7 @@ data class NewUserDto(
 data class UpdateUserDto(
     val city: String,
     val email: String,
-    val flatNumber: String,
+    val flatNumber: String?,
     val houseNumber: String,
     val id: UUID,
     val name: String,
@@ -120,7 +120,7 @@ data class UpdateUserDto(
 data class UpdatePasswordDto(
     val newPassword: String,
     val oldPassword: String,
-    val version: Int,
+    val userVersion: Int,
     val username: String
 )
 
@@ -136,7 +136,7 @@ fun NewPassword.asUpdatePasswordDto(): UpdatePasswordDto {
     return UpdatePasswordDto(
         newPassword = this.newPassword!!,
         oldPassword = this.oldPassword!!,
-        version = this.version!!,
+        userVersion = this.version!!,
         username = this.username!!
     )
 }
@@ -145,7 +145,7 @@ fun User.asUpdateUserDto(authorities: List<String>): UpdateUserDto {
     return UpdateUserDto(
         city = this.userdata.address.city!!,
         email = this.userdata.email!!,
-        flatNumber = this.userdata.address.flatNumber!!,
+        flatNumber = this.userdata.address.flatNumber,
         houseNumber = this.userdata.address.buildingNumber!!,
         id = this.id!!,
         name = this.userdata.name!!,

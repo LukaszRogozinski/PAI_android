@@ -2,10 +2,14 @@ package com.example.pai.features.users.detail
 
 import androidx.lifecycle.*
 import com.example.pai.domain.User
+import com.example.pai.network.UserDto
+import com.example.pai.network.asDomainModel
 import com.example.pai.repository.SessionRepository
 import com.example.pai.repository.UserRepository
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
+import retrofit2.Response
 import timber.log.Timber
 
 class UserDetailViewModel(
@@ -13,14 +17,38 @@ class UserDetailViewModel(
     val sessionRepository: SessionRepository
 ) : ViewModel() {
 
-    private lateinit var user: User
+    private val _mutableUser = MutableLiveData<User>()
+    val mutableUser: LiveData<User>
+        get() = _mutableUser
 
-    fun setUser(user: User) {
-        this.user = user
+    fun setUser(user: User?) {
+        runBlocking {
+            try {
+                val response = if (user != null) {
+                    sessionRepository.getLoggedUserNetwork(
+                        sessionRepository.token!!,
+                        user.username!!
+                    )
+                } else {
+                    sessionRepository.getLoggedUserNetwork(
+                        sessionRepository.token!!,
+                        sessionRepository.getUsername()
+                    )
+                }
+                if (response.isSuccessful) {
+                    _mutableUser.value = response.body()!!.asDomainModel()
+                } else {
+                    println("unable to load user from network")
+                }
+
+            } catch (e: java.lang.Exception) {
+                println("exception")
+            }
+        }
     }
 
     fun getUser(): User {
-        return this.user
+        return mutableUser.value!!
     }
 
     private var isMyAccount: Boolean? = null
@@ -81,7 +109,10 @@ class UserDetailViewModel(
     fun deleteUser() {
         viewModelScope.launch {
             try {
-                val response = userRepository.deleteUser(sessionRepository.token!!, user.username!!)
+                val response = userRepository.deleteUser(
+                    sessionRepository.token!!,
+                    _mutableUser.value!!.username!!
+                )
                 if (response.isSuccessful) {
                     _deleteResponse.postValue(true)
                     _showDeleteDialog.value = false

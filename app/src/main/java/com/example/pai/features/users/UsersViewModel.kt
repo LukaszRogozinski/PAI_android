@@ -5,11 +5,13 @@ import androidx.recyclerview.widget.DiffUtil
 import com.example.pai.BR
 import com.example.pai.R
 import com.example.pai.domain.User
+import com.example.pai.network.asDomainModel
 import com.example.pai.network.asUserDomainModel
 import com.example.pai.repository.SessionRepository
 import com.example.pai.repository.UserRepository
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import me.tatarka.bindingcollectionadapter2.OnItemBind
 import timber.log.Timber
 import java.lang.Exception
@@ -67,8 +69,22 @@ class UsersViewModel(
     }
 
     fun getLoggedUser(): User {
-        return sessionRepository.user!!
+        var loggedUser: User? = null
+        runBlocking {
+            try {
+                val response = sessionRepository.getLoggedUserNetwork(sessionRepository.token!!, sessionRepository.user!!.username!!)
+                if(response.isSuccessful) {
+                    loggedUser =  response.body()!!.asDomainModel()
+                } else{
+                    println("nie moge pobrac zalogowanego uzytkownika")
+                }
+            } catch (e: Exception) {
+                println("getLoggedUser nie pyklo")
+            }
+        }
+        return loggedUser!!
     }
+
 
 
     fun loadUsersFromNetwork() {

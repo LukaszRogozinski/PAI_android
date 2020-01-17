@@ -9,13 +9,16 @@ import com.example.pai.BR
 import com.example.pai.R
 import com.example.pai.domain.Product
 import com.example.pai.domain.User
+import com.example.pai.network.asDomainModel
 import com.example.pai.network.asProductDomainModel
 import com.example.pai.repository.ProductRepository
 import com.example.pai.repository.SessionRepository
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import me.tatarka.bindingcollectionadapter2.OnItemBind
 import timber.log.Timber
+import kotlin.math.log
 
 class ProductsViewModel(
     private val productRepository: ProductRepository,
@@ -66,7 +69,20 @@ class ProductsViewModel(
     }
 
     fun getLoggedUser(): User {
-        return sessionRepository.user!!
+        var loggedUser: User? = null
+        runBlocking {
+            try {
+                val response = sessionRepository.getLoggedUserNetwork(sessionRepository.token!!, sessionRepository.user!!.username!!)
+                if(response.isSuccessful) {
+                    loggedUser =  response.body()!!.asDomainModel()
+                } else{
+                    println("nie moge pobrac zalogowanego uzytkownika")
+                }
+            } catch (e: Exception) {
+                println("getLoggedUser nie pyklo")
+            }
+        }
+        return loggedUser!!
     }
 
     private fun loadProductsFromNetwork() {

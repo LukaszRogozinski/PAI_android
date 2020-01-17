@@ -48,6 +48,7 @@ class LoginViewModel(private val sessionRepository: SessionRepository) : ViewMod
                     val response = sessionRepository.logIn(username.value!!, password.value!!)
                     if (response.isSuccessful) {
                         sessionRepository.saveToken(response.body()!!.access_token)
+                        sessionRepository.saveUsername(username.value!!)
                         val getUserResponse = sessionRepository.getLoggedUserNetwork(
                             sessionRepository.token!!,
                             username.value!!

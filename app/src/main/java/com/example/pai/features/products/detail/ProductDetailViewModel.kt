@@ -3,10 +3,12 @@ package com.example.pai.features.products.detail
 import androidx.lifecycle.*
 import com.example.pai.domain.Product
 import com.example.pai.domain.User
+import com.example.pai.network.asDomainModel
 import com.example.pai.repository.ProductRepository
 import com.example.pai.repository.SessionRepository
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import timber.log.Timber
 
 class ProductDetailViewModel(private val productRepository: ProductRepository, val sessionRepository: SessionRepository) : ViewModel() {
@@ -42,11 +44,22 @@ class ProductDetailViewModel(private val productRepository: ProductRepository, v
         _showDeleteDialog.value = true
     }
 
-    fun getLoggedUser() : User {
-        return sessionRepository.user!!
+    fun getLoggedUser(): User {
+        var loggedUser: User? = null
+        runBlocking {
+            try {
+                val response = sessionRepository.getLoggedUserNetwork(sessionRepository.token!!, sessionRepository.user!!.username!!)
+                if(response.isSuccessful) {
+                    loggedUser =  response.body()!!.asDomainModel()
+                } else{
+                    println("nie moge pobrac zalogowanego uzytkownika")
+                }
+            } catch (e: Exception) {
+                println("getLoggedUser nie pyklo")
+            }
+        }
+        return loggedUser!!
     }
-
-    fun isLoggedUserAdmin() : Boolean = sessionRepository.isAdmin()
 
     fun deleteProduct() {
         viewModelScope.launch {
